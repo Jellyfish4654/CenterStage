@@ -49,7 +49,6 @@ public class JellyTele extends BaseOpMode {
             telemetry.addData("mX", gamepad2.left_stick_x);
             telemetry.addData("mY", gamepad2.left_stick_y);
             telemetry.addData("precision mode", mult);
-            telemetry.addData("Claw Position", claws.getCurrentPosition());
             telemetry.update();
             // DRIVE MODE
             switch (driveMode) {
@@ -99,26 +98,9 @@ public class JellyTele extends BaseOpMode {
                     break;
                 }
             }
-            // CLAW
-            if (gamepad2.right_bumper) {
-                claws.clawsClose();
-            }
-            if (gamepad2.left_bumper) {
-                claws.clawsOpen();
-            }
             // Update Anti-Tipping
             antiTipping.correctTilt();
-            // Manuel Joystick control
-            slides.setTargetPosition(slides.getTargetPosition() + (int) (gamepad2.left_stick_y * 0.5));
-            // Preset positions
-            if(gamepad2.a){
-                slides.setTargetPosition(0);
-            }
-            if(gamepad2.b){
-                slides.setTargetPosition(100);
-            }
-            // Updating the slide power using the PID controller inside the loop
-            slides.update();
+            
         }
     }
 
