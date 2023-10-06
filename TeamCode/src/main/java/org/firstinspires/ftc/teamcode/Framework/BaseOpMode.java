@@ -9,7 +9,7 @@ public abstract class BaseOpMode extends LinearOpMode{
     protected DcMotor[] motors;
     protected Hanger hangers;
 
-
+// Add IMU
 
     protected void initHardware() {
         motors = new DcMotor[]{
@@ -22,7 +22,7 @@ public abstract class BaseOpMode extends LinearOpMode{
         motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[2].setDirection(DcMotorSimple.Direction.FORWARD);
         motors[3].setDirection(DcMotorSimple.Direction.FORWARD);
-
+// Remove this
         Servo claw = hardwareMap.get(Servo.class, "servo");
         DcMotor otherMotor = hardwareMap.get(DcMotor.class, "linear_actuator");
         hangers = new Hanger(otherMotor);
