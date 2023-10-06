@@ -16,6 +16,7 @@ public class Hanger {
 
     public void hangUp() {
 
+
         if (position < targetUp) {
             //target = amount to slide to,,, slides move until position is high enough
             otherMotor.setPower(1.0);

@@ -9,6 +9,8 @@ public abstract class BaseOpMode extends LinearOpMode{
     protected DcMotor[] motors;
     protected Hanger hangers;
 
+
+
     protected void initHardware() {
         motors = new DcMotor[]{
                 hardwareMap.dcMotor.get("motor fr"),
