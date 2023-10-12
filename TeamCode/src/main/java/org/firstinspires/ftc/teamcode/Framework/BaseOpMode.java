@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public abstract class BaseOpMode extends LinearOpMode{
     protected DcMotor[] motors;
     protected Hanger hangers;
+    protected Slides slides;
     protected IMU imu;
 
     protected void initHardware() {
@@ -25,7 +26,11 @@ public abstract class BaseOpMode extends LinearOpMode{
         motors[3].setDirection(DcMotorSimple.Direction.FORWARD);
 
         DcMotor otherMotor = hardwareMap.get(DcMotor.class, "linear_actuator");
+        DcMotor motor1 = hardwareMap.get(DcMotor.class, "motor-1");
+        DcMotor motor2 = hardwareMap.get(DcMotor.class, "motor-2");
+
         hangers = new Hanger(otherMotor);
+        slides = new Slides(motor1, motor2);
 
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // ADJUST ORIENTATION PARAMETERS TO MATCH THE ROBOT
