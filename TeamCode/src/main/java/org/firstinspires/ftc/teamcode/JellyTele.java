@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
-
+//<<<<<<< HEAD
+//import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+//
+//=======
+//import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
+//>>>>>>> 43446bc3aacd0af85d123e4bd7bf8feaf8b3557a
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.AntiTipping;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -23,21 +30,22 @@ public class JellyTele extends BaseOpMode {
         // Init hardware from BaseOpMode
         initHardware();
         waitForStart();
-
+        ElapsedTime timer = new ElapsedTime();
         while (opModeIsActive()) {
             // DRIVETRAIN
             if (gamepad1.dpad_left) {
                 driveMode = DriveMode.TANK;
-                gamepad1.rumbleBlips(1);
             } else if (gamepad1.dpad_up) {
                 driveMode = DriveMode.MECANUM;
-                gamepad1.rumbleBlips(2);
             } else if (gamepad1.dpad_right) {
                 driveMode = DriveMode.DRIVE;
-                gamepad1.rumbleBlips(3);
             } else if (gamepad1.dpad_down) {
                 driveMode = DriveMode.FIELDCENTRIC;
-                gamepad1.rumbleBlips(4);
+            }
+            //PRE-ENDGAME ALERT
+            if(timer.seconds()==120){
+                gamepad1.rumbleBlips(3);
+                gamepad2.rumbleBlips(3);
             }
             // PRECISION
             double mult = gamepad1.left_bumper ? 0.35 : gamepad1.right_bumper ? 0.7 : 1.0;
@@ -52,6 +60,7 @@ public class JellyTele extends BaseOpMode {
             telemetry.addData("mY", gamepad2.left_stick_y);
             telemetry.addData("precision mode", mult);
             telemetry.update();
+
             // DRIVE MODE
             switch (driveMode) {
                 case TANK: {
@@ -136,4 +145,12 @@ public class JellyTele extends BaseOpMode {
         double DB = stickVal >= -DEADBAND && stickVal <= DEADBAND ? 0 : (stickVal - DEADBAND) * Math.signum(stickVal);
         return DB;
     }
+//<<<<<<< HEAD
+//=======
+    //Rising Edge Detector
+    public boolean risingEdgeDetect(boolean current, boolean previous) {
+        return current && !previous;
+    }
+
+//>>>>>>> 43446bc3aacd0af85d123e4bd7bf8feaf8b3557a
 }
