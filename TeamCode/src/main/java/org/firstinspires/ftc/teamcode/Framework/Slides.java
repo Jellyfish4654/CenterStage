@@ -15,6 +15,8 @@ public class Slides {
     private final double f = 0;
     private final double ticksInDegree = 145.1 / 360.0;
     public int targetPosition = 0;
+    public final int upperBound = 3000;
+    //stop break if goes over upperbound
     private double power1;
     private double power2;
     PIDCoefficients coefficients = new PIDCoefficients(Kp,Ki,Kd);
@@ -25,8 +27,16 @@ public class Slides {
         //mot1 = left motor, mot2 = right motor
     }
 
-    public void setTargetPosition(int targetPosition) {
-        this.targetPosition = targetPosition;
+    public void setTargetPosition(int target) {
+        if (target < 0) {
+            this.targetPosition = 0;
+        } else if (target > upperBound) {
+            this.targetPosition = upperBound;
+        } else {
+            this.targetPosition = target;
+        }
+
+        //safety limit
     }
 
     public void moveSlides(double power1, double power2) {
