@@ -12,6 +12,7 @@ public abstract class BaseOpMode extends LinearOpMode{
     protected Hanger hangers;
     protected Slides slides;
     protected IMU imu;
+    protected DroneLauncher droneLauncher;
 
     protected void initHardware() {
         motors = new DcMotor[]{
@@ -38,5 +39,8 @@ public abstract class BaseOpMode extends LinearOpMode{
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
         imu.initialize(parameters);
+
+        Servo droneServo = hardwareMap.get(Servo.class, "\uD83E\uDEBC");
+        droneLauncher = new DroneLauncher(droneServo);
     }
 }
