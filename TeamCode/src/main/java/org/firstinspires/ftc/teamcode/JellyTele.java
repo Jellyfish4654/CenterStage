@@ -19,14 +19,16 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
+    String previous = "";
+    String current = "";
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
 
     public void runOpMode() throws InterruptedException {
         AntiTipping antiTipping = new AntiTipping(motors, imu);
         // Init hardware from BaseOpMode
         initHardware();
-        waitForStart();
         ElapsedTime timer = new ElapsedTime();
+        waitForStart();
         while (opModeIsActive()) {
             // DRIVETRAIN
             if (gamepad1.dpad_left) {
@@ -136,7 +138,8 @@ public class JellyTele extends BaseOpMode {
         return DB;
     }
     //Rising Edge Detector
-    public boolean risingEdgeDetect(boolean current, boolean previous) {
-        return current && !previous;
+    public boolean risingEdgeDetect(Boolean current) {
+        current.toString();
+        return current;
     }
 }
