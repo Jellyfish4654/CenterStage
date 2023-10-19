@@ -108,7 +108,11 @@ public class JellyTele extends BaseOpMode {
             }
             // Update Anti-Tipping
             antiTipping.correctTilt();
-            
+
+            if (gamepad2.a)
+            {
+                droneLauncher.launchDrone();
+            }
         }
     }
 
