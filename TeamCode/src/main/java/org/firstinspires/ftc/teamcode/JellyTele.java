@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.AntiTipping;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.ButtonEX;
 
 
 @TeleOp(name = "CenterStage JellyTele")
@@ -19,8 +17,7 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
-    String previous = "";
-    String current = "";
+
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
 
     public void runOpMode() throws InterruptedException {
@@ -110,11 +107,12 @@ public class JellyTele extends BaseOpMode {
             }
             // Update Anti-Tipping
             antiTipping.correctTilt();
-
-            if (gamepad2.a)
-            {
+            if(ButtonEX.Gamepad2EX.A.isPressed()){
                 droneLauncher.launchDrone();
             }
+            // UPDATE STATES
+            ButtonEX.Gamepad1EX.updateAll();
+            ButtonEX.Gamepad2EX.updateAll();
         }
     }
 
@@ -140,10 +138,5 @@ public class JellyTele extends BaseOpMode {
     protected double DEADBAND(double DEADBAND, double stickVal) {
         double DB = stickVal >= -DEADBAND && stickVal <= DEADBAND ? 0 : (stickVal - DEADBAND) * Math.signum(stickVal);
         return DB;
-    }
-    //Rising Edge Detector
-    public boolean risingEdgeDetect(Boolean current) {
-        current.toString();
-        return current;
     }
 }
