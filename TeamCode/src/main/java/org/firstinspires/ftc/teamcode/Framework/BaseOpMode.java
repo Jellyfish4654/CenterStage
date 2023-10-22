@@ -27,11 +27,11 @@ public abstract class BaseOpMode extends LinearOpMode{
         motors[3].setDirection(DcMotorSimple.Direction.FORWARD);
 
         DcMotor otherMotor = hardwareMap.get(DcMotor.class, "linear_actuator");
-        DcMotor motor1 = hardwareMap.get(DcMotor.class, "motor-1");
-        DcMotor motor2 = hardwareMap.get(DcMotor.class, "motor-2");
+        DcMotor leftMotor = hardwareMap.get(DcMotor.class, "motor-left");
+        DcMotor rightMotor = hardwareMap.get(DcMotor.class, "motor-right");
 
         hangers = new Hanger(otherMotor);
-        slides = new Slides(motor1, motor2);
+        slides = new Slides(leftMotor, rightMotor);
 
         IMU imu = hardwareMap.get(IMU.class, "imu");
         // ADJUST ORIENTATION PARAMETERS TO MATCH THE ROBOT

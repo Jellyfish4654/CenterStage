@@ -5,10 +5,10 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 
 public class Slides {
 
-    private DcMotor motorLeft;
-    private DcMotor motorRight;
-    int position1 = motorLeft.getCurrentPosition();
-    int position2 = motorRight.getCurrentPosition();
+    private DcMotor leftMotor;
+    private DcMotor rightMotor;
+    int leftPosition = leftMotor.getCurrentPosition();
+    int rightPosition = rightMotor.getCurrentPosition();
     private final double Kp = 0;
     private final double Ki = 0;
     private final double Kd = 0;
@@ -17,14 +17,13 @@ public class Slides {
     public int targetPosition = 0;
     public final int upperBound = 3000;
     //stop break if goes over upperbound
-    private double power1;
-    private double power2;
+    private double leftPower;
+    private double rightPower;
     PIDCoefficients coefficients = new PIDCoefficients(Kp,Ki,Kd);
     BasicPID controller = new BasicPID(coefficients);
-    public Slides(DcMotor mot1, DcMotor mot2) {
-        this.motorLeft = mot1;
-        this.motorRight = mot2;
-        //mot1 = left motor, mot2 = right motor
+    public Slides(DcMotor leftMotor, DcMotor rightMotor) {
+        this.leftMotor = leftMotor;
+        this.rightMotor = rightMotor;
     }
 
     public void setTargetPosition(int target) {
@@ -39,20 +38,20 @@ public class Slides {
         //safety limit
     }
 
-    public void moveSlides(double power1, double power2) {
-        motorLeft.setPower(power1);
-        motorRight.setPower(power2);
+    public void moveSlides(double leftPower, double rightPower) {
+        leftMotor.setPower(leftPower);
+        rightMotor.setPower(rightPower);
     }
 
     public void update() {
         // Calculate the PID control output based on the current and target positions
-        double leftPid = controller.calculate(targetPosition, this.position1);
-        double rightPid = controller.calculate(targetPosition, this.position2);
+        double leftPid = controller.calculate(targetPosition, this.leftPosition);
+        double rightPid = controller.calculate(targetPosition, this.rightPosition);
         // Calculate the feed-forward term to anticipate gravity's effect on the slide
         double ff = Math.cos(Math.toRadians(targetPosition / ticksInDegree)) * f;
         // Determine the total power as the sum of PID output and feed-forward term
-        this.power1 = leftPid + ff;
-        this.power2 = rightPid + ff;
-        moveSlides(power1, power2);
+        this.leftPower = leftPid + ff;
+        this.rightPower = rightPid + ff;
+        moveSlides(leftPower, rightPower);
     }
 }
