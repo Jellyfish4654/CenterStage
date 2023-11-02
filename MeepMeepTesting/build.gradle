@@ -14,3 +14,10 @@ repositories {
 dependencies {
     implementation 'com.acmerobotics.roadrunner:MeepMeep:0.1.1'
 }
+repositories {
+    maven { url = 'https://maven.brott.dev/' }
+}
+
+dependencies {
+    implementation 'com.acmerobotics.roadrunner:MeepMeep:0.1.1'
+}
