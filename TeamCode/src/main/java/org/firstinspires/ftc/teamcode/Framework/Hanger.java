@@ -5,29 +5,32 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Hanger {
 
     private DcMotor hangerMotor;
-    int position = hangerMotor.getCurrentPosition();
-    int targetUp = 1000;
-    int targetDown = 0;
+    private final int TARGET_POSITION_UP = 1000;
+    private final int TARGET_POSITION_DOWN = 0;
 
-    public Hanger(DcMotor hangerMotor) {
-        this.hangerMotor = hangerMotor;
-        //constructor,,, dont do big stuff here
+    public Hanger(DcMotor motor) {
+        this.hangerMotor = motor;
     }
 
     public void hangUp() {
-
-
-        if (position < targetUp) {
-            //target = amount to slide to,,, slides move until position is high enough
-            hangerMotor.setPower(1.0);
+        int currentPosition = hangerMotor.getCurrentPosition();
+        if (currentPosition < TARGET_POSITION_UP) {
+            hangerMotor.setPower(1.0); // Move up at full power
+        } else {
+            stopMotor(); // Stop if it's already at or above the target
         }
     }
 
     public void hangDown() {
-        if (position > targetDown) {
-            //target = 0 b/c slides extend until reaches bottom
-            hangerMotor.setPower(-1.0);
+        int currentPosition = hangerMotor.getCurrentPosition();
+        if (currentPosition > TARGET_POSITION_DOWN) {
+            hangerMotor.setPower(-1.0); // Move down at full power
+        } else {
+            stopMotor(); // Stop if it's already at or below the target
         }
     }
 
+    private void stopMotor() {
+        hangerMotor.setPower(0); // Stop the motor
+    }
 }

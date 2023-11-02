@@ -27,7 +27,18 @@ public class ButtonEX {
 
     public enum Gamepad1EX {
         A(() -> gamepad1.a),
-        B(() -> gamepad1.b);
+        B(() -> gamepad1.b),
+        X(() -> gamepad1.x),
+        Y(() -> gamepad1.y),
+        DPAD_DOWN(() -> gamepad1.dpad_down),
+        DPAD_LEFT(() -> gamepad1.dpad_left),
+        DPAD_RIGHT(() -> gamepad1.dpad_right),
+        DPAD_UP(() -> gamepad1.dpad_up),
+        LEFT_BUMPER(() -> gamepad1.left_bumper),
+        RIGHT_BUMPER(() -> gamepad1.right_bumper),
+        START(() -> gamepad1.start),
+        BACK(() -> gamepad1.back),
+        GUIDE(() -> gamepad1.guide);
 
         private final ButtonEX ButtonEX;
 
@@ -48,8 +59,18 @@ public class ButtonEX {
 
     public enum Gamepad2EX {
         A(() -> gamepad2.a),
-        B(() -> gamepad2.b);
-
+        B(() -> gamepad2.b),
+        X(() -> gamepad2.x),
+        Y(() -> gamepad2.y),
+        DPAD_DOWN(() -> gamepad2.dpad_down),
+        DPAD_LEFT(() -> gamepad2.dpad_left),
+        DPAD_RIGHT(() -> gamepad2.dpad_right),
+        DPAD_UP(() -> gamepad2.dpad_up),
+        LEFT_BUMPER(() -> gamepad2.left_bumper),
+        RIGHT_BUMPER(() -> gamepad2.right_bumper),
+        START(() -> gamepad2.start),
+        BACK(() -> gamepad2.back),
+        GUIDE(() -> gamepad2.guide);
         private final ButtonEX ButtonEX;
 
         Gamepad2EX(BooleanSupplier buttonStateSupplier) {
