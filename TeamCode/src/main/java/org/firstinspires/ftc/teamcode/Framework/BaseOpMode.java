@@ -7,40 +7,55 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public abstract class BaseOpMode extends LinearOpMode{
-    protected DcMotor[] motors;
-    protected Hanger hangers;
+public abstract class BaseOpMode extends LinearOpMode {
+    protected DcMotor[] driveMotors;
+    protected Hanger hanger;
     protected Slides slides;
-    protected IMU imu;
+    protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
 
     protected void initHardware() {
-        motors = new DcMotor[]{
-                hardwareMap.dcMotor.get("motor fr"),
-                hardwareMap.dcMotor.get("motor br"),
-                hardwareMap.dcMotor.get("motor fl"),
-                hardwareMap.dcMotor.get("motor bl")
+        driveMotors = new DcMotor[] {
+                hardwareMap.dcMotor.get("motorFR"),
+                hardwareMap.dcMotor.get("motorBR"),
+                hardwareMap.dcMotor.get("motorFL"),
+                hardwareMap.dcMotor.get("motorBL")
         };
-        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
-        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
-        motors[2].setDirection(DcMotorSimple.Direction.FORWARD);
-        motors[3].setDirection(DcMotorSimple.Direction.FORWARD);
 
-        DcMotor hangerMotor = hardwareMap.get(DcMotor.class, "linear actuator");
-        DcMotor leftMotor = hardwareMap.get(DcMotor.class, "motor left");
-        DcMotor rightMotor = hardwareMap.get(DcMotor.class, "motor right");
+        // Set motor directions to match physical configuration
+        setMotorDirections(new DcMotorSimple.Direction[] {
+                DcMotorSimple.Direction.REVERSE, // motorFR
+                DcMotorSimple.Direction.REVERSE, // motorBR
+                DcMotorSimple.Direction.FORWARD, // motorFL
+                DcMotorSimple.Direction.FORWARD  // motorBL
+        });
 
-        hangers = new Hanger(hangerMotor);
-        slides = new Slides(leftMotor, rightMotor);
+        hanger = new Hanger(hardwareMap.get(DcMotor.class, "hangerMotor"));
+        slides = new Slides(
+                hardwareMap.get(DcMotor.class, "slideMotorLeft"),
+                hardwareMap.get(DcMotor.class, "slideMotorRight")
+        );
 
-        IMU imu = hardwareMap.get(IMU.class, "imu");
-        // ADJUST ORIENTATION PARAMETERS TO MATCH THE ROBOT
+        // Initialize the IMU sensor with appropriate parameters
+        imuSensor = initializeIMUSensor("imu");
+
+        // Initialize the drone launcher with the corresponding servo
+        droneLauncher = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
+    }
+
+    private IMU initializeIMUSensor(String imuName) {
+        IMU imu = hardwareMap.get(IMU.class, imuName);
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
+        ));
         imu.initialize(parameters);
+        return imu;
+    }
 
-        Servo droneServo = hardwareMap.get(Servo.class, "\uD83E\uDEBC");
-        droneLauncher = new DroneLauncher(droneServo);
+    private void setMotorDirections(DcMotorSimple.Direction[] directions) {
+        for (int i = 0; i < driveMotors.length; i++) {
+            driveMotors[i].setDirection(directions[i]);
+        }
     }
 }
