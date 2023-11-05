@@ -57,4 +57,10 @@ public class Slides {
     private double calculateFeedForward(int targetPosition) {
         return Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
     }
+
+    public boolean isAtTargetPosition() {
+        int leftPosition = leftMotor.getCurrentPosition();
+        int rightPosition = rightMotor.getCurrentPosition();
+        return leftPosition == targetPosition && rightPosition == targetPosition;
+    }
 }

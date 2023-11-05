@@ -4,18 +4,21 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.roadrunner.*;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.teamcode.Framework.ContourPipeline;
 
+import java.lang.Math;
+
 @Config
 @Autonomous(name="RedAuto")
-public class RedAuto extends LinearOpMode {
+public class RedAuto extends BaseOpMode {
     private OpenCvCamera camera;
 
     private static final int CAMERA_WIDTH  = 1280;
@@ -117,6 +120,12 @@ public class RedAuto extends LinearOpMode {
     public Double clampValue(double value, double min, double max) {
         return Math.max(min, Math.min(value, max));
     }
+
+    Action controlSlidesAction = telemetryPacket -> {
+        slides.setTargetPosition(1500);
+        slides.update();
+        return slides.isAtTargetPosition();
+    };
 
     public void runAutonomousPathA() {
         telemetry.addLine("Autonomous A");
