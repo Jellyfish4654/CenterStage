@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Framework;
+package org.firstinspires.ftc.teamcode.Framework.misc;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -13,8 +13,8 @@ public class AntiTipping {
     private final IMU imuSensor;
     PIDCoefficients pitchCoefficients = new PIDCoefficients(0,0,0);
     PIDCoefficients rollCoefficients = new PIDCoefficients(0,0,0);
-    private BasicPID pitchController = new BasicPID(pitchCoefficients);
-    private BasicPID rollController = new BasicPID(rollCoefficients);
+    private final BasicPID pitchController = new BasicPID(pitchCoefficients);
+    private final BasicPID rollController = new BasicPID(rollCoefficients);
 
     public AntiTipping(DcMotor[] motors, IMU imuSensor) {
         this.motors = motors;

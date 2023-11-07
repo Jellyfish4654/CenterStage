@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Framework.AntiTipping;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.ButtonEX;
-import org.firstinspires.ftc.teamcode.Framework.SlewRateLimiter;
+import org.firstinspires.ftc.teamcode.Framework.misc.AntiTipping;
+import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
+import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -27,7 +28,7 @@ public class JellyTele extends BaseOpMode {
     }
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
-    private SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
+    private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
 
     public void runOpMode() throws InterruptedException {
         AntiTipping antiTipping = new AntiTipping(driveMotors, imuSensor);

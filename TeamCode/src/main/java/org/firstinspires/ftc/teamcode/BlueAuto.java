@@ -3,22 +3,20 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.acmerobotics.roadrunner.*;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.misc.BlueContourPipeline;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.firstinspires.ftc.teamcode.Framework.misc.RedContourPipeline;
-
-import java.lang.Math;
 
 @Config
-@Autonomous(name="RedAuto")
-public class RedAuto extends BaseOpMode {
+@Autonomous(name="BlueAuto")
+public class BlueAuto extends BaseOpMode {
     private OpenCvCamera camera;
 
     private static final int CAMERA_WIDTH  = 1280;
@@ -37,14 +35,14 @@ public class RedAuto extends BaseOpMode {
     public static double regionTopY     = 0.0;
     public static double regionBottomY  = 0.0;
 
-    public static Scalar defaultLowerBoundYCrCb = new Scalar(0, 140, 0); // Increase the lower Cr bound for red
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(255, 255, 120); // Decrease the upper Cb bound to exclude blues
+    public static Scalar defaultLowerBoundYCrCb = new Scalar(0, 0, 140); // Increase the lower Cr bound for blue
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255, 120, 255); // Decrease the upper Cb bound to exclude reds
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        RedContourPipeline myPipeline = new RedContourPipeline(regionLeftX, regionRightX, regionTopY, regionBottomY);
+        BlueContourPipeline myPipeline = new BlueContourPipeline(regionLeftX, regionRightX, regionTopY, regionBottomY);
         camera.setPipeline(myPipeline);
 
         myPipeline.configureScalarLower(defaultLowerBoundYCrCb.val[0], defaultLowerBoundYCrCb.val[1], defaultLowerBoundYCrCb.val[2]);
@@ -91,7 +89,7 @@ public class RedAuto extends BaseOpMode {
         }
     }
 
-    public void updateColorThresholds(RedContourPipeline myPipeline) {
+    public void updateColorThresholds(BlueContourPipeline myPipeline) {
         if (lowerThresholdLastUpdate + 0.05 < getRuntime()) {
             chromaRedLowerBound += -gamepad1.left_stick_y;
             chromaBlueLowerBound += gamepad1.left_stick_x;

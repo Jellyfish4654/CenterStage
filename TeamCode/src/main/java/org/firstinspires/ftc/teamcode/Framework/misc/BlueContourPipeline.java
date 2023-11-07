@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Framework;
+package org.firstinspires.ftc.teamcode.Framework.misc;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -14,11 +14,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContourPipeline extends OpenCvPipeline {
+public class BlueContourPipeline extends OpenCvPipeline {
     Scalar HIGHLIGHT_COLOR = new Scalar(196, 23, 112);
 
-    public static Scalar lowerBoundYCrCb = new Scalar(0.0, 150.0, 120.0);
-    public static Scalar upperBoundYCrCb = new Scalar(255.0, 255.0, 255.0);
+    public static Scalar lowerBoundYCrCb = new Scalar(0.0, 0.0, 150.0); // Increase the lower Cr bound for red
+    public static Scalar upperBoundYCrCb = new Scalar(255.0, 120.0, 255.0); // Decrease the upper Cb bound to exclude blues
 
     public volatile boolean hasError = false;
     public volatile Exception debugException;
@@ -44,7 +44,7 @@ public class ContourPipeline extends OpenCvPipeline {
 
     private final Object synchronizationLock = new Object();
 
-    public ContourPipeline(double regionLeftX, double regionRightX, double regionTopY, double regionBottomY) {
+    public BlueContourPipeline(double regionLeftX, double regionRightX, double regionTopY, double regionBottomY) {
         this.regionLeftX = regionLeftX;
         this.regionRightX = regionRightX;
         this.regionTopY = regionTopY;

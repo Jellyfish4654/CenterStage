@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Hanger {
 
-    private DcMotor hangerMotor;
+    private final DcMotor hangerMotor;
     private final int TARGET_POSITION_UP = 1000;
     private final int TARGET_POSITION_DOWN = 0;
 
