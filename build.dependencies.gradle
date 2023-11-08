@@ -1,7 +1,7 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
-    maven { url 'https://jitpack.io' }
+    maven { url = 'https://jitpack.io' }
     maven { url = 'https://maven.brott.dev/' }
 }
 
@@ -21,8 +21,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.4.13'
-    implementation 'com.acmerobotics.dashboard:dashboard:0.4.13'
-    implementation 'com.github.RR-9527:robot-code-v2:1.0.2'
+    implementation 'com.acmerobotics.dashboard:dashboard:0.4.14'
 }
 
