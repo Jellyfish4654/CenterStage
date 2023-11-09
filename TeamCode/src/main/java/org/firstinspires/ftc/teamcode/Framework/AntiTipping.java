@@ -6,9 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 
-
 public class AntiTipping {
-
     private final DcMotor[] motors;
     private final IMU imuSensor;
     PIDCoefficients pitchCoefficients = new PIDCoefficients(0,0,0);
@@ -20,7 +18,7 @@ public class AntiTipping {
         this.motors = motors;
         this.imuSensor = imuSensor;
     }
-
+    
     public void correctTilt() {
         double pitch = imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS);
         double roll = imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS);
