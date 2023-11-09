@@ -68,8 +68,6 @@ public class MeepMeepTesting {
                 .splineToLinearHeading(new Pose2d(49, -43, 0), 0)
                 .build());
         
-        
-        
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
