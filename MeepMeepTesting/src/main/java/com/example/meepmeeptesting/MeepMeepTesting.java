@@ -32,7 +32,7 @@ public class MeepMeepTesting {
                 .build());
     
         RoadRunnerBotEntity myLeftlessBot = new DefaultBotBuilder(meepMeep)
-                .setColorScheme(new ColorSchemeRedLight())
+                .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
         
@@ -42,7 +42,7 @@ public class MeepMeepTesting {
                 .build());
     
         RoadRunnerBotEntity myLeftKindaNotReallyBot = new DefaultBotBuilder(meepMeep)
-                .setColorScheme(new ColorSchemeRedLight())
+                .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
     
@@ -51,7 +51,7 @@ public class MeepMeepTesting {
                 .build());
     
         RoadRunnerBotEntity myLeftKindaBotYeahWhateverYouWant = new DefaultBotBuilder(meepMeep)
-                .setColorScheme(new ColorSchemeRedLight())
+                .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
     
@@ -60,7 +60,7 @@ public class MeepMeepTesting {
                 .build());
     
         RoadRunnerBotEntity myRightKindaBotYeahWhateverYouWant = new DefaultBotBuilder(meepMeep)
-                .setColorScheme(new ColorSchemeRedLight())
+                .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
     
