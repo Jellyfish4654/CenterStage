@@ -15,11 +15,11 @@ public class Slides {
     private static final double KD = 0;
     private static final double FEED_FORWARD_CONSTANT = 0;
 
-    private DcMotor leftMotor;
-    private DcMotor rightMotor;
+    private final DcMotor leftMotor;
+    private final DcMotor rightMotor;
     private int targetPosition;
-    private PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
-    private BasicPID controller = new BasicPID(coefficients);
+    private final PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
+    private final BasicPID controller = new BasicPID(coefficients);
 
     public Slides(DcMotor leftMotor, DcMotor rightMotor) {
         this.leftMotor = leftMotor;
@@ -56,5 +56,11 @@ public class Slides {
 
     private double calculateFeedForward(int targetPosition) {
         return Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
+    }
+
+    public boolean isAtTargetPosition() {
+        int leftPosition = leftMotor.getCurrentPosition();
+        int rightPosition = rightMotor.getCurrentPosition();
+        return leftPosition == targetPosition && rightPosition == targetPosition;
     }
 }

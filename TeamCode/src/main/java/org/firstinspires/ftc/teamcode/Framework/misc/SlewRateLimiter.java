@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Framework;
+package org.firstinspires.ftc.teamcode.Framework.misc;
 
 import androidx.core.math.MathUtils;
 import com.qualcomm.robotcore.util.ElapsedTime;
