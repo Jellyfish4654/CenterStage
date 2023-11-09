@@ -21,8 +21,12 @@ public class ButtonEX {
         currState = buttonState.getAsBoolean();
     }
 
-    public boolean isPressed() {
+    public boolean risingEdge() {
         return !lastState && currState;
+    }
+
+    public boolean fallingEdge() {
+        return lastState && !currState;
     }
 
     public enum Gamepad1EX {
@@ -40,19 +44,23 @@ public class ButtonEX {
         BACK(() -> gamepad1.back),
         GUIDE(() -> gamepad1.guide);
 
-        private final ButtonEX ButtonEX;
+        private final ButtonEX buttonEX;
 
         Gamepad1EX(BooleanSupplier buttonStateSupplier) {
-            this.ButtonEX = new ButtonEX(buttonStateSupplier);
+            this.buttonEX = new ButtonEX(buttonStateSupplier);
         }
 
-        public boolean isPressed() {
-            return ButtonEX.isPressed();
+        public boolean risingEdge() {
+            return buttonEX.risingEdge();
+        }
+
+        public boolean fallingEdge() {
+            return buttonEX.fallingEdge();
         }
 
         public static void updateAll() {
             for (Gamepad1EX button : values()) {
-                button.ButtonEX.update();
+                button.buttonEX.update();
             }
         }
     }
@@ -71,19 +79,24 @@ public class ButtonEX {
         START(() -> gamepad2.start),
         BACK(() -> gamepad2.back),
         GUIDE(() -> gamepad2.guide);
-        private final ButtonEX ButtonEX;
+
+        private final ButtonEX buttonEX;
 
         Gamepad2EX(BooleanSupplier buttonStateSupplier) {
-            this.ButtonEX = new ButtonEX(buttonStateSupplier);
+            this.buttonEX = new ButtonEX(buttonStateSupplier);
         }
 
-        public boolean isPressed() {
-            return ButtonEX.isPressed();
+        public boolean risingEdge() {
+            return buttonEX.risingEdge();
+        }
+
+        public boolean fallingEdge() {
+            return buttonEX.fallingEdge();
         }
 
         public static void updateAll() {
             for (Gamepad2EX button : values()) {
-                button.ButtonEX.update();
+                button.buttonEX.update();
             }
         }
     }

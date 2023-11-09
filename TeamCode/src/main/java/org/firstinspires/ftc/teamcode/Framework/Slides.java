@@ -29,7 +29,9 @@ public class Slides {
     public void setTargetPosition(int target) {
         targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
     }
-
+    public int getTargetPosition() {
+        return this.targetPosition;
+    }
     public void moveSlides(double leftPower, double rightPower) {
         leftMotor.setPower(leftPower);
         rightMotor.setPower(rightPower);

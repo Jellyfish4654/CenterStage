@@ -26,8 +26,15 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
+    private enum SlideMode {
+        MANUAL,
+        AUTOMATIC
+    }
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
+    private SlideMode currentSlideMode = SlideMode.MANUAL;
+    private int slidePosition = 0;
+    private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
 
     public void runOpMode() throws InterruptedException {
@@ -47,15 +54,42 @@ public class JellyTele extends BaseOpMode {
 
             DriveMode(precisionMultiplier);
             antiTipping.correctTilt();
-            if (ButtonEX.Gamepad2EX.A.isPressed()) {
+            if (ButtonEX.Gamepad2EX.A.risingEdge()) {
                 droneLauncher.launchDrone();
             }
-
+            SlideControl();
             ButtonEX.Gamepad1EX.updateAll();
             ButtonEX.Gamepad2EX.updateAll();
         }
     }
 
+    private void SlideControl() {
+        // Slide control FSM logic
+        switch (currentSlideMode) {
+            case MANUAL:
+                if (ButtonEX.Gamepad2EX.B.risingEdge()) {
+                    currentSlideMode = SlideMode.AUTOMATIC;
+                } else {
+                    slides.setTargetPosition(slides.getTargetPosition() + (int) (gamepad2.left_stick_y * 2));
+                }
+                break;
+
+            case AUTOMATIC:
+                if (ButtonEX.Gamepad2EX.B.risingEdge()) {
+                    currentSlideMode = SlideMode.MANUAL;
+                } else {
+                    if (ButtonEX.Gamepad2EX.DPAD_UP.fallingEdge()) {
+                        slidePosition = (slidePosition + 1) % autoSlidePositions.length;
+                        slides.setTargetPosition(autoSlidePositions[slidePosition]);
+                    } else if (ButtonEX.Gamepad2EX.DPAD_DOWN.fallingEdge()) {
+                        slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
+                        slides.setTargetPosition(autoSlidePositions[slidePosition]);
+                    }
+                }
+                break;
+        }
+    }
+    
     private void initializeSlewRateLimiters() {
         for (int i = 0; i < slewRateLimiters.length; i++) {
             slewRateLimiters[i] = new SlewRateLimiter(RATE_LIMIT);
