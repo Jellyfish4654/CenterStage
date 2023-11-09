@@ -3,14 +3,13 @@ package com.example.meepmeeptesting;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
-import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedDark;
-import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedLight;
+import com.noahbres.meepmeep.core.colorscheme.scheme.*;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(775);
+        MeepMeep meepMeep = new MeepMeep(750);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -67,7 +66,18 @@ public class MeepMeepTesting {
         myRightKindaBotYeahWhateverYouWant.runAction(myRightKindaBotYeahWhateverYouWant.getDrive().actionBuilder(new Pose2d(43, -35, 0))
                 .splineToLinearHeading(new Pose2d(49, -43, 0), 0)
                 .build());
-        
+
+        RoadRunnerBotEntity bot1 = new DefaultBotBuilder(meepMeep)
+                // We set this bot to be red
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .build();
+
+        bot1.runAction(bot1.getDrive().actionBuilder(new Pose2d(7, -68, Math.toRadians(90)))
+                .splineTo(new Vector2d(17.5, -32), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(24, -36), Math.toRadians(0))
+                .build());
+
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
@@ -77,6 +87,7 @@ public class MeepMeepTesting {
                 .addEntity(myLeftKindaNotReallyBot)
                 .addEntity(myLeftKindaBotYeahWhateverYouWant)
                 .addEntity(myRightKindaBotYeahWhateverYouWant)
+                .addEntity(bot1)
                 .start();
     }
 }
