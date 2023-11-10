@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -31,14 +32,14 @@ public class JellyTele extends BaseOpMode {
     private int slidePosition = 0;
     private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
+    private boolean Hanging = false;
 
     public void runOpMode() throws InterruptedException {
         AntiTipping antiTipping = new AntiTipping(driveMotors, imuSensor);
         initHardware();
-        ElapsedTime timer = new ElapsedTime();
-        waitForStart();
-
         initializeSlewRateLimiters();
+        waitForStart();
+        ElapsedTime timer = new ElapsedTime();
 
         while (opModeIsActive()) {
             updateDriveModeFromGamepad();
@@ -48,8 +49,17 @@ public class JellyTele extends BaseOpMode {
             displayTelemetry(precisionMultiplier);
 
             DriveMode(precisionMultiplier);
-            antiTipping.correctTilt();
-            if (ButtonEX.Gamepad2EX.A.risingEdge()) {
+            if(Hanging==false){
+                antiTipping.correctTilt();
+            }
+            if(ButtonEX.Gamepad2EX.Y.fallingEdge()){
+                hanger.hangUp();
+                Hanging=true;
+            }
+            if(ButtonEX.Gamepad2EX.A.fallingEdge()){
+                hanger.hangDown();
+            }
+            if (ButtonEX.Gamepad2EX.GUIDE.fallingEdge()) {
                 droneLauncher.launchDrone();
             }
 
@@ -61,7 +71,7 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void SlideControl() {
-        slides.setTargetPosition(slides.getTargetPosition() + (int) (gamepad2.left_stick_y * 0.5));
+        slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
 
         if (ButtonEX.Gamepad2EX.DPAD_UP.fallingEdge()) {
             slidePosition = (slidePosition + 1) % autoSlidePositions.length;
@@ -79,21 +89,30 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void updateDriveModeFromGamepad() {
-        if (gamepad1.dpad_left) {
+        if (ButtonEX.Gamepad1EX.DPAD_LEFT.fallingEdge()) {
             driveMode = DriveMode.TANK;
-        } else if (gamepad1.dpad_up) {
+        } else if (ButtonEX.Gamepad1EX.DPAD_UP.fallingEdge()) {
             driveMode = DriveMode.MECANUM;
-        } else if (gamepad1.dpad_right) {
+        } else if (ButtonEX.Gamepad1EX.DPAD_RIGHT.fallingEdge()) {
             driveMode = DriveMode.DRIVE;
-        } else if (gamepad1.dpad_down) {
+        } else if (ButtonEX.Gamepad1EX.DPAD_DOWN.fallingEdge()) {
             driveMode = DriveMode.FIELDCENTRIC;
         }
     }
+    Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
+            .addStep(0.0, 1.0, 1000)
+            .addStep(0.0, 0.0, 250)
+            .addStep(1.0, 0.0, 1000)
+            .addStep(0.0, 0.0, 250)
+            .addStep(0.0, 1.0, 1000)
+            .addStep(0.0, 0.0, 250)
+            .addStep(1.0, 0.0, 1000)
+            .build();
 
     private void alertEndGame(ElapsedTime timer) {
         if (timer.seconds() == ENDGAME_ALERT_TIME) {
-            gamepad1.rumbleBlips(3);
-            gamepad2.rumbleBlips(3);
+            gamepad1.runRumbleEffect(effect);
+            gamepad2.runRumbleEffect(effect);
         }
     }
 
@@ -107,9 +126,9 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void resetIMU() {
-        if (gamepad1.y && gamepad1.back) {
+        if (ButtonEX.Gamepad1EX.BACK.fallingEdge()) {
             imuSensor.resetYaw();
-            gamepad1.rumbleBlips(5);
+            gamepad1.rumbleBlips(3);
         }
     }
 
