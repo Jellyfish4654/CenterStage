@@ -13,6 +13,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected Slides slides;
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
+    protected Outake outakeServos;
 
     protected void initHardware() {
         driveMotors = new DcMotor[] {
@@ -41,6 +42,10 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         // Initialize the drone launcher with the corresponding servo
         droneLauncher = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
+
+        Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outakeLeftServo");
+        Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outakeRightServo");
+        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
     }
 
     private IMU initializeIMUSensor(String imuName) {

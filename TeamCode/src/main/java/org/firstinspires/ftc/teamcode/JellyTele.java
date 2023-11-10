@@ -26,13 +26,8 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
-    private enum SlideMode {
-        MANUAL,
-        AUTOMATIC
-    }
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
-    private SlideMode currentSlideMode = SlideMode.MANUAL;
     private int slidePosition = 0;
     private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
@@ -57,36 +52,23 @@ public class JellyTele extends BaseOpMode {
             if (ButtonEX.Gamepad2EX.A.risingEdge()) {
                 droneLauncher.launchDrone();
             }
+
             SlideControl();
+            slides.update();
             ButtonEX.Gamepad1EX.updateAll();
             ButtonEX.Gamepad2EX.updateAll();
         }
     }
 
     private void SlideControl() {
-        // Slide control FSM logic
-        switch (currentSlideMode) {
-            case MANUAL:
-                if (ButtonEX.Gamepad2EX.B.risingEdge()) {
-                    currentSlideMode = SlideMode.AUTOMATIC;
-                } else {
-                    slides.setTargetPosition(slides.getTargetPosition() + (int) (gamepad2.left_stick_y * 2));
-                }
-                break;
+        slides.setTargetPosition(slides.getTargetPosition() + (int) (gamepad2.left_stick_y * 0.5));
 
-            case AUTOMATIC:
-                if (ButtonEX.Gamepad2EX.B.risingEdge()) {
-                    currentSlideMode = SlideMode.MANUAL;
-                } else {
-                    if (ButtonEX.Gamepad2EX.DPAD_UP.fallingEdge()) {
-                        slidePosition = (slidePosition + 1) % autoSlidePositions.length;
-                        slides.setTargetPosition(autoSlidePositions[slidePosition]);
-                    } else if (ButtonEX.Gamepad2EX.DPAD_DOWN.fallingEdge()) {
-                        slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
-                        slides.setTargetPosition(autoSlidePositions[slidePosition]);
-                    }
-                }
-                break;
+        if (ButtonEX.Gamepad2EX.DPAD_UP.fallingEdge()) {
+            slidePosition = (slidePosition + 1) % autoSlidePositions.length;
+            slides.setTargetPosition(autoSlidePositions[slidePosition]);
+        } else if (ButtonEX.Gamepad2EX.DPAD_DOWN.fallingEdge()) {
+            slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
+            slides.setTargetPosition(autoSlidePositions[slidePosition]);
         }
     }
     
@@ -158,7 +140,6 @@ public class JellyTele extends BaseOpMode {
         setMotorSpeeds(precisionMultiplier, motorSpeeds);
     }
 
-    // Methods for each drive mode execution
     private double[] TankDrive() {
         double left = -applyDeadband(gamepad1.left_stick_y);
         double right = -applyDeadband(gamepad1.right_stick_y);
