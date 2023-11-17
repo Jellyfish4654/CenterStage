@@ -15,13 +15,19 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
 
+    protected Tubing intakeMotor;
+
+
     protected void initHardware() {
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
                 hardwareMap.dcMotor.get("motorFL"),
                 hardwareMap.dcMotor.get("motorBL")
+
         };
+        DcMotor intakeMotor = hardwareMap.get(DcMotor.class,"Tubing");
+
 
         // Set motor directions to match physical configuration
         setMotorDirections(new DcMotorSimple.Direction[] {
@@ -63,4 +69,6 @@ public abstract class BaseOpMode extends LinearOpMode {
             driveMotors[i].setDirection(directions[i]);
         }
     }
+
+
 }
