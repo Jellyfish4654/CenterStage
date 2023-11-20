@@ -14,10 +14,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
-
-    protected Tubing intakeMotor;
-
-
+    protected tubingIntake intakeMotors;
     protected void initHardware() {
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
@@ -26,8 +23,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.dcMotor.get("motorBL")
 
         };
-        DcMotor intakeMotor = hardwareMap.get(DcMotor.class,"Tubing");
-
+        intakeMotors = new tubingIntake(hardwareMap.get(DcMotor.class, "Tubing"));
 
         // Set motor directions to match physical configuration
         setMotorDirections(new DcMotorSimple.Direction[] {

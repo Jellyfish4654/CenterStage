@@ -46,6 +46,9 @@ public class Hanger {
 
         double motorPower = controller.calculate(instantTargetPosition, hangerMotor.getCurrentPosition());
         moveHanger(motorPower);
+        
+//        double motorPower = calculatePidOutput(targetPosition, hangerMotor.getCurrentPosition());
+//        moveHanger(motorPower);
     }
 
     private double calculatePidOutput(int targetPosition, int currentPosition) {
