@@ -5,17 +5,18 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.Hanger;
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 @Config
 @TeleOp(name = "Hanger Tuner")
-public class HangerTuner extends BaseOpMode {
-    private DcMotor hangerMotor;
+public class HangerTuner extends LinearOpMode {
+      private DcMotor hangerMotor;
     private static double KP = 0; //Todo Tuning
     private static int HANG_UP_POSITION = 1000;
     private static int HANG_DOWN_POSITION = 0;
@@ -31,9 +32,7 @@ public class HangerTuner extends BaseOpMode {
     // FTC Dashboard instance
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
-    public HangerTuner(DcMotor motor) {
-        this.hangerMotor = motor;
-    }
+
 
     public void setTargetPosition(int target) {
         targetPosition = target;
@@ -75,7 +74,7 @@ public class HangerTuner extends BaseOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        initHardware();
+        hangerMotor = hangerMotor = hardwareMap.get(DcMotor.class, "hangerMotor");
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 

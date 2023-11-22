@@ -28,19 +28,14 @@ public class SlidesTuner extends BaseOpMode {
     private static int target = 0;
 
 
-    private final DcMotor leftMotor;
-    private final DcMotor rightMotor;
+    private DcMotor leftMotor;
+    private DcMotor rightMotor;
     private int targetPosition;
     private final PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
     private final BasicPID leftController = new BasicPID(coefficients);
     private final BasicPID rightController = new BasicPID(coefficients);
     private FtcDashboard dashboard = FtcDashboard.getInstance();
     private ElapsedTime timer = new ElapsedTime();
-
-    public SlidesTuner(DcMotor leftMotor, DcMotor rightMotor) {
-        this.leftMotor = leftMotor;
-        this.rightMotor = rightMotor;
-    }
 
     public void setTargetPosition(int target) {
         targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
@@ -101,7 +96,8 @@ public class SlidesTuner extends BaseOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        initHardware();
+        rightMotor = hardwareMap.get(DcMotor.class, "rightSlide");
+        leftMotor = hardwareMap.get(DcMotor.class, "leftSlide");
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 

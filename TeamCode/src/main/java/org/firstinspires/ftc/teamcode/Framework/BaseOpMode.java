@@ -7,15 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.HangerTuner;
 import org.firstinspires.ftc.teamcode.SlidesTuner;
 
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected Hanger hanger;
-    protected HangerTuner hangerTuner;
     protected Slides slides;
-    protected SlidesTuner slidesTuner;
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
@@ -37,14 +34,8 @@ public abstract class BaseOpMode extends LinearOpMode {
                 DcMotorSimple.Direction.FORWARD, // motorFL
                 DcMotorSimple.Direction.FORWARD  // motorBL
         });
-        hangerTuner = new HangerTuner(hardwareMap.get(DcMotor.class, "hangerMotor"));
         hanger = new Hanger(hardwareMap.get(DcMotor.class, "hangerMotor"));
         slides = new Slides(
-                hardwareMap.get(DcMotor.class, "slideMotorLeft"),
-                hardwareMap.get(DcMotor.class, "slideMotorRight")
-        );
-
-        slidesTuner = new SlidesTuner(
                 hardwareMap.get(DcMotor.class, "slideMotorLeft"),
                 hardwareMap.get(DcMotor.class, "slideMotorRight")
         );
