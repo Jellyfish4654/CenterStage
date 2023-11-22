@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
-
+//Elliot was here
     private static final double PRECISION_MULTIPLIER_LOW = 0.35;
     private static final double PRECISION_MULTIPLIER_HIGH = 0.7;
     private static final double RATE_LIMIT = 0.5;
