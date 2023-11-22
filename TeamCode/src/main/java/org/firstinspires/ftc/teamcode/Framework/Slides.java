@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.Framework;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 public class Slides {
 
@@ -14,12 +17,16 @@ public class Slides {
     private static final double KI = 0;
     private static final double KD = 0;
     private static final double FEED_FORWARD_CONSTANT = 0;
+    private static final double MAX_ACCELERATION = 1.0; // Adjust as needed
+    private static final double MAX_VELOCITY = 1.0; // Adjust as needed
 
     private final DcMotor leftMotor;
     private final DcMotor rightMotor;
     private int targetPosition;
     private final PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
     private final BasicPID controller = new BasicPID(coefficients);
+
+    private ElapsedTime timer = new ElapsedTime();
 
     public Slides(DcMotor leftMotor, DcMotor rightMotor) {
         this.leftMotor = leftMotor;
@@ -28,6 +35,7 @@ public class Slides {
 
     public void setTargetPosition(int target) {
         targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
+        timer.reset();
     }
     public int getTargetPosition() {
         return this.targetPosition;
@@ -42,14 +50,29 @@ public class Slides {
     }
 
     public void update() {
+        double elapsedTime = timer.seconds();
         int leftPosition = leftMotor.getCurrentPosition();
         int rightPosition = rightMotor.getCurrentPosition();
 
-        double leftPidOutput = calculatePidOutput(targetPosition, leftPosition);
-        double rightPidOutput = calculatePidOutput(targetPosition, rightPosition);
-        double feedForward = calculateFeedForward(targetPosition);
+        // Regular PIDF
+        // double leftPidOutput = calculatePidOutput(targetPosition, leftPosition);
+        // double rightPidOutput = calculatePidOutput(targetPosition, rightPosition);
+        // double feedForward = calculateFeedForward(targetPosition);
+        // moveSlides(leftPidOutput + feedForward, rightPidOutput + feedForward);
 
-        moveSlides(leftPidOutput + feedForward, rightPidOutput + feedForward);
+        double leftDistance = targetPosition - leftMotor.getCurrentPosition();
+        double rightDistance = targetPosition - rightMotor.getCurrentPosition();
+
+        double instantLeftTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, leftDistance, elapsedTime);
+        double instantRightTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, rightDistance, elapsedTime);
+
+        double leftPidOutput = calculatePidOutput((int) instantLeftTargetPosition, leftMotor.getCurrentPosition());
+        double rightPidOutput = calculatePidOutput((int) instantRightTargetPosition, rightMotor.getCurrentPosition());
+        double leftFeedForward = calculateFeedForward((int) instantLeftTargetPosition);
+        double rightFeedForward = calculateFeedForward((int) instantRightTargetPosition);
+
+        // Apply the calculated power to each motor
+        moveSlides(leftPidOutput + leftFeedForward, rightPidOutput + rightFeedForward);
     }
 
     private double calculatePidOutput(int targetPosition, int currentPosition) {

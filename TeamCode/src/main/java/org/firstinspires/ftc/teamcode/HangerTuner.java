@@ -5,17 +5,15 @@ import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 @Config
-@TeleOp(name = "P MP Test")
+@TeleOp(name = "Hanger Tuner")
 public class HangerTuner extends BaseOpMode {
     private DcMotor hangerMotor;
     private static double KP = 0; //Todo Tuning
@@ -55,14 +53,15 @@ public class HangerTuner extends BaseOpMode {
         double distance = targetPosition - hangerMotor.getCurrentPosition();
         double instantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, distance, elapsedTime);
 
-        double motorPower = controller.calculate(instantTargetPosition, hangerMotor.getCurrentPosition());
+        // W/out MP
+        double motorPower = controller.calculate(distance, 0);
+        // W/ MP
+        // double motorPower = controller.calculate(instantTargetPosition, hangerMotor.getCurrentPosition());
         moveHanger(motorPower);
 
         // Send data to FTC Dashboard
         telemetry.addData("Target Position", targetPosition);
         telemetry.addData("Current Position", hangerMotor.getCurrentPosition());
-        telemetry.addData("Motor Power", motorPower);
-        telemetry.addData("Elapsed Time", elapsedTime);
         telemetry.update();
     }
 
