@@ -8,29 +8,50 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 public class Slides {
-
-    private static final int SLIDE_LOWER_BOUND = 0;
-    private static final int SLIDE_UPPER_BOUND = 3000;
-    private static final double TICKS_PER_DEGREE = 145.1 / 360.0;
-    private static final int EXTENDED_THRESHOLD = 500;
-    private static final double KP = 0;
-    private static final double KI = 0;
-    private static final double KD = 0;
-    private static final double FEED_FORWARD_CONSTANT = 0;
-    private static final double MAX_ACCELERATION = 1.0; // Adjust as needed
-    private static final double MAX_VELOCITY = 1.0; // Adjust as needed
-
-    private final DcMotor leftMotor;
-    private final DcMotor rightMotor;
-    private int targetPosition;
-    private final PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
-    private final BasicPID controller = new BasicPID(coefficients);
-
-    private ElapsedTime timer = new ElapsedTime();
-
+    public  DcMotor leftMotor;
+    public  DcMotor rightMotor;
     public Slides(DcMotor leftMotor, DcMotor rightMotor) {
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
+    }
+    public static double KP = 0;
+    public static double KI = 0;
+    public static double KD = 0;
+    public static double FEED_FORWARD_CONSTANT = 0;
+    public static double MAX_ACCELERATION = 1.0; // Adjust as needed
+    public static double MAX_VELOCITY = 1.0; // Adjust as needed
+    public static int targetPosition = 0;
+    private final double TICKS_PER_DEGREE = 145.1 / 360.0;
+    public static int SLIDE_LOWER_BOUND = 0;
+    public static int SLIDE_UPPER_BOUND = 3000;
+    public static int EXTENDED_STATE = 500;
+    PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
+    BasicPID controller = new BasicPID(coefficients);
+
+    public ElapsedTime timer = new ElapsedTime();
+
+    public void update(){
+        double elapsedTime = timer.seconds();
+        int leftCurrentPosition = leftMotor.getCurrentPosition();
+        int rightCurrentPosition = rightMotor.getCurrentPosition();
+        double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
+        double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition) + FF;
+        double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) + FF;
+        double leftDistance = targetPosition - leftMotor.getCurrentPosition();
+        double rightDistance = targetPosition - rightMotor.getCurrentPosition();
+        double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+                MAX_VELOCITY,
+                leftDistance,
+                elapsedTime);
+        double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+                MAX_VELOCITY,
+                rightDistance,
+                elapsedTime);
+        double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
+        double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
+
+        leftMotor.setPower(LEFT_PIDF_POWER);
+        rightMotor.setPower(RIGHT_PIDF_POWER);
     }
 
     public void setTargetPosition(int target) {
@@ -40,49 +61,9 @@ public class Slides {
     public int getTargetPosition() {
         return this.targetPosition;
     }
-    public void moveSlides(double leftPower, double rightPower) {
-        leftMotor.setPower(leftPower);
-        rightMotor.setPower(rightPower);
-    }
-
     public boolean slidesExtendedState() {
-        return targetPosition > EXTENDED_THRESHOLD;
+        return targetPosition > EXTENDED_STATE;
     }
-
-    public void update() {
-        double elapsedTime = timer.seconds();
-        int leftPosition = leftMotor.getCurrentPosition();
-        int rightPosition = rightMotor.getCurrentPosition();
-
-        // Regular PIDF
-        // double leftPidOutput = calculatePidOutput(targetPosition, leftPosition);
-        // double rightPidOutput = calculatePidOutput(targetPosition, rightPosition);
-        // double feedForward = calculateFeedForward(targetPosition);
-        // moveSlides(leftPidOutput + feedForward, rightPidOutput + feedForward);
-
-        double leftDistance = targetPosition - leftMotor.getCurrentPosition();
-        double rightDistance = targetPosition - rightMotor.getCurrentPosition();
-
-        double instantLeftTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, leftDistance, elapsedTime);
-        double instantRightTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, rightDistance, elapsedTime);
-
-        double leftPidOutput = calculatePidOutput((int) instantLeftTargetPosition, leftMotor.getCurrentPosition());
-        double rightPidOutput = calculatePidOutput((int) instantRightTargetPosition, rightMotor.getCurrentPosition());
-        double leftFeedForward = calculateFeedForward((int) instantLeftTargetPosition);
-        double rightFeedForward = calculateFeedForward((int) instantRightTargetPosition);
-
-        // Apply the calculated power to each motor
-        moveSlides(leftPidOutput + leftFeedForward, rightPidOutput + rightFeedForward);
-    }
-
-    private double calculatePidOutput(int targetPosition, int currentPosition) {
-        return controller.calculate(targetPosition, currentPosition);
-    }
-
-    private double calculateFeedForward(int targetPosition) {
-        return Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
-    }
-
     public boolean isAtTargetPosition() {
         int leftPosition = leftMotor.getCurrentPosition();
         int rightPosition = rightMotor.getCurrentPosition();

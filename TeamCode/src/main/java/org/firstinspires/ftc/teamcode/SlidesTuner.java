@@ -4,106 +4,72 @@ import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 @Config
 @TeleOp(name = "Slides Tuner")
-public class SlidesTuner extends BaseOpMode {
-
-    private static int SLIDE_LOWER_BOUND = 0;
-    private static int SLIDE_UPPER_BOUND = 3000;
-    private static double KP = 0;
-    private static double KI = 0;
-    private static double KD = 0;
-    private static double FEED_FORWARD_CONSTANT = 0;
-    private static double MAX_ACCELERATION = 1.0; // Adjust as needed
-    private static double MAX_VELOCITY = 1.0; // Adjust as needed
-    private static int target = 0;
-
-
-    private DcMotor leftMotor;
-    private DcMotor rightMotor;
-    private int targetPosition;
-    private final PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
-    private final BasicPID leftController = new BasicPID(coefficients);
-    private final BasicPID rightController = new BasicPID(coefficients);
-    private FtcDashboard dashboard = FtcDashboard.getInstance();
-    private ElapsedTime timer = new ElapsedTime();
-
-    public void setTargetPosition(int target) {
-        targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
-        timer.reset();
-    }
-
-    public int getTargetPosition() {
-        return this.targetPosition;
-    }
-
-    public void update() {
-        double elapsedTime = timer.seconds();
-        int leftPosition = leftMotor.getCurrentPosition();
-        int rightPosition = rightMotor.getCurrentPosition();
-
-        double leftDistance = targetPosition - leftPosition;
-        double rightDistance = targetPosition - rightPosition;
-
-        // Without MP
-         double leftPidOutput = leftController.calculate(targetPosition, leftPosition);
-         double rightPidOutput = rightController.calculate(targetPosition, rightPosition);
-         double feedForward = calculateFeedForward(targetPosition);
-
-         moveSlides(leftPidOutput + feedForward, rightPidOutput + feedForward);
-
-        // With MP
-//        double instantLeftTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, leftDistance, elapsedTime);
-//        double instantRightTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION, MAX_VELOCITY, rightDistance, elapsedTime);
-//
-//        double leftPidOutput = leftController.calculate((int) instantLeftTargetPosition, leftPosition);
-//        double rightPidOutput = rightController.calculate((int) instantRightTargetPosition, rightPosition);
-//        double leftFeedForward = calculateFeedForward((int) instantLeftTargetPosition);
-//        double rightFeedForward = calculateFeedForward((int) instantRightTargetPosition);
-//
-//        moveSlides(leftPidOutput + leftFeedForward, rightPidOutput + rightFeedForward);
-
-        TelemetryPacket packet = new TelemetryPacket();
-        packet.put("Target Position", targetPosition);
-        packet.put("Left Motor Position", leftPosition);
-        packet.put("Right Motor Position", rightPosition);
-        dashboard.sendTelemetryPacket(packet);
-    }
-
-    private void moveSlides(double leftPower, double rightPower) {
-        leftMotor.setPower(leftPower);
-        rightMotor.setPower(rightPower);
-    }
-
-    private double calculateFeedForward(int targetPosition) {
-        return FEED_FORWARD_CONSTANT;
-    }
-
-    public boolean isAtTargetPosition() {
-        int leftPosition = leftMotor.getCurrentPosition();
-        int rightPosition = rightMotor.getCurrentPosition();
-        return leftPosition == targetPosition && rightPosition == targetPosition;
-    }
+public class SlidesTuner extends LinearOpMode {
+    public DcMotorEx leftMotor;
+    public DcMotorEx rightMotor;
+    public static double KP = 0;
+    public static double KI = 0;
+    public static double KD = 0;
+    public static double FEED_FORWARD_CONSTANT = 0;
+    public static double MAX_ACCELERATION = 1.0; // Adjust as needed
+    public static double MAX_VELOCITY = 1.0; // Adjust as needed
+    public static int targetPosition = 0;
+    public int previousTargetPosition = 0;
+    private final double TICKS_PER_DEGREE = 145.1 / 360.0;
+    PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
+    BasicPID controller = new BasicPID(coefficients);
+    public ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        rightMotor = hardwareMap.get(DcMotor.class, "rightSlide");
-        leftMotor = hardwareMap.get(DcMotor.class, "leftSlide");
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        rightMotor = hardwareMap.get(DcMotorEx.class, "rightSlide");
+        leftMotor = hardwareMap.get(DcMotorEx.class, "leftSlide");
+        leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
-        ElapsedTime timer = new ElapsedTime();
-
         while (opModeIsActive()) {
-            update();
-            setTargetPosition(target);
+            if (targetPosition != previousTargetPosition) {
+                timer.reset();
+                previousTargetPosition = targetPosition;
+            }
+
+            double elapsedTime = timer.seconds();
+            int leftCurrentPosition = leftMotor.getCurrentPosition();
+            int rightCurrentPosition = rightMotor.getCurrentPosition();
+            double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
+            double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition) + FF;
+            double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) + FF;
+            double leftDistance = targetPosition - leftMotor.getCurrentPosition();
+            double rightDistance = targetPosition - rightMotor.getCurrentPosition();
+            double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+                    MAX_VELOCITY,
+                    leftDistance,
+                    elapsedTime);
+            double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+                    MAX_VELOCITY,
+                    rightDistance,
+                    elapsedTime);
+            double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
+            double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
+
+            leftMotor.setPower(LEFT_PIDF_POWER);
+            rightMotor.setPower(RIGHT_PIDF_POWER);
+
+            telemetry.addData("Current Left Position", leftMotor.getCurrentPosition());
+            telemetry.addData("Current Right Position", rightMotor.getCurrentPosition());
+            telemetry.addData("Target Position", targetPosition);
+            telemetry.update();
         }
     }
 }
