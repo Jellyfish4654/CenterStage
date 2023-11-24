@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Framework;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,10 +14,10 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected Hanger hanger;
     protected Slides slides;
+    protected tubingIntake intakeMotors;
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
-    protected tubingIntake intakeMotors;
     protected void initHardware() {
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
@@ -25,7 +26,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.dcMotor.get("motorBL")
 
         };
-        intakeMotors = new tubingIntake(hardwareMap.get(DcMotor.class, "Tubing"));
+        intakeMotors = new tubingIntake(hardwareMap.get(DcMotorEx.class, "Tubing"));
 
         // Set motor directions to match physical configuration
         setMotorDirections(new DcMotorSimple.Direction[] {
@@ -34,10 +35,10 @@ public abstract class BaseOpMode extends LinearOpMode {
                 DcMotorSimple.Direction.FORWARD, // motorFL
                 DcMotorSimple.Direction.FORWARD  // motorBL
         });
-        hanger = new Hanger(hardwareMap.get(DcMotor.class, "hangerMotor"));
+        hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         slides = new Slides(
-                hardwareMap.get(DcMotor.class, "slideMotorLeft"),
-                hardwareMap.get(DcMotor.class, "slideMotorRight")
+                hardwareMap.get(DcMotorEx.class, "slideMotorLeft"),
+                hardwareMap.get(DcMotorEx.class, "slideMotorRight")
         );
 
         // Initialize the IMU sensor with appropriate parameters
@@ -66,6 +67,4 @@ public abstract class BaseOpMode extends LinearOpMode {
             driveMotors[i].setDirection(directions[i]);
         }
     }
-
-
 }
