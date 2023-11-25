@@ -16,8 +16,8 @@ public class Hanger {
     public static int targetPosition = 0;
     public static double MAX_ACCELERATION = 1.0;
     public static double MAX_VELOCITY = 1.0;
-    public int HANG_UP_POSITION;
-    public int HANG_DOWN_POSITION;
+    public int HANG_UP_POSITION = 13000;
+    public int HANG_DOWN_POSITION = 0;
     PIDCoefficients coefficients = new PIDCoefficients(KP, 0, 0);
     BasicPID controller = new BasicPID(coefficients);
     public ElapsedTime timer = new ElapsedTime();
@@ -33,7 +33,7 @@ public class Hanger {
                 elapsedTime);
         double motorPower = (instantTargetPosition - hangerMotor.getCurrentPosition()) * KP_POWER;
 
-        hangerMotor.setPower(KP_POWER);
+        hangerMotor.setPower(motorPower);
     }
     public void setTargetPosition(int target){
         targetPosition = target;

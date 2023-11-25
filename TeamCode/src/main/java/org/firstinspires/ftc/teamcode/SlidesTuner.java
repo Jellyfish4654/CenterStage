@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 public class SlidesTuner extends LinearOpMode {
     public DcMotorEx leftMotor;
     public DcMotorEx rightMotor;
-    public static double KP = 0;
+    public static double KP = 0.005;
     public static double KI = 0;
     public static double KD = 0;
     public static double FEED_FORWARD_CONSTANT = 0;
@@ -63,8 +63,8 @@ public class SlidesTuner extends LinearOpMode {
             double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
             double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
 
-            leftMotor.setPower(LEFT_PIDF_POWER);
-            rightMotor.setPower(RIGHT_PIDF_POWER);
+            leftMotor.setPower(leftMotorPower);
+            rightMotor.setPower(rightMotorPower);
 
             telemetry.addData("Current Left Position", leftMotor.getCurrentPosition());
             telemetry.addData("Current Right Position", rightMotor.getCurrentPosition());
