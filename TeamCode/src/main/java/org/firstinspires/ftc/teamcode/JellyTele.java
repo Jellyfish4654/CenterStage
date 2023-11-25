@@ -81,6 +81,10 @@ public class JellyTele extends BaseOpMode {
             slides.setTargetPosition(autoSlidePositions[slidePosition]);
         }
     }
+    private void slideRetract(){
+        slidePosition=0;
+        slides.setTargetPosition(autoSlidePositions[slidePosition]);
+    }
     
     private void initializeSlewRateLimiters() {
         for (int i = 0; i < slewRateLimiters.length; i++) {
