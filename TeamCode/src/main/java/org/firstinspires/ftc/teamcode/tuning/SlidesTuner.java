@@ -33,7 +33,7 @@ public class SlidesTuner extends BaseOpMode {
 	public SlidesTuner(DcMotor motor) {
 		this.hangerMotor = motor;
 	}
-	
+
 	public void setTargetPosition(int target) {
 		targetPosition = target;
 		timer.reset();
@@ -81,4 +81,7 @@ public class SlidesTuner extends BaseOpMode {
 			setTargetPosition(target);
 		}
 	}
+
+
+
 }

@@ -42,6 +42,8 @@ public class JellyTele extends BaseOpMode {
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
     private boolean Hanging = false;
     private boolean intaking = true;
+    private boolean sliding = true;
+    //used for the joystick booleans
 
     public void runOpMode() throws InterruptedException {
         AntiTipping antiTipping = new AntiTipping(driveMotors, imuSensor);
@@ -125,7 +127,17 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void SlideControl() {
-        slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
+        if (gamepad2.left_stick_y > 0.24 || gamepad2.left_stick_y <= 0.25) {
+            sliding = true;
+        } else {
+            sliding = false;
+        }
+
+        if (sliding == true) {
+            slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
+        } else  {
+            slides.setManualTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
+        }
 
         if (ButtonEX.Gamepad2EX.DPAD_UP.fallingEdge()) {
             slidePosition = (slidePosition + 1) % autoSlidePositions.length;

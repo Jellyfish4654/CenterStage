@@ -58,6 +58,9 @@ public class Slides {
         targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
         timer.reset();
     }
+    public void setManualTargetPosition(int target) {
+        targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
+    }
     public int getTargetPosition() {
         return this.targetPosition;
     }
