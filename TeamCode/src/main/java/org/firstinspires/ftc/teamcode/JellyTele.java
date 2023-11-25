@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.AntiTipping;
 import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
+import org.firstinspires.ftc.teamcode.Framework.tubingIntake;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -20,6 +21,7 @@ public class JellyTele extends BaseOpMode {
     private static final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
     private static final double MAX_SCALE = 1.0;
     private static final int ENDGAME_ALERT_TIME = 120; // Seconds
+
 
     protected enum DriveMode {
         TANK,
@@ -39,20 +41,26 @@ public class JellyTele extends BaseOpMode {
     private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
     private boolean Hanging = false;
+    private boolean intaking = true;
 
     public void runOpMode() throws InterruptedException {
         AntiTipping antiTipping = new AntiTipping(driveMotors, imuSensor);
+
         initHardware();
         initializeSlewRateLimiters();
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 
         while (opModeIsActive()) {
+            if(Hanging==false){
+                antiTipping.correctTilt();
+            }
             updateDriveModeFromGamepad();
             alertEndGame(timer);
             double precisionMultiplier = calculatePrecisionMultiplier();
             resetIMU();
             displayTelemetry(precisionMultiplier);
+            IntakeControl();
 
             DriveMode(precisionMultiplier);
             if(Hanging==false){
@@ -70,11 +78,33 @@ public class JellyTele extends BaseOpMode {
             }
             OutakeControl();
 
+            //make hanger control method
             SlideControl();
+            HangerControl();
+            DroneControl();
+
             slides.update();
             ButtonEX.Gamepad1EX.updateAll();
             ButtonEX.Gamepad2EX.updateAll();
         }
+    }
+
+    private void DroneControl() {
+        if (ButtonEX.Gamepad2EX.GUIDE.fallingEdge()) {
+            droneLauncher.launchDrone();
+        }
+    }
+
+    private void HangerControl() {
+
+        if(ButtonEX.Gamepad2EX.Y.fallingEdge()){
+            hanger.hangUp();
+            Hanging=true;
+        }
+        if(ButtonEX.Gamepad2EX.A.fallingEdge()){
+            hanger.hangDown();
+        }
+
     }
     private void OutakeControl(){
         switch(outakeState){
@@ -275,4 +305,21 @@ public class JellyTele extends BaseOpMode {
     protected double applyDeadband(double stickValue) {
         return Math.abs(stickValue) > DEADBAND_VALUE ? (stickValue - DEADBAND_VALUE) * Math.signum(stickValue) : 0;
     }
+
+
+
+
+    public void IntakeControl() {
+        if (gamepad2.right_stick_y > 0.24 || gamepad2.right_stick_y <= 0.25) {
+            intaking = true;
+        } else {
+            intaking = false;
+        }
+        if (intaking) {
+            tubingIntake.setTargetPosition(tubingIntake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
+        } else {
+            tubingIntake.setManualTargetPosition(tubingIntake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
+        }
+    }
+
 }

@@ -22,7 +22,7 @@ public class tubingIntake {
 
     PIDCoefficients coefficients = new PIDCoefficients(KP, 0, 0);
     BasicPID controller = new BasicPID(coefficients);
-    public ElapsedTime timer = new ElapsedTime();
+    public static ElapsedTime timer = new ElapsedTime();
 
     public void update(){
         double elapsedTime = timer.seconds();
@@ -38,9 +38,17 @@ public class tubingIntake {
         intakeMotor.setPower(motorPower);
     }
 
-    public void setTargetPosition(int target){
+    public static void setTargetPosition(int target){
         targetPosition = target;
         timer.reset();
     }
 
+    public static void setManualTargetPosition(int target){
+        targetPosition = target;
+    }
+
+    public static int getTargetPosition() {
+        return targetPosition;
+    }
+//Jeeffrey is super cool and awesome :)))))
 }
