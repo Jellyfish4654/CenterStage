@@ -27,6 +27,12 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
+    public enum OutakeState {
+        OUTAKE_OPEN,
+        OUTAKE_CLOSE
+    };
+    ElapsedTime outakeTimer = new ElapsedTime();
+    OutakeState outakeState = OutakeState.OUTAKE_CLOSE;
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
     private int slidePosition = 0;
@@ -62,6 +68,7 @@ public class JellyTele extends BaseOpMode {
             if (ButtonEX.Gamepad2EX.GUIDE.fallingEdge()) {
                 droneLauncher.launchDrone();
             }
+            OutakeControl();
 
             SlideControl();
             slides.update();
@@ -69,7 +76,24 @@ public class JellyTele extends BaseOpMode {
             ButtonEX.Gamepad2EX.updateAll();
         }
     }
-
+    private void OutakeControl(){
+        switch(outakeState){
+            case OUTAKE_CLOSE:
+                if(ButtonEX.Gamepad2EX.B.fallingEdge()){
+                    outakeServos.openOutake();
+                    outakeTimer.reset();
+                    outakeState = OutakeState.OUTAKE_OPEN;
+                }
+                break;
+            case OUTAKE_OPEN:
+                if(outakeTimer.seconds() >= 0.25){
+                    outakeServos.closeOutake();
+                    outakeState = OutakeState.OUTAKE_CLOSE;
+                    slideRetract();
+                }
+                break;
+        }
+    }
     private void SlideControl() {
         slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
 
