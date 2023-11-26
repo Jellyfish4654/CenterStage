@@ -17,13 +17,14 @@ public class AutoAlignment {
         this.imuSensor = imuSensor;
     }
 
-    public void correctTilt() {
+    public void update() {
         double yaw = imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS);
-        double yawCorrection = yawController.calculate(0, yaw);
-        rotateWheels(yawCorrection);
+        double targetPosition = 0;
+        double yawCorrection = yawController.calculate(targetPosition, yaw);
+        MotorPowers(yawCorrection);
     }
 
-    private void rotateWheels(double correction) {
+    private void MotorPowers(double correction) {
         double rightPower = correction;
         double leftPower = -correction;
 

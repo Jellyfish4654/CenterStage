@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.AntiTipping;
+import org.firstinspires.ftc.teamcode.Framework.misc.AutoAlignment;
 import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.Framework.tubingIntake;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
-//Elliot was here
     private static final double PRECISION_MULTIPLIER_LOW = 0.35;
     private static final double PRECISION_MULTIPLIER_HIGH = 0.7;
     private static final double RATE_LIMIT = 0.5;
@@ -40,57 +40,48 @@ public class JellyTele extends BaseOpMode {
     private int slidePosition = 0;
     private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
+    private AutoAlignment autoAlignment;
+    private AntiTipping antiTipping;
     private boolean Hanging = false;
     private boolean intaking = true;
     private boolean sliding = true;
-    //used for the joystick booleans
 
     public void runOpMode() throws InterruptedException {
-        AntiTipping antiTipping = new AntiTipping(driveMotors, imuSensor);
-
         initHardware();
         initializeSlewRateLimiters();
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 
         while (opModeIsActive()) {
-            if(Hanging==false){
-                antiTipping.correctTilt();
-            }
             updateDriveModeFromGamepad();
             alertEndGame(timer);
             double precisionMultiplier = calculatePrecisionMultiplier();
             resetIMU();
             displayTelemetry(precisionMultiplier);
-            IntakeControl();
-
             DriveMode(precisionMultiplier);
-            if(Hanging==false){
-                antiTipping.correctTilt();
-            }
-            if(ButtonEX.Gamepad2EX.Y.fallingEdge()){
-                hanger.hangUp();
-                Hanging=true;
-            }
-            if(ButtonEX.Gamepad2EX.A.fallingEdge()){
-                hanger.hangDown();
-            }
-            if (ButtonEX.Gamepad2EX.GUIDE.fallingEdge()) {
-                droneLauncher.launchDrone();
-            }
+            IntakeControl();
             OutakeControl();
-
-            //make hanger control method
             SlideControl();
             HangerControl();
             DroneControl();
-
+            autoAligment();
+            antiTipping();
             slides.update();
             ButtonEX.Gamepad1EX.updateAll();
             ButtonEX.Gamepad2EX.updateAll();
         }
     }
 
+    private void autoAligment(){
+        if(gamepad1.a){
+            autoAlignment.update();
+        }
+    }
+    private void antiTipping(){
+        if(Hanging==false){
+            antiTipping.correctTilt();
+        }
+    }
     private void DroneControl() {
         if (ButtonEX.Gamepad2EX.GUIDE.fallingEdge()) {
             droneLauncher.launchDrone();
@@ -98,7 +89,6 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void HangerControl() {
-
         if(ButtonEX.Gamepad2EX.Y.fallingEdge()){
             hanger.hangUp();
             Hanging=true;

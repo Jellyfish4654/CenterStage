@@ -50,5 +50,4 @@ public class tubingIntake {
     public static int getTargetPosition() {
         return targetPosition;
     }
-//Jeeffrey is super cool and awesome :)))))
 }

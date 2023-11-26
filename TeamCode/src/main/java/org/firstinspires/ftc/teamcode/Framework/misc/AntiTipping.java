@@ -22,9 +22,9 @@ public class AntiTipping {
     public void correctTilt() {
         double pitch = imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS);
         double roll = imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS);
-
-        double pitchCorrection = pitchController.calculate(0, pitch);
-        double rollCorrection = rollController.calculate(0, roll);
+        double targetPosition = 0;
+        double pitchCorrection = pitchController.calculate(targetPosition, pitch);
+        double rollCorrection = rollController.calculate(targetPosition, roll);
 
         double correction = Math.abs(pitch) > Math.abs(roll) ? pitchCorrection : rollCorrection;
 
