@@ -8,7 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.SlidesTuner;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
@@ -19,13 +21,17 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
     protected Servo intakeServo;
+    protected OpenCvCamera webcam1;
     protected void initHardware() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam1 = OpenCvCameraFactory.getInstance().createWebcam(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
                 hardwareMap.dcMotor.get("motorFL"),
                 hardwareMap.dcMotor.get("motorBL")
-
         };
         intakeMotors = new tubingIntake(hardwareMap.get(DcMotorEx.class, "Tubing"),hardwareMap.get(Servo.class, "Servo"));
         intakeMotors.servoDown();
@@ -57,7 +63,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     private IMU initializeIMUSensor(String imuName) {
         IMU imu = hardwareMap.get(IMU.class, imuName);
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         ));
         imu.initialize(parameters);

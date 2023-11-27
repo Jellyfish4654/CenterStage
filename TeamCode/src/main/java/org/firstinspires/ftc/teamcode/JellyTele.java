@@ -304,8 +304,9 @@ public class JellyTele extends BaseOpMode {
     }
 
 
-    protected double applyDeadband(double stickValue) {
-        return Math.abs(stickValue) > DEADBAND_VALUE ? (stickValue - DEADBAND_VALUE) * Math.signum(stickValue) : 0;
+    public double applyDeadband(double joystickValue) {
+        double sign = Math.signum(joystickValue);
+        return joystickValue + (-sign * DEADBAND_VALUE);
     }
 
 
