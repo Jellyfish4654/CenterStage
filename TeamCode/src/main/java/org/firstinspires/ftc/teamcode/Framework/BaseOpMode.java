@@ -20,6 +20,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
+    protected Servo intakeServo;
     protected OpenCvCamera webcam1;
     protected void initHardware() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -32,8 +33,8 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.dcMotor.get("motorFL"),
                 hardwareMap.dcMotor.get("motorBL")
         };
-        intakeMotors = new tubingIntake(hardwareMap.get(DcMotorEx.class, "Tubing"));
-
+        intakeMotors = new tubingIntake(hardwareMap.get(DcMotorEx.class, "Tubing"),hardwareMap.get(Servo.class, "Servo"));
+        intakeMotors.servoDown();
         // Set motor directions to match physical configuration
         setMotorDirections(new DcMotorSimple.Direction[] {
                 DcMotorSimple.Direction.REVERSE, // motorFR
@@ -56,6 +57,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outakeLeftServo");
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outakeRightServo");
         outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
+
     }
 
     private IMU initializeIMUSensor(String imuName) {
