@@ -55,7 +55,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     private IMU initializeIMUSensor(String imuName) {
         IMU imu = hardwareMap.get(IMU.class, imuName);
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
         ));
         imu.initialize(parameters);
