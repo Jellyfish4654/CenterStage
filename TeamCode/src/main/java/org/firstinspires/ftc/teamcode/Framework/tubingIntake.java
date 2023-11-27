@@ -4,15 +4,18 @@ import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 public class tubingIntake {
 
     private final DcMotor intakeMotor;
+    private final Servo intakeServo;
 
-    public tubingIntake(DcMotor intakeMotor) {
+    public tubingIntake(DcMotor intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
+        this.intakeServo = intakeServo;
     }
 
     public static double KP = 0;
@@ -41,6 +44,9 @@ public class tubingIntake {
     public static void setTargetPosition(int target){
         targetPosition = target;
         timer.reset();
+    }
+    public void servoDown(){
+        intakeServo.setPosition(1);
     }
 
     public static void setManualTargetPosition(int target){
