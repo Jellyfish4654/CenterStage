@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.SlidesTuner;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
@@ -18,13 +18,14 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
+    protected AprilTagPipeline webcam1;
     protected void initHardware() {
+        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
                 hardwareMap.dcMotor.get("motorFL"),
                 hardwareMap.dcMotor.get("motorBL")
-
         };
         intakeMotors = new tubingIntake(hardwareMap.get(DcMotorEx.class, "Tubing"));
 
