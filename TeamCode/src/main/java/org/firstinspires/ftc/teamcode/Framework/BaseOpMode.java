@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
 
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
@@ -18,9 +20,12 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
-    protected AprilTagPipeline webcam1;
+    protected OpenCvCamera webcam1;
     protected void initHardware() {
-        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam1 = OpenCvCameraFactory.getInstance().createWebcam(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
