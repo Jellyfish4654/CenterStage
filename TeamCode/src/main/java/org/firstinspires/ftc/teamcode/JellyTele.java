@@ -7,10 +7,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.AntiTipping;
+import org.firstinspires.ftc.teamcode.Framework.misc.AprilTagPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.AutoAlignment;
 import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
-import org.firstinspires.ftc.teamcode.Framework.tubingIntake;
+import org.firstinspires.ftc.teamcode.Framework.Intake;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -49,6 +50,8 @@ public class JellyTele extends BaseOpMode {
     public void runOpMode() throws InterruptedException {
         initHardware();
         initializeSlewRateLimiters();
+        autoAlignment = new AutoAlignment(driveMotors, imuSensor);
+        antiTipping = new AntiTipping(driveMotors, imuSensor);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 
@@ -135,6 +138,19 @@ public class JellyTele extends BaseOpMode {
         } else if (ButtonEX.Gamepad2EX.DPAD_DOWN.fallingEdge()) {
             slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
             slides.setTargetPosition(autoSlidePositions[slidePosition]);
+        }
+    }
+
+    public void IntakeControl() {
+        if (gamepad2.right_stick_y > 0.24 || gamepad2.right_stick_y <= 0.25) {
+            intaking = true;
+        } else {
+            intaking = false;
+        }
+        if (intaking) {
+            Intake.setTargetPosition(Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
+        } else {
+            Intake.setManualTargetPosition(Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
         }
     }
     private void slideRetract(){
@@ -254,6 +270,18 @@ public class JellyTele extends BaseOpMode {
         double rotation = applyDeadband(gamepad1.right_stick_x);
         double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
+        double Y_BACKDROP_DISTANCE = aprilTagPipeline.getTagY();
+        double X_BACKDROP_DISTANCE = aprilTagPipeline.getTagX();
+        double xBackdropLeft = 1.0;
+        double xBackdropRight = 10.0;
+        double backdropDistance = 10.0;
+        if(X_BACKDROP_DISTANCE>=xBackdropLeft && X_BACKDROP_DISTANCE<=xBackdropRight){
+            if (Y_BACKDROP_DISTANCE <= backdropDistance && forward > 0) {
+                // If the robot is within x inches of the wall and trying to move forward, stop forward movement
+                forward = 0;
+            }
+        }
+
         double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
         return new double[]{
@@ -303,26 +331,8 @@ public class JellyTele extends BaseOpMode {
         return max;
     }
 
-
     public double applyDeadband(double joystickValue) {
         double sign = Math.signum(joystickValue);
         return joystickValue + (-sign * DEADBAND_VALUE);
     }
-
-
-
-
-    public void IntakeControl() {
-        if (gamepad2.right_stick_y > 0.24 || gamepad2.right_stick_y <= 0.25) {
-            intaking = true;
-        } else {
-            intaking = false;
-        }
-        if (intaking) {
-            tubingIntake.setTargetPosition(tubingIntake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
-        } else {
-            tubingIntake.setManualTargetPosition(tubingIntake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
-        }
-    }
-
 }

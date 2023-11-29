@@ -7,34 +7,30 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.firstinspires.ftc.teamcode.Framework.misc.AprilTagPipeline;
 
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected Hanger hanger;
     protected Slides slides;
-    protected tubingIntake intakeMotors;
+    protected Intake intakeMotors;
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
     protected Servo intakeServo;
-    protected OpenCvCamera webcam1;
+    protected AprilTagPipeline aprilTagPipeline;
     protected void initHardware() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam1 = OpenCvCameraFactory.getInstance().createWebcam(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagPipeline = new AprilTagPipeline(hardwareMap);
+
         driveMotors = new DcMotor[] {
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
                 hardwareMap.dcMotor.get("motorFL"),
                 hardwareMap.dcMotor.get("motorBL")
         };
-        intakeMotors = new tubingIntake(hardwareMap.get(DcMotorEx.class, "Tubing"),hardwareMap.get(Servo.class, "Servo"));
-        intakeMotors.servoDown();
+        DcMotor intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
+        Servo intakeServo = hardwareMap.get(Servo.class, "Servo");
+        intakeMotors = new Intake(intakeMotor, intakeServo);
         // Set motor directions to match physical configuration
         setMotorDirections(new DcMotorSimple.Direction[] {
                 DcMotorSimple.Direction.REVERSE, // motorFR

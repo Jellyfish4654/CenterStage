@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
-public class tubingIntake {
+public class Intake {
 
     private final DcMotor intakeMotor;
     private final Servo intakeServo;
 
-    public tubingIntake(DcMotor intakeMotor, Servo intakeServo) {
+    public Intake(DcMotor intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;
     }
