@@ -29,7 +29,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.dcMotor.get("motorBL")
         };
         DcMotor intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
-        Servo intakeServo = hardwareMap.get(Servo.class, "Servo");
+        Servo intakeServo = hardwareMap.get(Servo.class, "intakeServo");
         intakeMotors = new Intake(intakeMotor, intakeServo);
         // Set motor directions to match physical configuration
         setMotorDirections(new DcMotorSimple.Direction[] {
