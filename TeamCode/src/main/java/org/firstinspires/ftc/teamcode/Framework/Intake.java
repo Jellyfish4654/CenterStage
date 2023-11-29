@@ -22,10 +22,15 @@ public class Intake {
     public static int targetPosition = 0;
     public static double MAX_ACCELERATION = 1.0;
     public static double MAX_VELOCITY = 1.0;
+    public static double servoPosition = 0.5;
 
     PIDCoefficients coefficients = new PIDCoefficients(KP, 0, 0);
     BasicPID controller = new BasicPID(coefficients);
     public static ElapsedTime timer = new ElapsedTime();
+
+    public void intakeDown(){
+    intakeServo.setPosition(0.8);
+    }
 
     public void update(){
         double elapsedTime = timer.seconds();

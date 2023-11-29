@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 
-@TeleOp(name = "Servo Test")
+@TeleOp(name = "Servo Tuner")
 public class ServoTuner extends BaseOpMode {
     protected Servo servo;
     public void runOpMode() throws InterruptedException{
-        servo = hardwareMap.get(Servo.class, "motorName");
+        servo = hardwareMap.get(Servo.class, "droneServo");
         waitForStart();
         double position = 0.5;
 
@@ -27,9 +27,9 @@ public class ServoTuner extends BaseOpMode {
             }
 
             if (gamepad1.a){
-                position = 1.0;
+                position = 0.5;
             } else if (gamepad1.b){
-                position = 0;
+                position = 0.8;
             }
         }
     }
