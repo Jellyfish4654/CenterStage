@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.Framework.Intake;
 
@@ -19,8 +20,8 @@ public class JellyTele extends BaseOpMode {
     private static final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
     private static final double MAX_SCALE = 1.0;
     private static final int ENDGAME_ALERT_TIME = 120; // Seconds
-
-
+    private GamepadEx gamepadEx1;
+    private GamepadEx gamepadEx2;
     protected enum DriveMode {
         TANK,
         DRIVE,
@@ -45,10 +46,15 @@ public class JellyTele extends BaseOpMode {
     public void runOpMode() throws InterruptedException {
         initHardware();
         initializeSlewRateLimiters();
+        gamepadEx1 = new GamepadEx(gamepad1);
+        gamepadEx2 = new GamepadEx(gamepad2);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
-
         while (opModeIsActive()) {
+            gamepadEx1.readButtons();
+            gamepadEx2.readButtons();
+
+
             updateDriveModeFromGamepad();
             alertEndGame(timer);
             double precisionMultiplier = calculatePrecisionMultiplier();
@@ -63,8 +69,6 @@ public class JellyTele extends BaseOpMode {
             autoAlignment();
             antiTipping();
             slides.update();
-            ButtonEX.Gamepad1EX.updateAll();
-            ButtonEX.Gamepad2EX.updateAll();
             if (gamepad1.a){
                 Intake.runPosition();
             }
@@ -83,17 +87,17 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void DroneControl() {
-        if (ButtonEX.Gamepad2EX.GUIDE.fallingEdge()) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)){
             droneLauncher.launchDrone();
         }
     }
 
     private void HangerControl() {
-        if(ButtonEX.Gamepad2EX.Y.fallingEdge()){
+        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)){
             hanger.hangUp();
             Hanging=true;
         }
-        if(ButtonEX.Gamepad2EX.A.fallingEdge()){
+        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.A)){
             hanger.hangDown();
         }
 
@@ -101,7 +105,7 @@ public class JellyTele extends BaseOpMode {
     private void OutakeControl(){
         switch(outakeState){
             case OUTAKE_CLOSE:
-                if(ButtonEX.Gamepad2EX.B.fallingEdge()){
+                if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)){
                     outakeServos.openOutake();
                     outakeTimer.reset();
                     outakeState = OutakeState.OUTAKE_OPEN;
@@ -129,10 +133,10 @@ public class JellyTele extends BaseOpMode {
             slides.setManualTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
         }
 
-        if (ButtonEX.Gamepad2EX.DPAD_UP.fallingEdge()) {
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             slidePosition = (slidePosition + 1) % autoSlidePositions.length;
             slides.setTargetPosition(autoSlidePositions[slidePosition]);
-        } else if (ButtonEX.Gamepad2EX.DPAD_DOWN.fallingEdge()) {
+        } else if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
             slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
             slides.setTargetPosition(autoSlidePositions[slidePosition]);
         }
@@ -162,13 +166,13 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void updateDriveModeFromGamepad() {
-        if (ButtonEX.Gamepad1EX.DPAD_LEFT.fallingEdge()) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
             driveMode = DriveMode.TANK;
-        } else if (ButtonEX.Gamepad1EX.DPAD_UP.fallingEdge()) {
+        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             driveMode = DriveMode.MECANUM;
-        } else if (ButtonEX.Gamepad1EX.DPAD_RIGHT.fallingEdge()) {
+        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
             driveMode = DriveMode.DRIVE;
-        } else if (ButtonEX.Gamepad1EX.DPAD_DOWN.fallingEdge()) {
+        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
             driveMode = DriveMode.FIELDCENTRIC;
         }
     }
@@ -199,7 +203,7 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void resetIMU() {
-        if (ButtonEX.Gamepad1EX.BACK.fallingEdge()) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)) {
             imuSensor.resetYaw();
             gamepad1.rumbleBlips(3);
         }
