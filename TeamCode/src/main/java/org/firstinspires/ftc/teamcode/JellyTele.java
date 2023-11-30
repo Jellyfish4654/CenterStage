@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.misc.AntiTipping;
-import org.firstinspires.ftc.teamcode.Framework.misc.AprilTagPipeline;
-import org.firstinspires.ftc.teamcode.Framework.misc.AutoAlignment;
 import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.Framework.Intake;
@@ -41,17 +38,13 @@ public class JellyTele extends BaseOpMode {
     private int slidePosition = 0;
     private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
-    private AutoAlignment autoAlignment;
-    private AntiTipping antiTipping;
     private boolean Hanging = false;
     private boolean intaking = true;
     private boolean sliding = true;
-
+    @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
         initializeSlewRateLimiters();
-        autoAlignment = new AutoAlignment(driveMotors, imuSensor);
-        antiTipping = new AntiTipping(driveMotors, imuSensor);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 
@@ -67,7 +60,7 @@ public class JellyTele extends BaseOpMode {
             SlideControl();
             HangerControl();
             DroneControl();
-            autoAligment();
+            autoAlignment();
             antiTipping();
             slides.update();
             ButtonEX.Gamepad1EX.updateAll();
@@ -79,13 +72,13 @@ public class JellyTele extends BaseOpMode {
         }
     }
 
-    private void autoAligment(){
+    private void autoAlignment(){
         if(gamepad1.a){
             autoAlignment.update();
         }
     }
     private void antiTipping(){
-        if(Hanging==false){
+        if(!Hanging){
             antiTipping.correctTilt();
         }
     }
@@ -124,13 +117,13 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void SlideControl() {
-        if (gamepad2.left_stick_y > 0.24 || gamepad2.left_stick_y <= 0.25) {
+        if(gamepad2.left_stick_y > 0.24 || gamepad2.left_stick_y <= 0.25) {
             sliding = true;
         } else {
             sliding = false;
         }
 
-        if (sliding == true) {
+        if (sliding) {
             slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
         } else  {
             slides.setManualTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
@@ -146,7 +139,7 @@ public class JellyTele extends BaseOpMode {
     }
 
     public void IntakeControl() {
-        if (gamepad2.right_stick_y > 0.24 || gamepad2.right_stick_y <= 0.25) {
+        if(gamepad2.right_stick_y > 0.24 || gamepad2.right_stick_y <= 0.25) {
             intaking = true;
         } else {
             intaking = false;

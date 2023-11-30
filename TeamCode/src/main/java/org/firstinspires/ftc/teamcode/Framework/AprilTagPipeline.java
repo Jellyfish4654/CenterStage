@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Framework.misc;
+package org.firstinspires.ftc.teamcode.Framework;
 
 import android.util.Size;
 
@@ -12,11 +12,11 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
 
 public class AprilTagPipeline {
-    protected OpenCvCamera webcam1;
-    private AprilTagProcessor tagProcessor;
-    private VisionPortal visionPortal;
     double x;
     double y;
+
+    private AprilTagProcessor tagProcessor;
+    private VisionPortal visionPortal;
 
     public AprilTagPipeline(HardwareMap hardwareMap) {
         tagProcessor = new AprilTagProcessor.Builder()
@@ -26,12 +26,11 @@ public class AprilTagPipeline {
                 .setDrawTagOutline(true)
                 .build();
 
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
-        builder.setCameraResolution(new Size(1920 , 1080));
-        builder.enableLiveView(true);
-        builder.addProcessor(tagProcessor);
-        visionPortal = builder.build();
+        visionPortal = new VisionPortal.Builder()
+                .addProcessor(tagProcessor)
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
+                .setCameraResolution(new Size(1920, 1080))
+                .build();
     }
 
     public double getTagX(){
