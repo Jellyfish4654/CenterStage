@@ -29,7 +29,8 @@ public class HangerTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        hangerMotor = hardwareMap.get(DcMotorEx.class, "hangerMotor");
+//        hangerMotor = hardwareMap.get(DcMotorEx.class, "hangerMotor");
+        hangerMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
         hangerMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         waitForStart();
         while (opModeIsActive()) {

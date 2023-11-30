@@ -53,8 +53,6 @@ public class JellyTele extends BaseOpMode {
         while (opModeIsActive()) {
             gamepadEx1.readButtons();
             gamepadEx2.readButtons();
-
-
             updateDriveModeFromGamepad();
             alertEndGame(timer);
             double precisionMultiplier = calculatePrecisionMultiplier();

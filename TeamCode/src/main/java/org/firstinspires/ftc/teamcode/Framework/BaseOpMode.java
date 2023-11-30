@@ -16,17 +16,30 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected Intake intakeMotors;
 //    protected Slides slides;
     protected IMU imuSensor;
+    protected AntiTipping antiTipping;
     protected DroneLauncher droneLauncher;
     protected Outake outakeServos;
     protected Intake intakeSystem;
     protected AprilTagPipeline aprilTagPipeline;
     protected AutoAlignment autoAlignment;
-    protected AntiTipping antiTipping;
     protected void initHardware() {
+        imuSensor = initializeIMUSensor("imu");
+        driveMotors = new DcMotor[] {
+                hardwareMap.dcMotor.get("motorFR"),
+                hardwareMap.dcMotor.get("motorBR"),
+                hardwareMap.dcMotor.get("motorFL"),
+                hardwareMap.dcMotor.get("motorBL")
+        };
+        setMotorDirections(new DcMotorSimple.Direction[] {
+                DcMotorSimple.Direction.REVERSE, // motorFR
+                DcMotorSimple.Direction.REVERSE, // motorBR
+                DcMotorSimple.Direction.FORWARD, // motorFL
+                DcMotorSimple.Direction.FORWARD  // motorBL
+        });
+
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
         aprilTagPipeline = new AprilTagPipeline(hardwareMap);
-        imuSensor = initializeIMUSensor("imu");
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
         outakeServos = new Outake(
@@ -41,18 +54,6 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class, "Tubing"),
                 hardwareMap.get(Servo.class, "intakeServo")
         );
-        driveMotors = new DcMotor[] {
-                hardwareMap.dcMotor.get("motorFR"),
-                hardwareMap.dcMotor.get("motorBR"),
-                hardwareMap.dcMotor.get("motorFL"),
-                hardwareMap.dcMotor.get("motorBL")
-        };
-        setMotorDirections(new DcMotorSimple.Direction[] {
-                DcMotorSimple.Direction.REVERSE, // motorFR
-                DcMotorSimple.Direction.REVERSE, // motorBR
-                DcMotorSimple.Direction.FORWARD, // motorFL
-                DcMotorSimple.Direction.FORWARD  // motorBL
-        });
 
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         slides = new oneSlide(hardwareMap.get(DcMotorEx.class, "slideMotorLeft"));
@@ -72,6 +73,7 @@ public abstract class BaseOpMode extends LinearOpMode {
 
     private IMU initializeIMUSensor(String imuName) {
         IMU imu = hardwareMap.get(IMU.class, imuName);
+
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
