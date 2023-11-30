@@ -1,36 +1,45 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 
 @TeleOp(name = "Servo Tuner")
 public class ServoTuner extends BaseOpMode {
-    protected Servo servo;
+    protected CRServo servo;
     public void runOpMode() throws InterruptedException{
-        servo = hardwareMap.get(Servo.class, "droneServo");
+        servo = hardwareMap.get(CRServo.class, "droneServo");
         waitForStart();
         double position = 0.5;
-
+        ElapsedTime DroneTimer = new ElapsedTime();
         while(opModeIsActive()){
             telemetry.addData("Servo", position);
             telemetry.update();
 
-            servo.setPosition(position);
+                servo.setPower(1);
+                DroneTimer.reset();
 
-            if(gamepad1.dpad_left){
-                position-=0.0001;
-            }
-            if(gamepad1.dpad_right){
-                position+=0.0001;
-            }
+                if (DroneTimer.seconds()>=0.5){
+                    servo.setPower(0);
+                }
 
-            if (gamepad1.a){
-                position = 0.5;
-            } else if (gamepad1.b){
-                position = 0.8;
-            }
+//            servo.setPosition(position);
+//
+//            if(gamepad1.dpad_left){
+//                position-=0.0001;
+//            }
+//            if(gamepad1.dpad_right){
+//                position+=0.0001;
+//            }
+//
+//            if (gamepad1.a){
+//                position = 0.5;
+//            } else if (gamepad1.b){
+//                position = 0.8;
+//            }
         }
     }
 }
