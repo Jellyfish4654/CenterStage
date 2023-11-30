@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Framework.misc;
+package org.firstinspires.ftc.teamcode.Framework;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;

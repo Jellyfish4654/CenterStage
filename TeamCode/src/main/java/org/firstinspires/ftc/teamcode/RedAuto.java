@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
+import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -50,9 +50,17 @@ public class RedAuto extends BaseOpMode {
     };
     ElapsedTime outakeTimer = new ElapsedTime();
     OutakeState outakeState = OutakeState.OUTAKE_CLOSE;
+    private MecanumDrive drive;
+    private Action TrajectoryAction1;
 
     @Override
     public void runOpMode() {
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
+
+        Action TrajectoryAction1 = drive.actionBuilder(drive.pose)
+                .lineToX(0)
+                .build();
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         RedContourPipeline myPipeline = new RedContourPipeline(regionLeftX, regionRightX, regionTopY, regionBottomY);
@@ -132,28 +140,29 @@ public class RedAuto extends BaseOpMode {
         return Math.max(min, Math.min(value, max));
     }
 
-//    Action controlSlidesAction = telemetryPacket -> {
-//        switch(outakeState){
-//            case OUTAKE_CLOSE:
-//                    outakeServos.openOutake();
-//                    outakeTimer.reset();
-//                break;
-//            case OUTAKE_OPEN:
-//                while(outakeTimer.seconds() <= 0.25){
-//                }
-//                outakeServos.closeOutake();
-//                break;
-//            case SLIDES_DOWN:
-//                slides.setTargetPosition(0);
-//                break;
-//            case SLIDES_UP:
-//                slides.setTargetPosition(666);
-//                break;
-//            default:
-//                outakeState = OutakeState.SLIDES_DOWN;
-//                break;
-//        }
-//    };
+    Action controlSlidesAction = telemetryPacket -> {
+        switch(outakeState){
+            case OUTAKE_CLOSE:
+                    outakeServos.openOutake();
+                    outakeTimer.reset();
+                break;
+            case OUTAKE_OPEN:
+                while(outakeTimer.seconds() <= 0.25){
+                }
+                outakeServos.closeOutake();
+                break;
+            case SLIDES_DOWN:
+                slides.setTargetPosition(0);
+                break;
+            case SLIDES_UP:
+                slides.setTargetPosition(666);
+                break;
+            default:
+                outakeState = OutakeState.SLIDES_DOWN;
+                break;
+        }
+        return false;
+    };
 
     public void runAutonomousPathA() {
         telemetry.addLine("Autonomous A");
