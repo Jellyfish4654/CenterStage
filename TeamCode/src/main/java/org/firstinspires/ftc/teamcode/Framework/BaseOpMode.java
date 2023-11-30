@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Framework;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -48,7 +49,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         imuSensor = initializeIMUSensor("imu");
 
         // Initialize the drone launcher with the corresponding servo
-        droneLauncher = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
+        droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
 
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outakeLeftServo");
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outakeRightServo");
