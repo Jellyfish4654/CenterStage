@@ -132,28 +132,28 @@ public class RedAuto extends BaseOpMode {
         return Math.max(min, Math.min(value, max));
     }
 
-    Action controlSlidesAction = telemetryPacket -> {
-        switch(outakeState){
-            case OUTAKE_CLOSE:
-                    outakeServos.openOutake();
-                    outakeTimer.reset();
-                break;
-            case OUTAKE_OPEN:
-                while(outakeTimer.seconds() <= 0.25){
-                }
-                outakeServos.closeOutake();
-                break;
-            case SLIDES_DOWN:
-                slides.setTargetPosition(0);
-                break;
-            case SLIDES_UP:
-                slides.setTargetPosition(666);
-                break;
-            default:
-                outakeState = OutakeState.SLIDES_DOWN;
-                break;
-        }
-    };
+//    Action controlSlidesAction = telemetryPacket -> {
+//        switch(outakeState){
+//            case OUTAKE_CLOSE:
+//                    outakeServos.openOutake();
+//                    outakeTimer.reset();
+//                break;
+//            case OUTAKE_OPEN:
+//                while(outakeTimer.seconds() <= 0.25){
+//                }
+//                outakeServos.closeOutake();
+//                break;
+//            case SLIDES_DOWN:
+//                slides.setTargetPosition(0);
+//                break;
+//            case SLIDES_UP:
+//                slides.setTargetPosition(666);
+//                break;
+//            default:
+//                outakeState = OutakeState.SLIDES_DOWN;
+//                break;
+//        }
+//    };
 
     public void runAutonomousPathA() {
         telemetry.addLine("Autonomous A");
