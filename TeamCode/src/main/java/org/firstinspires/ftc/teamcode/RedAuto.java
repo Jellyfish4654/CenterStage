@@ -5,9 +5,11 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.acmerobotics.roadrunner.*;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.misc.ButtonEX;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -39,6 +41,15 @@ public class RedAuto extends BaseOpMode {
 
     public static Scalar defaultLowerBoundYCrCb = new Scalar(0, 140, 0); // Increase the lower Cr bound for red
     public static Scalar defaultUpperBoundYCrCb = new Scalar(255, 255, 120); // Decrease the upper Cb bound to exclude blues
+
+    public enum OutakeState {
+        OUTAKE_OPEN,
+        OUTAKE_CLOSE,
+        SLIDES_DOWN,
+        SLIDES_UP
+    };
+    ElapsedTime outakeTimer = new ElapsedTime();
+    OutakeState outakeState = OutakeState.OUTAKE_CLOSE;
 
     @Override
     public void runOpMode() {
@@ -122,9 +133,26 @@ public class RedAuto extends BaseOpMode {
     }
 
     Action controlSlidesAction = telemetryPacket -> {
-        slides.setTargetPosition(1500);
-        slides.update();
-        return slides.isAtTargetPosition();
+        switch(outakeState){
+            case OUTAKE_CLOSE:
+                    outakeServos.openOutake();
+                    outakeTimer.reset();
+                break;
+            case OUTAKE_OPEN:
+                while(outakeTimer.seconds() <= 0.25){
+                }
+                outakeServos.closeOutake();
+                break;
+            case SLIDES_DOWN:
+                slides.setTargetPosition(0);
+                break;
+            case SLIDES_UP:
+                slides.setTargetPosition(666);
+                break;
+            default:
+                outakeState = OutakeState.SLIDES_DOWN;
+                break;
+        }
     };
 
     public void runAutonomousPathA() {
