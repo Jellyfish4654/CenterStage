@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.AprilTagPipeline;
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected Hanger hanger;
-    protected Slides slides;
+    protected oneSlide slides;
     protected Intake intakeMotors;
     protected IMU imuSensor;
     protected DroneLauncher droneLauncher;
@@ -40,11 +40,8 @@ public abstract class BaseOpMode extends LinearOpMode {
                 DcMotorSimple.Direction.FORWARD  // motorBL
         });
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
-        slides = new Slides(
-                hardwareMap.get(DcMotorEx.class, "slideMotorLeft"),
-                hardwareMap.get(DcMotorEx.class, "slideMotorRight")
-        );
-
+        slides = new oneSlide(hardwareMap.get(DcMotorEx.class, "slideMotorLeft"));
+//                hardwareMap.get(DcMotorEx.class, "slideMotorRight")
         // Initialize the IMU sensor with appropriate parameters
         imuSensor = initializeIMUSensor("imu");
 
