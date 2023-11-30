@@ -72,6 +72,10 @@ public class JellyTele extends BaseOpMode {
             slides.update();
             ButtonEX.Gamepad1EX.updateAll();
             ButtonEX.Gamepad2EX.updateAll();
+            if (gamepad1.a){
+                Intake.runPosition();
+            }
+
         }
     }
 

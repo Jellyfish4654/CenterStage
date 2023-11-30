@@ -18,9 +18,9 @@ public class Intake {
         this.intakeServo = intakeServo;
     }
 
-    public static double KP = 0;
+    public static double KP = 0.005;
     public static int targetPosition = 0;
-    public static double MAX_ACCELERATION = 1.0;
+    public static double MAX_ACCELERATION = 0.7;
     public static double MAX_VELOCITY = 1.0;
     public static double servoPosition = 0.5;
 
@@ -28,11 +28,15 @@ public class Intake {
     BasicPID controller = new BasicPID(coefficients);
     public static ElapsedTime timer = new ElapsedTime();
 
-    public void intakeDown(){
-    intakeServo.setPosition(0.8);
+    public void intakeDown() {
+        intakeServo.setPosition(0.8);
     }
 
-    public void update(){
+    public static void runPosition() {
+        setTargetPosition(getTargetPosition()+1000);
+    }
+
+    public void update() {
         double elapsedTime = timer.seconds();
         int currentPosition = intakeMotor.getCurrentPosition();
         double KP_POWER = controller.calculate(targetPosition, currentPosition);
@@ -46,15 +50,16 @@ public class Intake {
         intakeMotor.setPower(motorPower);
     }
 
-    public static void setTargetPosition(int target){
+    public static void setTargetPosition(int target) {
         targetPosition = target;
         timer.reset();
     }
-    public void servoDown(){
+
+    public void servoDown() {
         intakeServo.setPosition(1);
     }
 
-    public static void setManualTargetPosition(int target){
+    public static void setManualTargetPosition(int target) {
         targetPosition = target;
     }
 
