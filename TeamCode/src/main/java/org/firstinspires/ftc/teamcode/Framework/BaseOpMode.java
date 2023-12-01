@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import android.transition.Slide;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -12,7 +14,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected Hanger hanger;
-    protected oneSlide slides;
+    protected Slides slides;
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
     protected DroneLauncher droneLauncher;
@@ -44,9 +46,9 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.get(Servo.class, "outakeLeftServo"),
                 hardwareMap.get(Servo.class, "outakeRightServo")
         );
-        slides = new oneSlide(
-                hardwareMap.get(DcMotorEx.class, "slideMotorLeft")
-//                hardwareMap.get(DcMotorEx.class, "slideMotorRight")
+        slides = new Slides(
+                hardwareMap.get(DcMotorEx.class, "slideMotorLeft"),
+                hardwareMap.get(DcMotorEx.class, "slideMotorRight")
         );
         intakeSystem = new Intake(
                 hardwareMap.get(DcMotorEx.class, "Tubing"),
@@ -54,8 +56,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         );
 
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
-        slides = new oneSlide(hardwareMap.get(DcMotorEx.class, "slideMotorLeft"));
-//                hardwareMap.get(DcMotorEx.class, "slideMotorRight")
+
         // Initialize the IMU sensor with appropriate parameters
         imuSensor = initializeIMUSensor("imu");
 

@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.Framework;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 public class Slides {
-    public  DcMotor leftMotor;
-    public  DcMotor rightMotor;
-    public Slides(DcMotor leftMotor, DcMotor rightMotor) {
+    public  DcMotorEx leftMotor;
+    public  DcMotorEx rightMotor;
+    public Slides(DcMotorEx leftMotor, DcMotorEx rightMotor) {
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
     }
@@ -25,20 +26,22 @@ public class Slides {
     public static int SLIDE_LOWER_BOUND = 0;
     public static int SLIDE_UPPER_BOUND = 3000;
     public static int EXTENDED_STATE = 500;
+    private boolean isManualControl = false;
+    private double profileStartTime;
     PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
     BasicPID controller = new BasicPID(coefficients);
 
     public ElapsedTime timer = new ElapsedTime();
 
     public void update(){
-        double elapsedTime = timer.seconds();
+        double elapsedTime = timer.seconds() - profileStartTime;;
         int leftCurrentPosition = leftMotor.getCurrentPosition();
         int rightCurrentPosition = rightMotor.getCurrentPosition();
         double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
         double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition) + FF;
         double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) + FF;
-        double leftDistance = targetPosition - leftMotor.getCurrentPosition();
-        double rightDistance = targetPosition - rightMotor.getCurrentPosition();
+        double leftDistance = targetPosition - leftCurrentPosition;
+        double rightDistance = targetPosition - rightCurrentPosition;
         double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
                 MAX_VELOCITY,
                 leftDistance,
@@ -47,8 +50,8 @@ public class Slides {
                 MAX_VELOCITY,
                 rightDistance,
                 elapsedTime);
-        double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
-        double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
+        double leftMotorPower = (leftInstantTargetPosition - leftCurrentPosition) * LEFT_PIDF_POWER;
+        double rightMotorPower = (rightInstantTargetPosition - rightCurrentPosition) * RIGHT_PIDF_POWER;
 
         leftMotor.setPower(LEFT_PIDF_POWER);
         rightMotor.setPower(RIGHT_PIDF_POWER);
@@ -56,10 +59,15 @@ public class Slides {
 
     public void setTargetPosition(int target) {
         targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
-        timer.reset();
+        if (!isManualControl) {
+            profileStartTime = timer.seconds();
+        }
     }
-    public void setManualTargetPosition(int target) {
-        targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
+    public void setManualControl(boolean manualControl) {
+        isManualControl = manualControl;
+        if (!manualControl) {
+            profileStartTime = timer.seconds();
+        }
     }
     public int getTargetPosition() {
         return this.targetPosition;
