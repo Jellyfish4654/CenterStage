@@ -13,8 +13,6 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected Hanger hanger;
     protected oneSlide slides;
-    protected Intake intakeMotors;
-//    protected Slides slides;
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
     protected DroneLauncher droneLauncher;

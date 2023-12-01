@@ -34,8 +34,8 @@ public class SlidesTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        rightMotor = hardwareMap.get(DcMotorEx.class, "rightSlide");
-        leftMotor = hardwareMap.get(DcMotorEx.class, "leftSlide");
+        rightMotor = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
+        leftMotor = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
         while (opModeIsActive()) {

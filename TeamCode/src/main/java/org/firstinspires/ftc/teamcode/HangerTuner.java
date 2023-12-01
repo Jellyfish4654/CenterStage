@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 @TeleOp(name = "Hanger Test")
 public class HangerTuner extends LinearOpMode {
     private DcMotorEx hangerMotor;
-    public static double KP = 0;
+    public static double KP = 0.005;
     public static double MAX_ACCELERATION = 1.0;
     public static double MAX_VELOCITY = 1.0;
     public static int targetPosition = 0;
@@ -31,7 +31,7 @@ public class HangerTuner extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //        hangerMotor = hardwareMap.get(DcMotorEx.class, "hangerMotor");
         hangerMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
-        hangerMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        hangerMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         waitForStart();
         while (opModeIsActive()) {
             if (targetPosition != previousTargetPosition) {

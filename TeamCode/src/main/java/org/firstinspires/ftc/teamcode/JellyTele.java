@@ -67,6 +67,7 @@ public class JellyTele extends BaseOpMode {
             autoAlignment();
             antiTipping();
             slides.update();
+            intakeSystem.update();
             if (gamepad1.a){
                 Intake.runPosition();
             }
@@ -119,17 +120,18 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void SlideControl() {
-        if(gamepad2.left_stick_y > 0.24 || gamepad2.left_stick_y <= 0.25) {
-            sliding = true;
-        } else {
-            sliding = false;
-        }
 
-        if (sliding) {
-            slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
-        } else  {
-            slides.setManualTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
-        }
+//        if(gamepad2.left_stick_y > 0.24 || gamepad2.left_stick_y <= 0.25) {
+//            sliding = true;
+//        } else {
+//            sliding = false;
+//        }
+//
+//        if (sliding) {
+//            slides.setTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
+//        } else  {
+//            slides.setManualTargetPosition(slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y) * 0.5));
+//        }
 
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             slidePosition = (slidePosition + 1) % autoSlidePositions.length;
@@ -141,17 +143,19 @@ public class JellyTele extends BaseOpMode {
     }
 
     public void IntakeControl() {
-        if(gamepad2.right_stick_y > 0.24 || gamepad2.right_stick_y <= 0.25) {
-            intaking = true;
-        } else {
-            intaking = false;
-        }
-        if (intaking) {
-            Intake.setTargetPosition(Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
-        } else {
-            Intake.setManualTargetPosition(Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y) * 0.5));
-        }
+        intakeSystem.setTargetPosition(intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100)));
+//        if(gamepad2.right_stick_y >= 0.25 || gamepad2.right_stick_y <= -0.25) {
+//            intaking = true;
+//        } else {
+//            intaking = false;
+//        }
+//        if (intaking) {
+//            intakeSystem.setTargetPosition(intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 10)));
+//        } else {
+//            intakeSystem.setManualTargetPosition(intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y* 10) ));
+//        }
     }
+
     private void slideRetract(){
         slidePosition=0;
         slides.setTargetPosition(autoSlidePositions[slidePosition]);
@@ -212,6 +216,7 @@ public class JellyTele extends BaseOpMode {
         telemetry.addData("mX", gamepad2.left_stick_x);
         telemetry.addData("mY", gamepad2.left_stick_y);
         telemetry.addData("precision mode", precisionMultiplier);
+        telemetry.addData("Intaking", intaking);
         telemetry.update();
     }
 
@@ -274,12 +279,12 @@ public class JellyTele extends BaseOpMode {
         double xBackdropLeft = 1.0;
         double xBackdropRight = 10.0;
         double backdropDistance = 10.0;
-        if(X_BACKDROP_DISTANCE>=xBackdropLeft && X_BACKDROP_DISTANCE<=xBackdropRight){
-            if (Y_BACKDROP_DISTANCE <= backdropDistance && forward > 0) {
-                // If the robot is within x inches of the wall and trying to move forward, stop forward movement
-                forward = 0;
-            }
-        }
+//        if(X_BACKDROP_DISTANCE>=xBackdropLeft && X_BACKDROP_DISTANCE<=xBackdropRight){
+//            if (Y_BACKDROP_DISTANCE <= backdropDistance && forward > 0) {
+//                // If the robot is within x inches of the wall and trying to move forward, stop forward movement
+//                forward = 0;
+//            }
+//        }
 
         double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);

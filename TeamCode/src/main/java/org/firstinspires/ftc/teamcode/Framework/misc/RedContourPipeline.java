@@ -17,8 +17,8 @@ import java.util.List;
 public class RedContourPipeline extends OpenCvPipeline {
     Scalar HIGHLIGHT_COLOR = new Scalar(196, 23, 112);
 
-    public static Scalar lowerBoundYCrCb = new Scalar(0.0, 150.0, 0.0); // Increase the lower Cr bound for red
-    public static Scalar upperBoundYCrCb = new Scalar(255.0, 255.0, 120.0); // Decrease the upper Cb bound to exclude blues
+    public static Scalar lowerBoundYCrCb = new Scalar(0.0, 120.0, 80.0); // Increase the lower Cr bound for red
+    public static Scalar upperBoundYCrCb = new Scalar(255.0, 180.0, 135.0); // Decrease the upper Cb bound to exclude blues
 
     public volatile boolean hasError = false;
     public volatile Exception debugException;

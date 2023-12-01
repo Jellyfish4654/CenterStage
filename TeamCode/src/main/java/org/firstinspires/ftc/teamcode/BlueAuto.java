@@ -19,13 +19,13 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class BlueAuto extends BaseOpMode {
     private OpenCvCamera camera;
 
-    private static final int CAMERA_WIDTH  = 1280;
-    private static final int CAMERA_HEIGHT = 720;
+    private static final int CAMERA_WIDTH  = 1920;
+    private static final int CAMERA_HEIGHT = 1080;
 
-    private double chromaRedLowerBound = 160;
-    private double chromaBlueLowerBound = 100;
-    private double chromaRedUpperBound = 255;
-    private double chromaBlueUpperBound = 255;
+    private double chromaRedLowerBound = 90.0;
+    private double chromaBlueLowerBound = 100.0;
+    private double chromaRedUpperBound = 255.0;
+    private double chromaBlueUpperBound = 255.0;
 
     private double lowerThresholdLastUpdate = 0;
     private double upperThresholdLastUpdate = 0;
@@ -35,8 +35,8 @@ public class BlueAuto extends BaseOpMode {
     public static double regionTopY     = 0.0;
     public static double regionBottomY  = 0.0;
 
-    public static Scalar defaultLowerBoundYCrCb = new Scalar(0, 0, 140); // Increase the lower Cr bound for blue
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(255, 120, 255); // Decrease the upper Cb bound to exclude reds
+    public static Scalar defaultLowerBoundYCrCb = new Scalar(0.0, 80.0, 120.0); // Increase the lower Cr bound for blue
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 135.0, 180.0); // Decrease the upper Cb bound to exclude reds
 
     @Override
     public void runOpMode() {

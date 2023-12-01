@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -10,18 +12,18 @@ import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 public class Intake {
 
-    private final DcMotor intakeMotor;
+    private final DcMotorEx intakeMotor;
     private final Servo intakeServo;
 
-    public Intake(DcMotor intakeMotor, Servo intakeServo) {
+    public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;
     }
 
     public static double KP = 0.005;
     public static int targetPosition = 0;
-    public static double MAX_ACCELERATION = 0.7;
-    public static double MAX_VELOCITY = 1.0;
+    public static double MAX_ACCELERATION = 0.8;
+    public static double MAX_VELOCITY = 0.8;
     public static double servoPosition = 0.5;
 
     PIDCoefficients coefficients = new PIDCoefficients(KP, 0, 0);
@@ -47,7 +49,7 @@ public class Intake {
                 elapsedTime);
         double motorPower = (instantTargetPosition - intakeMotor.getCurrentPosition()) * KP_POWER;
 
-        intakeMotor.setPower(motorPower);
+        intakeMotor.setPower(KP_POWER);
     }
 
     public static void setTargetPosition(int target) {

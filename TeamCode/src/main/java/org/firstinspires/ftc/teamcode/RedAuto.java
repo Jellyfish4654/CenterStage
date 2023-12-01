@@ -23,10 +23,10 @@ import java.lang.Math;
 public class RedAuto extends BaseOpMode {
     private OpenCvCamera camera;
 
-    private static final int CAMERA_WIDTH  = 1280;
-    private static final int CAMERA_HEIGHT = 720;
+    private static final int CAMERA_WIDTH  = 1920;
+    private static final int CAMERA_HEIGHT = 1080;
 
-    private double chromaRedLowerBound = 160;
+    private double chromaRedLowerBound = 130;
     private double chromaBlueLowerBound = 100;
     private double chromaRedUpperBound = 255;
     private double chromaBlueUpperBound = 255;
@@ -39,8 +39,8 @@ public class RedAuto extends BaseOpMode {
     public static double regionTopY     = 0.0;
     public static double regionBottomY  = 0.0;
 
-    public static Scalar defaultLowerBoundYCrCb = new Scalar(0, 140, 0); // Increase the lower Cr bound for red
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(255, 255, 120); // Decrease the upper Cb bound to exclude blues
+    public static Scalar defaultLowerBoundYCrCb = new Scalar(0.0, 120.0, 80.0); // Increase the lower Cr bound for red
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 180.0, 135.0); // Decrease the upper Cb bound to exclude blues
 
     public enum OutakeState {
         OUTAKE_OPEN,
