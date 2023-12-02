@@ -63,8 +63,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         // Initialize the drone launcher with the corresponding servo
         droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
 
-        Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outakeLeftServo");
-        Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outakeRightServo");
+        Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
+        Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
 
 

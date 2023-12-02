@@ -11,19 +11,27 @@ public class Outake {
     private final Servo outakeLeftServo;
     private final Servo outakeRightServo;
 
+
+    double positionL = -0.5129;
+    double positionR = 0.5129;
+
     public Outake(Servo servo1, Servo servo2) {
         this.outakeLeftServo = servo1;
         this.outakeRightServo = servo2;
     }
 
     public void openOutake() {
-        outakeLeftServo.setPosition(OPEN_POSITION_LEFT_SERVO); 
-        outakeRightServo.setPosition(OPEN_POSITION_RIGHT_SERVO); 
+        positionL=OPEN_POSITION_LEFT_SERVO;
+        positionR=OPEN_POSITION_RIGHT_SERVO;
     }
 
     public void closeOutake() {
-        outakeLeftServo.setPosition(CLOSE_POSITION_LEFT_SERVO);
-        outakeRightServo.setPosition(CLOSE_POSITION_RIGHT_SERVO);
+        positionL=CLOSE_POSITION_LEFT_SERVO;
+        positionR=CLOSE_POSITION_RIGHT_SERVO;
+    }
+    public void setOutput() {
+        outakeLeftServo.setPosition(positionL);
+        outakeRightServo.setPosition(positionR);
     }
 
     public double getCurrentPositionLeftServo() {

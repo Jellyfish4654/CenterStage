@@ -15,8 +15,8 @@ public class ServoTuner extends BaseOpMode {
         outakeRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         waitForStart();
 
-        double positionL = 0.0;
-        double positionR = 0.0;
+        double positionL = -0.5;
+        double positionR = 0.5;
 
         while(opModeIsActive()){
             telemetry.addData("ServoR", positionR);

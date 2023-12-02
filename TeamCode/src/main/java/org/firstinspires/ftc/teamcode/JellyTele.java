@@ -29,11 +29,12 @@ public class JellyTele extends BaseOpMode {
         FIELDCENTRIC
     }
     public enum OutakeState {
+        SLIDES_RETRACT,
         OUTAKE_OPEN,
         OUTAKE_CLOSE
     };
     ElapsedTime outakeTimer = new ElapsedTime();
-    OutakeState outakeState = OutakeState.OUTAKE_CLOSE;
+    OutakeState outakeState = OutakeState.OUTAKE_OPEN;
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
     private int slidePosition = 0;
@@ -65,6 +66,7 @@ public class JellyTele extends BaseOpMode {
             DroneControl();
             autoAlignment();
             antiTipping();
+            outakeServos.setOutput();
             slides.update();
             intakeSystem.update();
             if (gamepad1.a){
@@ -102,20 +104,31 @@ public class JellyTele extends BaseOpMode {
     }
     private void OutakeControl(){
         switch(outakeState){
-            case OUTAKE_CLOSE:
+            case OUTAKE_OPEN:
                 if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)){
                     outakeServos.openOutake();
                     outakeTimer.reset();
-                    outakeState = OutakeState.OUTAKE_OPEN;
+                    outakeState = OutakeState.OUTAKE_CLOSE;
                 }
                 break;
-            case OUTAKE_OPEN:
+            case OUTAKE_CLOSE:
                 if(outakeTimer.seconds() >= 0.25){
                     outakeServos.closeOutake();
-                    outakeState = OutakeState.OUTAKE_CLOSE;
+                    outakeState = OutakeState.OUTAKE_OPEN;
+                }
+                outakeTimer.reset();
+                outakeState = OutakeState.SLIDES_RETRACT;
+                break;
+            case SLIDES_RETRACT:
+                if(outakeTimer.seconds() >= 0.25){
                     slideRetract();
                 }
-                break;
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)){
+            outakeServos.closeOutake();
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)){
+            outakeServos.openOutake();
         }
     }
     private void SlideControl() {
