@@ -122,7 +122,7 @@ public class BlueAuto extends BaseOpMode {
     Action controlSlidesAction = telemetryPacket -> {
         slides.setTargetPosition(1500);
         slides.update();
-        return slides.isAtTargetPosition();
+        return false;
     };
 
     public void runAutonomousPathA() {

@@ -60,52 +60,49 @@ public class JellyTele extends BaseOpMode {
             displayTelemetry(precisionMultiplier);
             DriveMode(precisionMultiplier);
             IntakeControl();
-            OutakeControl();
-            SlideControl();
-            HangerControl();
+//            OutakeControl();
+//            SlideControl();
+//            HangerControl();
             DroneControl();
-            autoAlignment();
-            antiTipping();
+//            autoAlignment();
+//            antiTipping();
             outakeServos.setOutput();
             slides.update();
             intakeSystem.update();
-            if (gamepad1.a){
-                Intake.runPosition();
-            }
 
         }
     }
 
-    private void autoAlignment(){
-        if(gamepad1.a){
-            autoAlignment.update();
-        }
-    }
-    private void antiTipping(){
-        if(!Hanging){
-            antiTipping.correctTilt();
-        }
-    }
+//    private void autoAlignment(){
+//        if(gamepad1.a){
+//            autoAlignment.update();
+//        }
+//    }
+//    private void antiTipping(){
+//        if(!Hanging){
+//            antiTipping.correctTilt();
+//        }
+//    }
     private void DroneControl() {
         if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)){
             droneLauncher.launchDrone();
         }
     }
 
-    private void HangerControl() {
-        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)){
-            hanger.hangUp();
-            Hanging=true;
-        }
-        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.A)){
-            hanger.hangDown();
-        }
-
-    }
+//    private void HangerControl() {
+//        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)){
+//            hanger.hangUp();
+//            Hanging=true;
+//        }
+//        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.A)){
+//            hanger.hangDown();
+//        }
+//
+//    }
     private void OutakeControl(){
         switch(outakeState){
             case OUTAKE_OPEN:
-                if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)){
+                if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)&&gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
                     outakeServos.openOutake();
                     outakeTimer.reset();
                     outakeState = OutakeState.OUTAKE_CLOSE;
@@ -133,13 +130,14 @@ public class JellyTele extends BaseOpMode {
     }
     private void SlideControl() {
         if (Math.abs(gamepad2.left_stick_y) > DEADBAND_VALUE) {
-            slides.setManualControl(true);
+//            slides.setManualControl(true);
             int manualTarget = Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 100));
             Intake.setTargetPosition(manualTarget);
-        } else {
-            slides.setManualControl(false);
         }
-
+//         else {
+//            slides.setManualControl(false);
+//        }
+//
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             slidePosition = (slidePosition + 1) % autoSlidePositions.length;
             slides.setTargetPosition(autoSlidePositions[slidePosition]);
@@ -151,16 +149,20 @@ public class JellyTele extends BaseOpMode {
 
     private void IntakeControl() {
         if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
-            intakeSystem.setManualControl(true);
             int manualTarget = Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
             Intake.setTargetPosition(manualTarget);
-        } else {
-            intakeSystem.setManualControl(false);
         }
-
-        if (gamepad2.a) {
-            Intake.runPosition();
-        }
+//        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
+//            intakeSystem.setManualControl(true);
+//            int manualTarget = Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
+//            Intake.setTargetPosition(manualTarget);
+//        } else {
+//            intakeSystem.setManualControl(false);
+//        }
+//
+//        if (gamepad2.a) {
+//            Intake.runPosition();
+//        }
     }
 
     private void slideRetract(){

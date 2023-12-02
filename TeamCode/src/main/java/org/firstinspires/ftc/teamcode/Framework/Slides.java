@@ -23,8 +23,6 @@ public class Slides {
     public static double MAX_VELOCITY = 1.0; // Adjust as needed
     public static int targetPosition = 0;
     private final double TICKS_PER_DEGREE = 145.1 / 360.0;
-    public static int SLIDE_LOWER_BOUND = 0;
-    public static int SLIDE_UPPER_BOUND = 3000;
     public static int EXTENDED_STATE = 500;
     private boolean isManualControl = false;
     private double profileStartTime;
@@ -38,8 +36,8 @@ public class Slides {
         int leftCurrentPosition = leftMotor.getCurrentPosition();
         int rightCurrentPosition = rightMotor.getCurrentPosition();
         double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
-        double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition) + FF;
-        double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) + FF;
+        double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition);// + FF;
+        double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) ;// + FF;
         double leftDistance = targetPosition - leftCurrentPosition;
         double rightDistance = targetPosition - rightCurrentPosition;
         double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
@@ -58,10 +56,10 @@ public class Slides {
     }
 
     public void setTargetPosition(int target) {
-        targetPosition = Math.max(SLIDE_LOWER_BOUND, Math.min(target, SLIDE_UPPER_BOUND));
-        if (!isManualControl) {
-            profileStartTime = timer.seconds();
-        }
+        targetPosition = target;
+//        if (!isManualControl) {
+//            profileStartTime = timer.seconds();
+//        }
     }
     public void setManualControl(boolean manualControl) {
         isManualControl = manualControl;

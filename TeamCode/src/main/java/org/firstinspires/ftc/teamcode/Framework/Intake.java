@@ -48,14 +48,14 @@ public class Intake {
                 elapsedTime);
         double motorPower = (instantTargetPosition - currentPosition) * KP_POWER;
 
-        intakeMotor.setPower(motorPower); // Set to motorPower
+        intakeMotor.setPower(KP_POWER); // Set to motorPower
     }
 
     public static void setTargetPosition(int target) {
         targetPosition = target;
-        if (!isManualControl) {
-            profileStartTime = timer.seconds(); // Update only if not in manual control
-        }
+//        if (!isManualControl) {
+//            profileStartTime = timer.seconds(); // Update only if not in manual control
+//        }
     }
 
     public void setManualControl(boolean manualControl) {
