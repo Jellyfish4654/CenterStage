@@ -5,37 +5,43 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.Outake;
 
 @TeleOp(name = "Servo Test")
 public class ServoTuner extends BaseOpMode {
     @Override
-    public void runOpMode() throws InterruptedException{
-        Servo clawServo  = null;
-        clawServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
+    public void runOpMode() throws InterruptedException {
+        final Servo outakeLeftServo;
+        final Servo outakeRightServo;
+        outakeLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
+        outakeRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         waitForStart();
 
-        double position = 0.5;
+        Outake outake = new Outake(outakeLeftServo, outakeRightServo);
+
+        final double OPEN_POSITION_LEFT_SERVO = -1.0;
+        final double CLOSE_POSITION_LEFT_SERVO = 1.0;
+        final double OPEN_POSITION_RIGHT_SERVO = 1.0;
+        final double CLOSE_POSITION_RIGHT_SERVO = -1.0;
 
 
-        while(opModeIsActive()){
-            telemetry.addData("Servo", position);
+        while (opModeIsActive()) {
+            telemetry.addData("leftServo", outakeLeftServo.getPosition());
+            telemetry.addData("rightServo", outakeRightServo.getPosition());
             telemetry.update();
 
-            clawServo.setPosition(position);
 
-            if(gamepad1.dpad_left){
-                position-=0.0001;
+
+            if (gamepad1.a) {
+                outake.openOutake();
             }
-            if(gamepad1.dpad_right){
-                position+=0.0001;
+            if (gamepad1.b) {
+                outake.closeOutake();
             }
 
-            if (gamepad1.a){
-                clawServo.setPosition(1.0);
-            } else if (gamepad1.b){
-                clawServo.setPosition(0);
-            }
+           
 
         }
+
     }
 }
