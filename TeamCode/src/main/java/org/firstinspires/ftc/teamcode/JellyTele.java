@@ -131,8 +131,8 @@ public class JellyTele extends BaseOpMode {
     private void SlideControl() {
         if (Math.abs(gamepad2.left_stick_y) > DEADBAND_VALUE) {
 //            slides.setManualControl(true);
-            int manualTarget = Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 100));
-            Intake.setTargetPosition(manualTarget);
+            int manualTarget = intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 100));
+            intakeSystem.setTargetPosition(manualTarget);
         }
 //         else {
 //            slides.setManualControl(false);
