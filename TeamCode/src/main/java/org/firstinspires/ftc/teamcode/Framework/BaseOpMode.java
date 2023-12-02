@@ -17,10 +17,10 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected Slides slides;
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
-    protected CRServo Lunch;
+    protected Servo Lunch;
     protected Outake outakeServos;
     protected Intake intakeSystem;
-    protected AprilTagPipeline aprilTagPipeline;
+//    protected AprilTagPipeline aprilTagPipeline;
     protected AutoAlignment autoAlignment;
     protected void initHardware() {
         imuSensor = initializeIMUSensor("imu");
@@ -39,9 +39,9 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
-        aprilTagPipeline = new AprilTagPipeline(hardwareMap);
+//        aprilTagPipeline = new AprilTagPipeline(hardwareMap);
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
-        Lunch = hardwareMap.get(CRServo.class, "droneServo");
+        Lunch = hardwareMap.get(Servo.class, "droneServo");
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");

@@ -41,7 +41,6 @@ public class JellyTele extends BaseOpMode {
         OUTAKE_CLOSE
     };
     ElapsedTime outakeTimer = new ElapsedTime();
-    ElapsedTime lunchTimer = new ElapsedTime();
     OutakeState outakeState = OutakeState.OUTAKE_OPEN;
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
@@ -64,7 +63,7 @@ public class JellyTele extends BaseOpMode {
         // Initialize the right slide motor (no direction change)
         DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
         Servo intaker = hardwareMap.get(Servo.class, "intakeServo");
-        intaker.setPosition(1);
+        intaker.setPosition(0.7);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
 
@@ -78,22 +77,18 @@ public class JellyTele extends BaseOpMode {
             displayTelemetry(precisionMultiplier);
             DriveMode(precisionMultiplier);
 //            IntakeControl();
-//            OutakeControl();
+            OutakeControl();
 //            SlideControl();
 //            HangerControl();
             if (gamepad2.back){
-                Lunch.setPower(1);
-                lunchTimer.reset();
-                if (lunchTimer.seconds()>=0.5){
-                    Lunch.setPower(0);
-                }
+                Lunch.setPosition(1);
             }
 //            autoAlignment();
 //            antiTipping();
             outakeServos.setOutput();
             slideMotorLeft.setPower(-gamepad2.right_stick_y);
             slideMotorRight.setPower(gamepad2.right_stick_y);
-            intakeSystem.intakeMotor.setPower(gamepad2.left_stick_y);
+            intakeSystem.intakeMotor.setPower((gamepad2.left_stick_y)*0.75);
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.X)) {
                 intaker.setPosition(0);
             }
@@ -127,26 +122,26 @@ public class JellyTele extends BaseOpMode {
 //
 //    }
     private void OutakeControl(){
-        switch(outakeState){
-            case OUTAKE_OPEN:
-                if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)&&gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
-                    outakeServos.openOutake();
-                    outakeTimer.reset();
-                    outakeState = OutakeState.OUTAKE_CLOSE;
-                }
-                break;
-            case OUTAKE_CLOSE:
-                if(outakeTimer.seconds() >= 0.25){
-                    outakeServos.closeOutake();
-                    outakeState = OutakeState.OUTAKE_OPEN;
-                }
-                outakeTimer.reset();
-                outakeState = OutakeState.SLIDES_RETRACT;
-                break;
-            case SLIDES_RETRACT:
-                if(outakeTimer.seconds() >= 0.25){
-                }
-        }
+//        switch(outakeState){
+//            case OUTAKE_OPEN:
+//                if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)&&gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
+//                    outakeServos.openOutake();
+//                    outakeTimer.reset();
+//                    outakeState = OutakeState.OUTAKE_CLOSE;
+//                }
+//                break;
+//            case OUTAKE_CLOSE:
+//                if(outakeTimer.seconds() >= 0.25){
+//                    outakeServos.closeOutake();
+//                    outakeState = OutakeState.OUTAKE_OPEN;
+//                }
+//                outakeTimer.reset();
+//                outakeState = OutakeState.SLIDES_RETRACT;
+//                break;
+//            case SLIDES_RETRACT:
+//                if(outakeTimer.seconds() >= 0.25){
+//                }
+//        }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)){
             outakeServos.closeOutake();
         }
