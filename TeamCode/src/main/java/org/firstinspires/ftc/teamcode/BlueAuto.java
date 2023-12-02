@@ -35,8 +35,8 @@ public class BlueAuto extends BaseOpMode {
     public static double regionTopY     = 0.5;
     public static double regionBottomY  = 0.0;
 
-    public static Scalar defaultLowerBoundYCrCb = new Scalar(0.0, 70.0, 140.0); // Adjusted for light blue
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 130.0, 200.0); // Adjusted for light blue
+    public static Scalar defaultLowerBoundYCrCb = new Scalar(0.0, 140, 100); // Adjusted for light blue
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 180, 255);; // Adjusted for light blue
 
     @Override
     public void runOpMode() {

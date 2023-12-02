@@ -17,8 +17,8 @@ import java.util.List;
 public class RedContourPipeline extends OpenCvPipeline {
     Scalar HIGHLIGHT_COLOR = new Scalar(196, 23, 112);
 
-    public static Scalar lowerBoundYCrCb = new Scalar(50.0, 120.0, 80.0); // Increase Y (brightness)
-    public static Scalar upperBoundYCrCb = new Scalar(255.0, 160.0, 140.0); // Adjust Cr and Cb
+    public static Scalar lowerBoundYCrCb = new Scalar(0, 210 - 20, 95 - 20);
+    public static Scalar upperBoundYCrCb = new Scalar(255, 210 + 20, 95 + 20); // Adjust Cr and Cb
 
     public volatile boolean hasError = false;
     public volatile Exception debugException;

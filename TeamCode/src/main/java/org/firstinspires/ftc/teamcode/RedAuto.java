@@ -26,10 +26,10 @@ public class RedAuto extends BaseOpMode {
     private static final int CAMERA_WIDTH  = 1920;
     private static final int CAMERA_HEIGHT = 1080;
 
-    private double chromaRedLowerBound = 70; // Increased to capture lighter shades of red
-    private double chromaBlueLowerBound = 110; // Adjusted based on the light red characteristics
-    private double chromaRedUpperBound = 160; // Slightly increased to include lighter reds
-    private double chromaBlueUpperBound = 130;
+    private double chromaRedLowerBound = 210 - 30; // Lower bound for Cr channel to capture red shades
+    private double chromaBlueLowerBound = 95 - 30; // Lower bound for Cb channel to exclude non-red colors
+    private double chromaRedUpperBound = 210 + 30; // Upper bound for Cr channel to capture red shades
+    private double chromaBlueUpperBound = 95 + 30;
 
     private double lowerThresholdLastUpdate = 0;
     private double upperThresholdLastUpdate = 0;
@@ -39,8 +39,8 @@ public class RedAuto extends BaseOpMode {
     public static double regionTopY     = 0.5;
     public static double regionBottomY  = 0.0;
 
-    public static Scalar defaultLowerBoundYCrCb = new Scalar(50.0, 120.0, 80.0);// Increase the lower Cr bound for red
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 160.0, 140.0); // Decrease the upper Cb bound to exclude blues
+    public static Scalar defaultLowerBoundYCrCb = new Scalar(0, 210 - 20, 95 - 20);// Increase the lower Cr bound for red
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255, 210 + 20, 95 + 20); // Decrease the upper Cb bound to exclude blues
 
     public enum OutakeState {
         OUTAKE_OPEN,
