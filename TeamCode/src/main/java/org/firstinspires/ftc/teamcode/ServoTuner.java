@@ -39,7 +39,7 @@ public class ServoTuner extends BaseOpMode {
                 outake.closeOutake();
             }
 
-           
+
 
         }
 

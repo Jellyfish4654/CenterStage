@@ -15,7 +15,7 @@ public class Slides {
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
     }
-    public static double KP = 0;
+    public static double KP = 0.005;
     public static double KI = 0;
     public static double KD = 0;
     public static double FEED_FORWARD_CONSTANT = 0;

@@ -267,11 +267,11 @@ public class JellyTele extends BaseOpMode {
         double rotation = applyDeadband(gamepad1.right_stick_x);
         double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        double Y_BACKDROP_DISTANCE = aprilTagPipeline.getTagY();
-        double X_BACKDROP_DISTANCE = aprilTagPipeline.getTagX();
-        double xBackdropLeft = 1.0;
-        double xBackdropRight = 10.0;
-        double backdropDistance = 10.0;
+//        double Y_BACKDROP_DISTANCE = aprilTagPipeline.getTagY();
+//        double X_BACKDROP_DISTANCE = aprilTagPipeline.getTagX();
+//        double xBackdropLeft = 1.0;
+//        double xBackdropRight = 10.0;
+//        double backdropDistance = 10.0;
 //        if(X_BACKDROP_DISTANCE>=xBackdropLeft && X_BACKDROP_DISTANCE<=xBackdropRight){
 //            if (Y_BACKDROP_DISTANCE <= backdropDistance && forward > 0) {
 //                // If the robot is within x inches of the wall and trying to move forward, stop forward movement
