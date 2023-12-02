@@ -40,7 +40,7 @@ public class RedAuto extends BaseOpMode {
     public static double regionBottomY  = 0.0;
 
     public static Scalar defaultLowerBoundYCrCb = new Scalar(50.0, 120.0, 80.0);// Increase the lower Cr bound for red
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(50.0, 120.0, 80.0); // Decrease the upper Cb bound to exclude blues
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 160.0, 140.0); // Decrease the upper Cb bound to exclude blues
 
     public enum OutakeState {
         OUTAKE_OPEN,

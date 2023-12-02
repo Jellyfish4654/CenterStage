@@ -1,47 +1,41 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 
-@TeleOp(name = "Servo Tuner")
+@TeleOp(name = "Servo Test")
 public class ServoTuner extends BaseOpMode {
-    protected CRServo servo;
-
-    public void runOpMode() throws InterruptedException {
-        servo = hardwareMap.get(CRServo.class, "droneServo");
+    @Override
+    public void runOpMode() throws InterruptedException{
+        Servo clawServo  = null;
+        clawServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         waitForStart();
+
         double position = 0.5;
-        ElapsedTime DroneTimer = new ElapsedTime();
-        while (opModeIsActive()) {
+
+
+        while(opModeIsActive()){
             telemetry.addData("Servo", position);
             telemetry.update();
 
-            if (gamepad1.a) {
-                servo.setPower(-1);
-                DroneTimer.reset();
+            clawServo.setPosition(position);
 
-                while (DroneTimer.seconds() <= 0.5) {
-                }
-                servo.setPower(0);
+            if(gamepad1.dpad_left){
+                position-=0.0001;
             }
-//            servo.setPosition(position);
-//
-//            if(gamepad1.dpad_left){
-//                position-=0.0001;
-//            }
-//            if(gamepad1.dpad_right){
-//                position+=0.0001;
-//            }
-//
-//            if (gamepad1.a){
-//                position = 0.5;
-//            } else if (gamepad1.b){
-//                position = 0.8;
-//            }
+            if(gamepad1.dpad_right){
+                position+=0.0001;
+            }
+
+            if (gamepad1.a){
+                clawServo.setPosition(1.0);
+            } else if (gamepad1.b){
+                clawServo.setPosition(0);
+            }
+
         }
     }
 }
