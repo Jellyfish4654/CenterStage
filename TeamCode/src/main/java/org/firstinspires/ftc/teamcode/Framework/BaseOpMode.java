@@ -17,7 +17,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected Slides slides;
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
-    protected DroneLauncher droneLauncher;
+    protected CRServo Lunch;
     protected Outake outakeServos;
     protected Intake intakeSystem;
     protected AprilTagPipeline aprilTagPipeline;
@@ -41,7 +41,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
         aprilTagPipeline = new AprilTagPipeline(hardwareMap);
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
-        droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
+        Lunch = hardwareMap.get(CRServo.class, "droneServo");
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
@@ -65,8 +65,6 @@ public abstract class BaseOpMode extends LinearOpMode {
         // Initialize the IMU sensor with appropriate parameters
         imuSensor = initializeIMUSensor("imu");
 
-        // Initialize the drone launcher with the corresponding servo
-        droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
         outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
 
 

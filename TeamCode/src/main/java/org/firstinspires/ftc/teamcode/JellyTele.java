@@ -1,15 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.ftc.MidpointTimer;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.Framework.Intake;
+
+import org.firstinspires.ftc.teamcode.Framework.Slides;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -34,6 +41,7 @@ public class JellyTele extends BaseOpMode {
         OUTAKE_CLOSE
     };
     ElapsedTime outakeTimer = new ElapsedTime();
+    ElapsedTime lunchTimer = new ElapsedTime();
     OutakeState outakeState = OutakeState.OUTAKE_OPEN;
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
@@ -48,8 +56,18 @@ public class JellyTele extends BaseOpMode {
         initializeSlewRateLimiters();
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
+
+
+        DcMotorEx slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
+        slideMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        final Servo outtakeRightServo;
+        // Initialize the right slide motor (no direction change)
+        DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
+        Servo intaker = hardwareMap.get(Servo.class, "intakeServo");
+        intaker.setPosition(1);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
+
         while (opModeIsActive()) {
             gamepadEx1.readButtons();
             gamepadEx2.readButtons();
@@ -60,25 +78,28 @@ public class JellyTele extends BaseOpMode {
             displayTelemetry(precisionMultiplier);
             DriveMode(precisionMultiplier);
 //            IntakeControl();
-            OutakeControl();
+//            OutakeControl();
 //            SlideControl();
 //            HangerControl();
-            DroneControl();
+            if (gamepad2.back){
+                Lunch.setPower(1);
+                lunchTimer.reset();
+                if (lunchTimer.seconds()>=0.5){
+                    Lunch.setPower(0);
+                }
+            }
 //            autoAlignment();
 //            antiTipping();
             outakeServos.setOutput();
+            slideMotorLeft.setPower(-gamepad2.right_stick_y);
+            slideMotorRight.setPower(gamepad2.right_stick_y);
+            intakeSystem.intakeMotor.setPower(gamepad2.left_stick_y);
+            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.X)) {
+                intaker.setPosition(0);
+            }
+        }
 
 //            intakeSystem.update();
-            intakeSystem.intakeMotor.setPower(gamepad2.left_stick_y);
-            if (Math.abs(gamepad2.right_stick_y) > 0.1) {
-                // Calculate new target position for the right slide
-                int rightTarget = slides.getRightTargetPosition() + (int)(gamepad2.right_stick_y * 10); // Adjust scaling as needed
-                slides.setRightTargetPosition(rightTarget);
-                int leftTarget = slides.getLeftTargetPosition() + (int)(gamepad2.right_stick_y * 10); // Adjust scaling as needed
-                slides.setLeftTargetPosition(leftTarget);
-            }
-            slides.update();
-        }
     }
 
 //    private void autoAlignment(){
@@ -91,10 +112,8 @@ public class JellyTele extends BaseOpMode {
 //            antiTipping.correctTilt();
 //        }
 //    }
-    private void DroneControl() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)){
-            droneLauncher.launchDrone();
-        }
+    public void DroneControl() {
+
     }
 
 //    private void HangerControl() {
@@ -126,7 +145,6 @@ public class JellyTele extends BaseOpMode {
                 break;
             case SLIDES_RETRACT:
                 if(outakeTimer.seconds() >= 0.25){
-                    slideRetract();
                 }
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)){
@@ -136,21 +154,21 @@ public class JellyTele extends BaseOpMode {
             outakeServos.openOutake();
         }
     }
-    private void SlideControl() {
-
+//    private void SlideControl() {
 //
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
-            slidePosition = (slidePosition + 1) % autoSlidePositions.length;
-            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
-            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
-
-        } else if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
-            slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
-
-            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
-            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
-        }
-    }
+////
+//        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
+//            slidePosition = (slidePosition + 1) % autoSlidePositions.length;
+//            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
+//            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
+//
+//        } else if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
+//            slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
+//
+//            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
+//            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
+//        }
+//    }
 
 //    private void IntakeControl() {
 //        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
@@ -170,12 +188,6 @@ public class JellyTele extends BaseOpMode {
 //        }
 //    }
 
-    private void slideRetract(){
-        slidePosition=0;
-
-        slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
-        slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
-    }
     
     private void initializeSlewRateLimiters() {
         for (int i = 0; i < slewRateLimiters.length; i++) {
@@ -312,9 +324,9 @@ public class JellyTele extends BaseOpMode {
     }
 
     protected void setMotorSpeeds(double multiplier, double[] powers) {
-        if (slides.slidesExtendedState()) {
-            applySlewRateLimit(powers);
-        }
+//        if (slides.slidesExtendedState()) {
+//            applySlewRateLimit(powers);
+//        }
 
         applyPrecisionAndScale(multiplier, powers);
 

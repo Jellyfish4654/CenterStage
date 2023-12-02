@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.Framework;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Outake {
-    private static final double OPEN_POSITION_LEFT_SERVO = -0.8754;
-    private static final double CLOSE_POSITION_LEFT_SERVO = -0.5129;
-    private static final double OPEN_POSITION_RIGHT_SERVO = 0.8754;
-    private static final double CLOSE_POSITION_RIGHT_SERVO = 0.5129;
+    private static final double OPEN_POSITION_LEFT_SERVO = 0.7371;
+    private static final double CLOSE_POSITION_LEFT_SERVO = 0.267;
+    private static final double OPEN_POSITION_RIGHT_SERVO = 0.2629;
+    private static final double CLOSE_POSITION_RIGHT_SERVO = 0.7331;
 
     private final Servo outakeLeftServo;
     private final Servo outakeRightServo;
