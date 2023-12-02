@@ -42,10 +42,11 @@ public abstract class BaseOpMode extends LinearOpMode {
         aprilTagPipeline = new AprilTagPipeline(hardwareMap);
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
-        outakeServos = new Outake(
-                hardwareMap.get(Servo.class, "outtakeLeftServo"),
-                hardwareMap.get(Servo.class, "outtakeRightServo")
-        );
+        Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
+        outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
+        Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
+        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
+
         slides = new Slides(
                 hardwareMap.get(DcMotorEx.class, "slideMotorLeft"),
                 hardwareMap.get(DcMotorEx.class, "slideMotorRight")
@@ -62,9 +63,6 @@ public abstract class BaseOpMode extends LinearOpMode {
 
         // Initialize the drone launcher with the corresponding servo
         droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
-
-        Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
-        Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
 
 

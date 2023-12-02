@@ -59,7 +59,7 @@ public class JellyTele extends BaseOpMode {
             resetIMU();
             displayTelemetry(precisionMultiplier);
             DriveMode(precisionMultiplier);
-            IntakeControl();
+//            IntakeControl();
 //            OutakeControl();
 //            SlideControl();
 //            HangerControl();
@@ -67,8 +67,8 @@ public class JellyTele extends BaseOpMode {
 //            autoAlignment();
 //            antiTipping();
             outakeServos.setOutput();
-            slides.update();
-            intakeSystem.update();
+//            slides.update();
+//            intakeSystem.update();
 
         }
     }
@@ -131,8 +131,8 @@ public class JellyTele extends BaseOpMode {
     private void SlideControl() {
         if (Math.abs(gamepad2.left_stick_y) > DEADBAND_VALUE) {
 //            slides.setManualControl(true);
-            int manualTarget = intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 100));
-            intakeSystem.setTargetPosition(manualTarget);
+            int manualTarget = slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 100));
+            slides.setTargetPosition(manualTarget);
         }
 //         else {
 //            slides.setManualControl(false);

@@ -1,49 +1,44 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 
 @TeleOp(name = "Servo Test")
-public class ServoTuner extends BaseOpMode {
+public class ServoTuner extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException{
-        final Servo outakeLeftServo;
-        final Servo outakeRightServo;
-        outakeLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
-        outakeRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
+    public void runOpMode() throws InterruptedException {
+        final Servo outtakeLeftServo;
+        final Servo outtakeRightServo;
+        outtakeLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
+        outtakeRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
+
+        outtakeLeftServo.setDirection(Servo.Direction.REVERSE);
+        double position = 0.5; // Initialize to midpoint
+
         waitForStart();
 
-        double positionL = -0.5;
-        double positionR = 0.5;
-
-        while(opModeIsActive()){
-            telemetry.addData("ServoR", positionR);
-            telemetry.addData("ServoL", positionL);
+        while(opModeIsActive()) {
+            telemetry.addData("ServoR", position);
+//            telemetry.addData("ServoL", -position);
             telemetry.update();
 
-            outakeLeftServo.setPosition(positionL);
-            outakeRightServo.setPosition(positionR);
+            outtakeLeftServo.setPosition(position);
+            outtakeRightServo.setPosition(position);
 
             if(gamepad1.dpad_left){
-                positionR-=0.0001;
-                positionL+=0.0001;
+                position-=0.0001;
             }
             if(gamepad1.dpad_right){
-                positionL-=0.0001;
-                positionR+=0.0001;
+                position+=0.0001;
             }
 
-
-            if (gamepad1.a){
-                positionR= -1.0;
-                positionL= 1.0;
-            } else if (gamepad1.b){
-                positionR= 1.0;
-                positionL= -1.0;
+            if (gamepad1.a) {
+                position=0;
+            } else if (gamepad1.b) {
+                position=1;
             }
-
         }
     }
 }
