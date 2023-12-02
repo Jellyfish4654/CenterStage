@@ -60,16 +60,18 @@ public class JellyTele extends BaseOpMode {
             displayTelemetry(precisionMultiplier);
             DriveMode(precisionMultiplier);
 //            IntakeControl();
-//            OutakeControl();
-//            SlideControl();
+            OutakeControl();
+            SlideControl();
 //            HangerControl();
             DroneControl();
 //            autoAlignment();
 //            antiTipping();
             outakeServos.setOutput();
-//            slides.update();
+            slides.update();
 //            intakeSystem.update();
-
+            intakeSystem.intakeMotor.setPower(gamepad2.left_stick_y);
+            telemetry.addData("LeftSlide", slides.leftMotor.getCurrentPosition());
+            telemetry.addData("RightSlide", slides.rightMotor.getCurrentPosition());
         }
     }
 
@@ -131,7 +133,7 @@ public class JellyTele extends BaseOpMode {
     private void SlideControl() {
         if (Math.abs(gamepad2.left_stick_y) > DEADBAND_VALUE) {
 //            slides.setManualControl(true);
-            int manualTarget = slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 100));
+            int manualTarget = slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 10));
             slides.setTargetPosition(manualTarget);
         }
 //         else {
@@ -147,11 +149,11 @@ public class JellyTele extends BaseOpMode {
         }
     }
 
-    private void IntakeControl() {
-        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
-            int manualTarget = intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
-            intakeSystem.setTargetPosition(manualTarget);
-        }
+//    private void IntakeControl() {
+//        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
+//            int manualTarget = intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
+//            intakeSystem.setTargetPosition(manualTarget);
+//        }
 //        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
 //            intakeSystem.setManualControl(true);
 //            int manualTarget = Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
@@ -163,7 +165,7 @@ public class JellyTele extends BaseOpMode {
 //        if (gamepad2.a) {
 //            Intake.runPosition();
 //        }
-    }
+//    }
 
     private void slideRetract(){
         slidePosition=0;

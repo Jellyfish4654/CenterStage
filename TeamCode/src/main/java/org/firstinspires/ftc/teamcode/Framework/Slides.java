@@ -32,24 +32,26 @@ public class Slides {
     public ElapsedTime timer = new ElapsedTime();
 
     public void update(){
-        double elapsedTime = timer.seconds() - profileStartTime;;
+//        double elapsedTime = timer.seconds() - profileStartTime;;
         int leftCurrentPosition = leftMotor.getCurrentPosition();
         int rightCurrentPosition = rightMotor.getCurrentPosition();
-        double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
+
+
+//        double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
         double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition);// + FF;
         double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) ;// + FF;
-        double leftDistance = targetPosition - leftCurrentPosition;
-        double rightDistance = targetPosition - rightCurrentPosition;
-        double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-                MAX_VELOCITY,
-                leftDistance,
-                elapsedTime);
-        double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-                MAX_VELOCITY,
-                rightDistance,
-                elapsedTime);
-        double leftMotorPower = (leftInstantTargetPosition - leftCurrentPosition) * LEFT_PIDF_POWER;
-        double rightMotorPower = (rightInstantTargetPosition - rightCurrentPosition) * RIGHT_PIDF_POWER;
+//        double leftDistance = targetPosition - leftCurrentPosition;
+//        double rightDistance = targetPosition - rightCurrentPosition;
+//        double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+//                MAX_VELOCITY,
+//                leftDistance,
+//                elapsedTime);
+//        double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+//                MAX_VELOCITY,
+//                rightDistance,
+//                elapsedTime);
+//        double leftMotorPower = (leftInstantTargetPosition - leftCurrentPosition) * LEFT_PIDF_POWER;
+//        double rightMotorPower = (rightInstantTargetPosition - rightCurrentPosition) * RIGHT_PIDF_POWER;
 
         leftMotor.setPower(LEFT_PIDF_POWER);
         rightMotor.setPower(RIGHT_PIDF_POWER);

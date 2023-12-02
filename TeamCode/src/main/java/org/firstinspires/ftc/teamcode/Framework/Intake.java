@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 public class Intake {
 
-    private final DcMotorEx intakeMotor;
+    public final DcMotorEx intakeMotor;
     private final Servo intakeServo;
 
     public static double KP = 0.005;
