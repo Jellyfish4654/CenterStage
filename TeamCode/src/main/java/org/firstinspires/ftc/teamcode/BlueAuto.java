@@ -22,21 +22,21 @@ public class BlueAuto extends BaseOpMode {
     private static final int CAMERA_WIDTH  = 1920;
     private static final int CAMERA_HEIGHT = 1080;
 
-    private double chromaRedLowerBound = 90.0;
-    private double chromaBlueLowerBound = 100.0;
-    private double chromaRedUpperBound = 255.0;
-    private double chromaBlueUpperBound = 255.0;
+    private double chromaRedLowerBound = 70.0;
+    private double chromaBlueLowerBound = 140.0;
+    private double chromaRedUpperBound = 130.0;
+    private double chromaBlueUpperBound = 200.0;
 
     private double lowerThresholdLastUpdate = 0;
     private double upperThresholdLastUpdate = 0;
 
     public static double regionLeftX    = 0.0;
     public static double regionRightX   = 0.0;
-    public static double regionTopY     = 0.0;
+    public static double regionTopY     = 0.5;
     public static double regionBottomY  = 0.0;
 
-    public static Scalar defaultLowerBoundYCrCb = new Scalar(0.0, 80.0, 120.0); // Increase the lower Cr bound for blue
-    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 135.0, 180.0); // Decrease the upper Cb bound to exclude reds
+    public static Scalar defaultLowerBoundYCrCb = new Scalar(0.0, 70.0, 140.0); // Adjusted for light blue
+    public static Scalar defaultUpperBoundYCrCb = new Scalar(255.0, 130.0, 200.0); // Adjusted for light blue
 
     @Override
     public void runOpMode() {
