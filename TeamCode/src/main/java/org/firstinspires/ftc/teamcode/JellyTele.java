@@ -61,7 +61,7 @@ public class JellyTele extends BaseOpMode {
             DriveMode(precisionMultiplier);
 //            IntakeControl();
             OutakeControl();
-            SlideControl();
+//            SlideControl();
 //            HangerControl();
             DroneControl();
 //            autoAlignment();
