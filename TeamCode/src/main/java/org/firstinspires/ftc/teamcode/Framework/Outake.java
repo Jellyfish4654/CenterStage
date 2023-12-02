@@ -12,8 +12,8 @@ public class Outake {
     private final Servo outakeRightServo;
 
 
-    double positionL = -0.5129;
-    double positionR = 0.5129;
+    double positionL = 0.5;
+    double positionR = 0.5;
 
     public Outake(Servo servo1, Servo servo2) {
         this.outakeLeftServo = servo1;

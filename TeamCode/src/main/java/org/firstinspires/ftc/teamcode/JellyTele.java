@@ -19,7 +19,7 @@ public class JellyTele extends BaseOpMode {
     private static final double DEADBAND_VALUE = 0.02;
     private static final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
     private static final double MAX_SCALE = 1.0;
-    private static final int ENDGAME_ALERT_TIME = 120; // Seconds
+    private static final int ENDGAME_ALERT_TIME = 115; // Seconds
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
     protected enum DriveMode {
@@ -67,11 +67,17 @@ public class JellyTele extends BaseOpMode {
 //            autoAlignment();
 //            antiTipping();
             outakeServos.setOutput();
-            slides.update();
+
 //            intakeSystem.update();
             intakeSystem.intakeMotor.setPower(gamepad2.left_stick_y);
-            telemetry.addData("LeftSlide", slides.leftMotor.getCurrentPosition());
-            telemetry.addData("RightSlide", slides.rightMotor.getCurrentPosition());
+            if (Math.abs(gamepad2.right_stick_y) > 0.1) {
+                // Calculate new target position for the right slide
+                int rightTarget = slides.getRightTargetPosition() + (int)(gamepad2.right_stick_y * 10); // Adjust scaling as needed
+                slides.setRightTargetPosition(rightTarget);
+                int leftTarget = slides.getLeftTargetPosition() + (int)(gamepad2.right_stick_y * 10); // Adjust scaling as needed
+                slides.setLeftTargetPosition(leftTarget);
+            }
+            slides.update();
         }
     }
 
@@ -131,21 +137,18 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void SlideControl() {
-        if (Math.abs(gamepad2.left_stick_y) > DEADBAND_VALUE) {
-//            slides.setManualControl(true);
-            int manualTarget = slides.getTargetPosition() + (int) (applyDeadband(gamepad2.left_stick_y * 10));
-            slides.setTargetPosition(manualTarget);
-        }
-//         else {
-//            slides.setManualControl(false);
-//        }
+
 //
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             slidePosition = (slidePosition + 1) % autoSlidePositions.length;
-            slides.setTargetPosition(autoSlidePositions[slidePosition]);
+            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
+            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
+
         } else if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
             slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
-            slides.setTargetPosition(autoSlidePositions[slidePosition]);
+
+            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
+            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
         }
     }
 
@@ -169,7 +172,9 @@ public class JellyTele extends BaseOpMode {
 
     private void slideRetract(){
         slidePosition=0;
-        slides.setTargetPosition(autoSlidePositions[slidePosition]);
+
+        slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
+        slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
     }
     
     private void initializeSlewRateLimiters() {
