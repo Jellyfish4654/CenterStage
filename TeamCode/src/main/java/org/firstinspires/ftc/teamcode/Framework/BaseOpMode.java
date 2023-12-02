@@ -43,8 +43,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         droneLauncher = new DroneLauncher(hardwareMap.get(CRServo.class, "droneServo"));
         outakeServos = new Outake(
-                hardwareMap.get(Servo.class, "outakeLeftServo"),
-                hardwareMap.get(Servo.class, "outakeRightServo")
+                hardwareMap.get(Servo.class, "outtakeLeftServo"),
+                hardwareMap.get(Servo.class, "outtakeRightServo")
         );
         slides = new Slides(
                 hardwareMap.get(DcMotorEx.class, "slideMotorLeft"),
