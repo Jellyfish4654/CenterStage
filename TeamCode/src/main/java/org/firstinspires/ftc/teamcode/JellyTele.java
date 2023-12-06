@@ -60,12 +60,16 @@ public class JellyTele extends BaseOpMode {
         DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
-        intakeSystem.servoIntake();
+        intakeSystem.servoIntakeOut();
         while (opModeIsActive()) {
             gamepadEx1.readButtons();
             gamepadEx2.readButtons();
             updateDriveModeFromGamepad();
-            alertEndGame(timer);
+            if (timer.seconds() == ENDGAME_ALERT_TIME) {
+                gamepad1.runRumbleEffect(effect);
+                gamepad2.runRumbleEffect(effect);
+            }
+            intakeSystem.servoIntakeDrone();
             double precisionMultiplier = calculatePrecisionMultiplier();
             resetIMU();
             displayTelemetry(precisionMultiplier);
@@ -119,10 +123,7 @@ public class JellyTele extends BaseOpMode {
             .build();
 
     private void alertEndGame(ElapsedTime timer) {
-        if (timer.seconds() == ENDGAME_ALERT_TIME) {
-            gamepad1.runRumbleEffect(effect);
-            gamepad2.runRumbleEffect(effect);
-        }
+
     }
 
     private double calculatePrecisionMultiplier() {

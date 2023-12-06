@@ -71,10 +71,12 @@ public class Intake {
     public void servoIntakeInit() {
         intakeServo.setPosition(0.235);
     }
-    public void servoIntake() {
+    public void servoIntakeOut() {
         intakeServo.setPosition(0.115);
         servoTimer.reset();
-        if(servoTimer.seconds()==0.75) {
+    }
+    public void servoIntakeDrone(){
+        if(servoTimer.seconds() >= 0.75) {
             intakeServo.setPosition(0.97);
         }
     }
