@@ -31,8 +31,6 @@ public class JellyTele extends BaseOpMode {
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
     protected enum DriveMode {
-        TANK,
-        DRIVE,
         MECANUM,
         FIELDCENTRIC
     }
@@ -104,12 +102,8 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void updateDriveModeFromGamepad() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
-            driveMode = DriveMode.TANK;
-        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             driveMode = DriveMode.MECANUM;
-        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
-            driveMode = DriveMode.DRIVE;
         } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
             driveMode = DriveMode.FIELDCENTRIC;
         }
@@ -158,12 +152,6 @@ public class JellyTele extends BaseOpMode {
     private void DriveMode(double precisionMultiplier) {
         double[] motorSpeeds = new double[4];
         switch (driveMode) {
-            case TANK:
-                motorSpeeds = TankDrive();
-                break;
-            case DRIVE:
-                motorSpeeds = Drive();
-                break;
             case MECANUM:
                 motorSpeeds = MecanumDrive();
                 break;
@@ -172,23 +160,6 @@ public class JellyTele extends BaseOpMode {
                 break;
         }
         setMotorSpeeds(precisionMultiplier, motorSpeeds);
-    }
-
-    private double[] TankDrive() {
-        double left = -applyDeadband(gamepad1.left_stick_y);
-        double right = -applyDeadband(gamepad1.right_stick_y);
-        return new double[]{right, right, left, left};
-    }
-
-    private double[] Drive() {
-        double pivot = applyDeadband(gamepad1.left_stick_x);
-        double forward = -applyDeadband(gamepad1.left_stick_y);
-        return new double[]{
-                forward - pivot,
-                forward - pivot,
-                forward + pivot,
-                forward + pivot
-        };
     }
 
     private double[] MecanumDrive() {
