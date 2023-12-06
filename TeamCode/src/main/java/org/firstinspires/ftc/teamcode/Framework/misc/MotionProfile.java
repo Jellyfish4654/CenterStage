@@ -1,42 +1,90 @@
 package org.firstinspires.ftc.teamcode.Framework.misc;
 
 public class MotionProfile {
+    public double initialPosition;
+    public double finalPosition;
+    public double distance;
+    public double t1, t2, t3; // Times for acceleration, constant velocity, and deceleration phases
+    public double totalTime;
+    public double maxVelocity;
+    public Constraints constraints;
 
-    public static double motion_profile(double maxAcceleration, double maxVelocity, double distance, double elapsedTime) {
-        double accelerationDt = maxVelocity / maxAcceleration;
-        double halfwayDistance = distance / 2;
-        double accelerationDistance = 0.5 * maxAcceleration * Math.pow(accelerationDt, 2);
+    public MotionProfile(double initialPosition, double finalPosition, Constraints constraints) {
+        this.initialPosition = initialPosition;
+        this.finalPosition = finalPosition;
+        this.distance = finalPosition - initialPosition;
+        this.constraints = constraints;
 
-        if (accelerationDistance > halfwayDistance) {
-            accelerationDt = Math.sqrt(halfwayDistance / (0.5 * maxAcceleration));
+        // Calculate the time to reach max velocity
+        t1 = constraints.maxVelocity / constraints.maxAcceleration;
+        // Time to decelerate
+        t3 = constraints.maxVelocity / constraints.maxDeceleration;
+        // Time at max velocity
+        t2 = Math.abs(distance) / constraints.maxVelocity - (t1 + t3) / 2;
+
+        // If t2 is negative, the profile does not reach max velocity
+        if (t2 < 0) {
+            t2 = 0;
+            double a = constraints.maxAcceleration;
+            double d = constraints.maxDeceleration;
+            t1 = Math.sqrt((d * distance) / (a * d + a * a));
+            t3 = (a * t1) / d;
         }
 
-        accelerationDistance = 0.5 * maxAcceleration * Math.pow(accelerationDt, 2);
-        maxVelocity = maxAcceleration * accelerationDt;
+        maxVelocity = constraints.maxVelocity;
+        totalTime = t1 + t2 + t3;
+    }
 
-        double decelerationDt = accelerationDt;
-        double cruiseDistance = distance - 2 * accelerationDistance;
-        double cruiseDt = cruiseDistance / maxVelocity;
-        double decelerationTime = accelerationDt + cruiseDt;
-
-        double entireDt = accelerationDt + cruiseDt + decelerationDt;
-        if (elapsedTime > entireDt) {
-            return distance;
+    public State calculate(double time) {
+        double position, velocity, acceleration;
+        if (time <= t1) {
+            // Acceleration phase
+            acceleration = constraints.maxAcceleration;
+            velocity = acceleration * time;
+            position = 0.5 * acceleration * time * time;
+        } else if (time <= t1 + t2) {
+            // Constant velocity phase
+            acceleration = 0;
+            velocity = maxVelocity;
+            position = (0.5 * maxVelocity * t1) + maxVelocity * (time - t1);
+        } else if (time <= totalTime) {
+            // Deceleration phase
+            double timeInDeceleration = time - t1 - t2;
+            acceleration = -constraints.maxDeceleration;
+            velocity = maxVelocity - acceleration * timeInDeceleration;
+            position = (0.5 * maxVelocity * t1) + (maxVelocity * t2) + (maxVelocity * timeInDeceleration) + (0.5 * acceleration * timeInDeceleration * timeInDeceleration);
+        } else {
+            // End of profile
+            acceleration = 0;
+            velocity = 0;
+            position = distance;
         }
-        if (elapsedTime < accelerationDt) {
-            return 0.5 * maxAcceleration * Math.pow(elapsedTime, 2);
-        } else if (elapsedTime < decelerationTime) {
-            accelerationDistance = 0.5 * maxAcceleration * Math.pow(accelerationDt, 2);
-            double cruiseCurrentDt = elapsedTime - accelerationDt;
 
-            return accelerationDistance + maxVelocity * cruiseCurrentDt;
-        }
-        else {
-            accelerationDistance = 0.5 * maxAcceleration * Math.pow(accelerationDt, 2);
-            cruiseDistance = maxVelocity * cruiseDt;
-            double decelerationCurrentDt = elapsedTime - decelerationTime;
+        State state = new State();
+        state.x = initialPosition + position;
+        state.v = velocity;
+        state.a = acceleration;
 
-            return accelerationDistance + cruiseDistance + maxVelocity * decelerationCurrentDt - 0.5 * maxAcceleration * Math.pow(decelerationCurrentDt, 2);
+        return state;
+    }
+
+    // Inner class for state representation
+    public static class State {
+        public double x; // position
+        public double v; // velocity
+        public double a; // acceleration
+    }
+
+    // Inner class for constraints
+    public static class Constraints {
+        public double maxAcceleration;
+        public double maxDeceleration;
+        public double maxVelocity;
+
+        public Constraints(double maxVelo, double maxAccel, double maxDecel) {
+            this.maxVelocity = maxVelo;
+            this.maxAcceleration = maxAccel;
+            this.maxDeceleration = maxDecel;
         }
     }
 }

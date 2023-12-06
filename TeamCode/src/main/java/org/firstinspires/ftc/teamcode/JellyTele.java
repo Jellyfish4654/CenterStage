@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
@@ -39,9 +40,7 @@ public class JellyTele extends BaseOpMode {
         SLIDES_RETRACT,
         OUTAKE_OPEN,
         OUTAKE_CLOSE
-    };
-    ElapsedTime outakeTimer = new ElapsedTime();
-    OutakeState outakeState = OutakeState.OUTAKE_OPEN;
+    }
 
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
     private int slidePosition = 0;
@@ -53,20 +52,17 @@ public class JellyTele extends BaseOpMode {
     public void runOpMode() throws InterruptedException {
         initHardware();
         initializeSlewRateLimiters();
+        intakeSystem.servoIntakeInit();
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
 
         DcMotorEx slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        final Servo outtakeRightServo;
-        // Initialize the right slide motor (no direction change)
         DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
-        Servo intaker = hardwareMap.get(Servo.class, "intakeServo");
-        intaker.setPosition(0.7);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
-
+        intakeSystem.servoIntake();
         while (opModeIsActive()) {
             gamepadEx1.readButtons();
             gamepadEx2.readButtons();
@@ -76,72 +72,23 @@ public class JellyTele extends BaseOpMode {
             resetIMU();
             displayTelemetry(precisionMultiplier);
             DriveMode(precisionMultiplier);
-//            IntakeControl();
             OutakeControl();
-//            SlideControl();
-//            HangerControl();
-            if (gamepad2.back){
-                Lunch.setPosition(1);
-            }
-//            autoAlignment();
-//            antiTipping();
             outakeServos.setOutput();
             slideMotorLeft.setPower(-gamepad2.right_stick_y);
             slideMotorRight.setPower(gamepad2.right_stick_y);
             intakeSystem.intakeMotor.setPower((gamepad2.left_stick_y)*0.75);
-            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.X)) {
-                intaker.setPosition(0);
-            }
+            DroneControl();
         }
-
-//            intakeSystem.update();
     }
 
-//    private void autoAlignment(){
-//        if(gamepad1.a){
-//            autoAlignment.update();
-//        }
-//    }
-//    private void antiTipping(){
-//        if(!Hanging){
-//            antiTipping.correctTilt();
-//        }
-//    }
     public void DroneControl() {
-
+        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
+            droneServo.launchDrone();
+        }
     }
 
-//    private void HangerControl() {
-//        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)){
-//            hanger.hangUp();
-//            Hanging=true;
-//        }
-//        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.A)){
-//            hanger.hangDown();
-//        }
-//
-//    }
     private void OutakeControl(){
-//        switch(outakeState){
-//            case OUTAKE_OPEN:
-//                if(gamepadEx2.wasJustReleased(GamepadKeys.Button.B)&&gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
-//                    outakeServos.openOutake();
-//                    outakeTimer.reset();
-//                    outakeState = OutakeState.OUTAKE_CLOSE;
-//                }
-//                break;
-//            case OUTAKE_CLOSE:
-//                if(outakeTimer.seconds() >= 0.25){
-//                    outakeServos.closeOutake();
-//                    outakeState = OutakeState.OUTAKE_OPEN;
-//                }
-//                outakeTimer.reset();
-//                outakeState = OutakeState.SLIDES_RETRACT;
-//                break;
-//            case SLIDES_RETRACT:
-//                if(outakeTimer.seconds() >= 0.25){
-//                }
-//        }
+
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)){
             outakeServos.closeOutake();
         }
@@ -149,41 +96,7 @@ public class JellyTele extends BaseOpMode {
             outakeServos.openOutake();
         }
     }
-//    private void SlideControl() {
-//
-////
-//        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
-//            slidePosition = (slidePosition + 1) % autoSlidePositions.length;
-//            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
-//            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
-//
-//        } else if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
-//            slidePosition = (slidePosition - 1 + autoSlidePositions.length) % autoSlidePositions.length;
-//
-//            slides.setLeftTargetPosition(autoSlidePositions[slidePosition]);
-//            slides.setRightTargetPosition(autoSlidePositions[slidePosition]);
-//        }
-//    }
 
-//    private void IntakeControl() {
-//        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
-//            int manualTarget = intakeSystem.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
-//            intakeSystem.setTargetPosition(manualTarget);
-//        }
-//        if (Math.abs(gamepad2.right_stick_y) > DEADBAND_VALUE) {
-//            intakeSystem.setManualControl(true);
-//            int manualTarget = Intake.getTargetPosition() + (int) (applyDeadband(gamepad2.right_stick_y * 100));
-//            Intake.setTargetPosition(manualTarget);
-//        } else {
-//            intakeSystem.setManualControl(false);
-//        }
-//
-//        if (gamepad2.a) {
-//            Intake.runPosition();
-//        }
-//    }
-
-    
     private void initializeSlewRateLimiters() {
         for (int i = 0; i < slewRateLimiters.length; i++) {
             slewRateLimiters[i] = new SlewRateLimiter(RATE_LIMIT);
@@ -296,18 +209,6 @@ public class JellyTele extends BaseOpMode {
         double rotation = applyDeadband(gamepad1.right_stick_x);
         double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-//        double Y_BACKDROP_DISTANCE = aprilTagPipeline.getTagY();
-//        double X_BACKDROP_DISTANCE = aprilTagPipeline.getTagX();
-//        double xBackdropLeft = 1.0;
-//        double xBackdropRight = 10.0;
-//        double backdropDistance = 10.0;
-//        if(X_BACKDROP_DISTANCE>=xBackdropLeft && X_BACKDROP_DISTANCE<=xBackdropRight){
-//            if (Y_BACKDROP_DISTANCE <= backdropDistance && forward > 0) {
-//                // If the robot is within x inches of the wall and trying to move forward, stop forward movement
-//                forward = 0;
-//            }
-//        }
-
         double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
         return new double[]{
@@ -319,9 +220,6 @@ public class JellyTele extends BaseOpMode {
     }
 
     protected void setMotorSpeeds(double multiplier, double[] powers) {
-//        if (slides.slidesExtendedState()) {
-//            applySlewRateLimit(powers);
-//        }
 
         applyPrecisionAndScale(multiplier, powers);
 

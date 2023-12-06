@@ -52,19 +52,19 @@ public class SlidesTuner extends LinearOpMode {
             double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) + FF;
             double leftDistance = targetPosition - leftMotor.getCurrentPosition();
             double rightDistance = targetPosition - rightMotor.getCurrentPosition();
-            double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-                    MAX_VELOCITY,
-                    leftDistance,
-                    elapsedTime);
-            double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-                    MAX_VELOCITY,
-                    rightDistance,
-                    elapsedTime);
-            double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
-            double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
+//            double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+//                    MAX_VELOCITY,
+//                    leftDistance,
+//                    elapsedTime);
+//            double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+//                    MAX_VELOCITY,
+//                    rightDistance,
+//                    elapsedTime);
+//            double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
+//            double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
 
-            leftMotor.setPower(leftMotorPower);
-            rightMotor.setPower(rightMotorPower);
+//            leftMotor.setPower(leftMotorPower);
+//            rightMotor.setPower(rightMotorPower);
 
             telemetry.addData("Current Left Position", leftMotor.getCurrentPosition());
             telemetry.addData("Current Right Position", rightMotor.getCurrentPosition());

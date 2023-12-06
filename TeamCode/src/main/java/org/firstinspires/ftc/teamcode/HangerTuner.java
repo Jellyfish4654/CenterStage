@@ -43,11 +43,11 @@ public class HangerTuner extends LinearOpMode {
             int currentPosition = hangerMotor.getCurrentPosition();
             double KP_POWER = controller.calculate(targetPosition, currentPosition);
             double distance = targetPosition - hangerMotor.getCurrentPosition();
-            double instantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-                    MAX_VELOCITY,
-                    distance,
-                    elapsedTime);
-            double motorPower = (instantTargetPosition - hangerMotor.getCurrentPosition()) * KP_POWER;
+//            double instantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+//                    MAX_VELOCITY,
+//                    distance,
+//                    elapsedTime);
+//            double motorPower = (instantTargetPosition - hangerMotor.getCurrentPosition()) * KP_POWER;
 
             hangerMotor.setPower(KP_POWER);
 

@@ -24,9 +24,12 @@ public class Intake {
     BasicPID controller = new BasicPID(coefficients);
     public static ElapsedTime timer = new ElapsedTime();
 
+    private ElapsedTime servoTimer;
+
     public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;
+        this.servoTimer = new ElapsedTime();
     }
 
     public void intakeDown() {
@@ -42,11 +45,11 @@ public class Intake {
         int currentPosition = intakeMotor.getCurrentPosition();
         double KP_POWER = controller.calculate(targetPosition, currentPosition);
         double distance = targetPosition - currentPosition;
-        double instantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-                MAX_VELOCITY,
-                distance,
-                elapsedTime);
-        double motorPower = (instantTargetPosition - currentPosition) * KP_POWER;
+//        double instantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
+//                MAX_VELOCITY,
+//                distance,
+//                elapsedTime);
+//        double motorPower = (instantTargetPosition - currentPosition) * KP_POWER;
 
         intakeMotor.setPower(KP_POWER); // Set to motorPower
     }
@@ -65,12 +68,15 @@ public class Intake {
         }
     }
 
-    public void servoDown() {
-        intakeServo.setPosition(1);
+    public void servoIntakeInit() {
+        intakeServo.setPosition(0.235);
     }
-
-    public void servoUp(){
-        intakeServo.setPosition(0);
+    public void servoIntake() {
+        intakeServo.setPosition(0.115);
+        servoTimer.reset();
+        if(servoTimer.seconds()==0.75) {
+            intakeServo.setPosition(0.97);
+        }
     }
 
     public static int getTargetPosition() {
