@@ -38,5 +38,4 @@ dependencies {
 }
 dependencies {
     implementation 'org.openftc:apriltag:2.0.0'
-    implementation 'org.ftclib.ftclib:core:2.0.1'
 }
