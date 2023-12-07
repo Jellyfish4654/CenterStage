@@ -48,23 +48,19 @@ public abstract class BaseOpMode extends LinearOpMode {
         
         DcMotorEx slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Initialize the right slide motor (no direction change)
         DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
-        // Initialize the Slides object with the modified slide motors
-//        slides = new Slides(slideMotorLeft, slideMotorRight);
+        slides = new Slides(slideMotorLeft, slideMotorRight);
         
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
-//      aprilTagPipeline = new AprilTagPipeline(hardwareMap);
-        // Initialize the IMU sensor with appropriate parameters
         imuSensor = initializeIMUSensor();
     }
 
     private IMU initializeIMUSensor() {
         IMU imu = hardwareMap.get(IMU.class, "imu");
-        
+
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP
