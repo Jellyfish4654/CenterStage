@@ -48,10 +48,6 @@ public class JellyTele extends BaseOpMode {
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
 
-
-        DcMotorEx slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
-        slideMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeOut();
@@ -59,7 +55,7 @@ public class JellyTele extends BaseOpMode {
             gamepadEx1.readButtons();
             gamepadEx2.readButtons();
             updateDriveModeFromGamepad();
-            if (timer.seconds() == ENDGAME_ALERT_TIME) {
+            if (timer.seconds() >= ENDGAME_ALERT_TIME) {
                 gamepad1.runRumbleEffect(effect);
                 gamepad2.runRumbleEffect(effect);
             }
@@ -70,14 +66,17 @@ public class JellyTele extends BaseOpMode {
             DriveMode(precisionMultiplier);
             OutakeControl();
             outakeServos.setOutput();
-            slideMotorLeft.setPower(gamepad2.right_stick_y);
-            slideMotorRight.setPower(gamepad2.right_stick_y);
             intakeSystem.intakeMotor.setPower((gamepad2.left_stick_y)*0.75);
             DroneControl();
             slides.update();
             if(gamepad2.triangle){
                 slides.setTargetPosition(1000);
             }
+            if(gamepad2.circle){
+                slides.setTargetPosition(100);
+            }
+            telemetry.addData("LeftSlide", slideMotorLeft.getCurrentPosition());
+            telemetry.addData("RightSlide", slideMotorRight.getCurrentPosition());
         }
     }
 

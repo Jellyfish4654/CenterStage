@@ -13,6 +13,8 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DroneLauncher droneServo;
     protected Intake intakeSystem;
     protected Outake outakeServos;
+    protected DcMotorEx slideMotorLeft;
+    protected DcMotorEx slideMotorRight;
     protected Slides slides;
     protected Hanger hanger;
     
@@ -45,17 +47,22 @@ public abstract class BaseOpMode extends LinearOpMode {
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
-        
-        DcMotorEx slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
-        slideMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
+
+        slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
+        slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
+        slideMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         slides = new Slides(slideMotorLeft, slideMotorRight);
-        
+        slideMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
+        slideMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slideMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
+        slideMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
         
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
         imuSensor = initializeIMUSensor();
+
     }
 
     private IMU initializeIMUSensor() {

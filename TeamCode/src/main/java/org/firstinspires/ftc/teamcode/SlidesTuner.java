@@ -54,7 +54,8 @@ public class SlidesTuner extends LinearOpMode {
                 previousTargetPosition = targetPosition;
                 timer.reset();
             }
-
+            leftMotor.setPower(gamepad2.right_stick_y);
+            rightMotor.setPower(gamepad2.right_stick_y);
             double elapsedTime = timer.seconds();
 
             MotionProfile.State leftState = leftProfile.calculate(elapsedTime);

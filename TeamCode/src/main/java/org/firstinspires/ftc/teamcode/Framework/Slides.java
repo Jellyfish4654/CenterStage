@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -21,12 +23,12 @@ public class Slides {
     private double MAX_VELOCITY = 999;
     private double MAX_DECELERATION = 999;
     private int targetPosition = 0;
-    public double lKP = 0.00001;
-    public double lKI = 0;
-    public double lKD = 0;
-    public double rKP = 0.00004;
-    public double rKI = 0;
-    public double rKD = 0;
+    public double lKP = 0.00002;
+        public double lKI = 0;
+        public double lKD = 0;
+//    public double lKP = 0.00002;
+//    public double lKI = 0.0000000000000000000005;
+//    public double lKD = 0.007;
     PIDCoefficients leftCoefficients;
     PIDCoefficients rightCoefficients;
 
@@ -34,10 +36,9 @@ public class Slides {
         this.slideMotorLeft = slideMotorLeft;
         this.slideMotorRight = slideMotorRight;
         this.leftCoefficients = new PIDCoefficients(lKP, lKI, lKD);
-        this.rightCoefficients = new PIDCoefficients(rKP, rKI, rKD);
         // Create PID controllers for each motor
         this.leftPIDController = new BasicPID(leftCoefficients);
-        this.rightPIDController = new BasicPID(rightCoefficients);
+        this.rightPIDController = new BasicPID(leftCoefficients);
         this.timer = new ElapsedTime();
         initializeMotionProfiles();
     }
@@ -58,9 +59,8 @@ public class Slides {
         double rightMotorPower = (rightState.x - slideMotorRight.getCurrentPosition()) * rightPIDOutput;
 
         // Set motor power
-        slideMotorLeft.setPower(leftMotorPower);
-        slideMotorRight.setPower(rightMotorPower);
-
+        slideMotorLeft.setPower(leftPIDOutput);
+        slideMotorRight.setPower(rightPIDOutput);
         // Todo - Limit switches and synchronization
     }
 
