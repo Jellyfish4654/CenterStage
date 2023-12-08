@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 
 @Config
@@ -21,15 +20,15 @@ public class SlidesTuner extends LinearOpMode {
     public static double KP = 0.005;
     public static double KI = 0;
     public static double KD = 0;
-    public static double FEED_FORWARD_CONSTANT = 0;
-    public static double MAX_ACCELERATION = 1.0; // Adjust as needed
-    public static double MAX_VELOCITY = 1.0; // Adjust as needed
+    public static double MAX_ACCELERATION = 1.0;
+    public static double MAX_VELOCITY = 1.0;
     public static int targetPosition = 0;
-    public int previousTargetPosition = 0;
-    private final double TICKS_PER_DEGREE = 145.1 / 360.0;
-    PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
-    BasicPID controller = new BasicPID(coefficients);
-    public ElapsedTime timer = new ElapsedTime();
+    private int previousTargetPosition = -1;
+    private MotionProfile leftProfile;
+    private MotionProfile rightProfile;
+    private BasicPID leftPIDController;
+    private BasicPID rightPIDController;
+    private ElapsedTime timer = new ElapsedTime();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,34 +36,31 @@ public class SlidesTuner extends LinearOpMode {
         rightMotor = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
         leftMotor = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
+        leftPIDController = new BasicPID(coefficients);
+        rightPIDController = new BasicPID(coefficients);
+
         waitForStart();
+
         while (opModeIsActive()) {
             if (targetPosition != previousTargetPosition) {
-                timer.reset();
+                leftProfile = new MotionProfile(leftMotor.getCurrentPosition(), targetPosition, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_ACCELERATION));
+                rightProfile = new MotionProfile(rightMotor.getCurrentPosition(), targetPosition, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_ACCELERATION));
                 previousTargetPosition = targetPosition;
+                timer.reset();
             }
 
             double elapsedTime = timer.seconds();
-            int leftCurrentPosition = leftMotor.getCurrentPosition();
-            int rightCurrentPosition = rightMotor.getCurrentPosition();
-            double FF = Math.cos(Math.toRadians(targetPosition / TICKS_PER_DEGREE)) * FEED_FORWARD_CONSTANT;
-            double LEFT_PIDF_POWER = controller.calculate(targetPosition, leftCurrentPosition) + FF;
-            double RIGHT_PIDF_POWER = controller.calculate(targetPosition, rightCurrentPosition) + FF;
-            double leftDistance = targetPosition - leftMotor.getCurrentPosition();
-            double rightDistance = targetPosition - rightMotor.getCurrentPosition();
-//            double leftInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-//                    MAX_VELOCITY,
-//                    leftDistance,
-//                    elapsedTime);
-//            double rightInstantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-//                    MAX_VELOCITY,
-//                    rightDistance,
-//                    elapsedTime);
-//            double leftMotorPower = (leftInstantTargetPosition - leftMotor.getCurrentPosition()) * LEFT_PIDF_POWER;
-//            double rightMotorPower = (rightInstantTargetPosition - rightMotor.getCurrentPosition()) * RIGHT_PIDF_POWER;
 
-//            leftMotor.setPower(leftMotorPower);
-//            rightMotor.setPower(rightMotorPower);
+            MotionProfile.State leftState = leftProfile.calculate(elapsedTime);
+            MotionProfile.State rightState = rightProfile.calculate(elapsedTime);
+
+            double leftPIDOutput = leftPIDController.calculate(leftState.x, leftMotor.getCurrentPosition());
+            double rightPIDOutput = rightPIDController.calculate(rightState.x, rightMotor.getCurrentPosition());
+
+            leftMotor.setPower(leftPIDOutput);
+            rightMotor.setPower(rightPIDOutput);
 
             telemetry.addData("Current Left Position", leftMotor.getCurrentPosition());
             telemetry.addData("Current Right Position", rightMotor.getCurrentPosition());
