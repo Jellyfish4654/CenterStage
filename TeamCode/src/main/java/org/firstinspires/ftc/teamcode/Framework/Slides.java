@@ -17,9 +17,9 @@ public class Slides {
     private MotionProfile rightProfile;
 
     // Constants for motion profiles and PID
-    private static final double MAX_ACCELERATION = 999;
-    private static final double MAX_VELOCITY = 999;
-    private static final double MAX_DECELERATION = 999;
+    private double MAX_ACCELERATION = 999;
+    private double MAX_VELOCITY = 999;
+    private double MAX_DECELERATION = 999;
     private int targetPosition = 0;
     public double lKP = 0.00001;
     public double lKI = 0;

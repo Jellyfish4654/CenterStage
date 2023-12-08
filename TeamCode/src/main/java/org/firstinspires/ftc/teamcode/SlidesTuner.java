@@ -17,9 +17,12 @@ import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
 public class SlidesTuner extends LinearOpMode {
     public DcMotorEx leftMotor;
     public DcMotorEx rightMotor;
-    public static double KP = 0.005;
-    public static double KI = 0;
-    public static double KD = 0;
+    public static double lKP = 0;
+    public static double lKI = 0;
+    public static double lKD = 0;
+    public static double rKP = 0;
+    public static double rKI = 0;
+    public static double rKD = 0;
     public static double MAX_ACCELERATION = 1.0;
     public static double MAX_VELOCITY = 1.0;
     public static int targetPosition = 0;
@@ -37,9 +40,10 @@ public class SlidesTuner extends LinearOpMode {
         leftMotor = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        PIDCoefficients coefficients = new PIDCoefficients(KP, KI, KD);
-        leftPIDController = new BasicPID(coefficients);
-        rightPIDController = new BasicPID(coefficients);
+        PIDCoefficients leftCoefficients = new PIDCoefficients(lKP, lKI, lKD);
+        PIDCoefficients rightCoefficients = new PIDCoefficients(rKP, rKI, rKD);
+        leftPIDController = new BasicPID(leftCoefficients);
+        rightPIDController = new BasicPID(rightCoefficients);
 
         waitForStart();
 
