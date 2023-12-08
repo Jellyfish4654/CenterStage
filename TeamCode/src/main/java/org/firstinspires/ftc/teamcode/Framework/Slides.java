@@ -17,22 +17,27 @@ public class Slides {
     private MotionProfile rightProfile;
 
     // Constants for motion profiles and PID
-    private static final double MAX_ACCELERATION = 1.0;
-    private static final double MAX_VELOCITY = 1.0;
-    private static final double MAX_DECELERATION = 1.0;
+    private static final double MAX_ACCELERATION = 999;
+    private static final double MAX_VELOCITY = 999;
+    private static final double MAX_DECELERATION = 999;
     private int targetPosition = 0;
-    public  double KP = 0;
-    public  double KI = 0;
-    public double KD = 0;
-    PIDCoefficients coefficients;
+    public double lKP = 0.00001;
+    public double lKI = 0;
+    public double lKD = 0;
+    public double rKP = 0.00004;
+    public double rKI = 0;
+    public double rKD = 0;
+    PIDCoefficients leftCoefficients;
+    PIDCoefficients rightCoefficients;
 
     public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
         this.slideMotorLeft = slideMotorLeft;
         this.slideMotorRight = slideMotorRight;
-        this.coefficients = new PIDCoefficients(KP, KI, KD);
+        this.leftCoefficients = new PIDCoefficients(lKP, lKI, lKD);
+        this.rightCoefficients = new PIDCoefficients(rKP, rKI, rKD);
         // Create PID controllers for each motor
-        this.leftPIDController = new BasicPID(coefficients);
-        this.rightPIDController = new BasicPID(coefficients);
+        this.leftPIDController = new BasicPID(leftCoefficients);
+        this.rightPIDController = new BasicPID(rightCoefficients);
         this.timer = new ElapsedTime();
         initializeMotionProfiles();
     }

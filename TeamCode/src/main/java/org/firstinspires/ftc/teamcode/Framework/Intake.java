@@ -12,53 +12,56 @@ public class Intake {
 
     public final DcMotorEx intakeMotor;
     private final Servo intakeServo;
-
-    public static double KP = 0.005;
     public static int targetPosition = 0;
-    public static double MAX_ACCELERATION = 0.8;
-    public static double MAX_VELOCITY = 0.8;
+    private static final double MAX_ACCELERATION = 1.0;
+    private static final double MAX_VELOCITY = 1.0;
+    private static final double MAX_DECELERATION = 1.0;
     private static boolean isManualControl = false;
-    private static double profileStartTime;  // Track the start time of each profile
-
-    PIDCoefficients coefficients = new PIDCoefficients(KP, 0, 0);
-    BasicPID controller = new BasicPID(coefficients);
+    private BasicPID controller;
+    private static double profileStartTime;
+    PIDCoefficients coefficients;
     public static ElapsedTime timer = new ElapsedTime();
 
     private ElapsedTime servoTimer;
+    public double KP = 0;
+    public double KI = 0;
+    public double KD = 0;
+    private MotionProfile motionProfile;
 
     public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;
         this.servoTimer = new ElapsedTime();
-    }
-
-    public void intakeDown() {
-        intakeServo.setPosition(0.8);
-    }
-
-    public static void runPosition() {
-        setTargetPosition(getTargetPosition() + 1000);
+        this.coefficients = new PIDCoefficients(KP, KI, KD);
+        this.controller = new BasicPID(coefficients);
+        initializeMotionProfiles();
     }
 
     public void update() {
-        double elapsedTime = timer.seconds() - profileStartTime; // Use elapsed time since profile start
-        int currentPosition = intakeMotor.getCurrentPosition();
-        double KP_POWER = controller.calculate(targetPosition, currentPosition);
-        double distance = targetPosition - currentPosition;
-//        double instantTargetPosition = MotionProfile.motion_profile(MAX_ACCELERATION,
-//                MAX_VELOCITY,
-//                distance,
-//                elapsedTime);
-//        double motorPower = (instantTargetPosition - currentPosition) * KP_POWER;
+        double elapsedTime = timer.seconds();
 
-        intakeMotor.setPower(KP_POWER); // Set to motorPower
+        // Update motion profiles
+        MotionProfile.State leftState = motionProfile.calculate(elapsedTime);
+        
+        // Calculate PID output for each motor
+        double PIDOutput = controller.calculate(targetPosition, intakeMotor.getCurrentPosition());
+
+        // Apply simple proportional control using the motion profile's target position
+        double motorPower = (leftState.x - intakeMotor.getCurrentPosition()) * PIDOutput;
+        
+        // Set motor power
+        intakeMotor.setPower(motorPower);
     }
-
-    public static void setTargetPosition(int target) {
-        targetPosition = target;
-//        if (!isManualControl) {
-//            profileStartTime = timer.seconds(); // Update only if not in manual control
-//        }
+    private void initializeMotionProfiles() {
+        // Set initial target as current position
+        int initialPosition = intakeMotor.getCurrentPosition();
+        this.motionProfile = new MotionProfile(initialPosition, initialPosition, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
+    }
+    public void setTargetPosition(int target) {
+        this.targetPosition = target;
+        // Reset the motion profiles with the current positions and the new target
+        this.motionProfile = new MotionProfile(intakeMotor.getCurrentPosition(), target, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
+        timer.reset();
     }
 
     public void setManualControl(boolean manualControl) {
@@ -79,9 +82,5 @@ public class Intake {
         if(servoTimer.seconds() >= 0.75) {
             intakeServo.setPosition(0.97);
         }
-    }
-
-    public static int getTargetPosition() {
-        return targetPosition;
     }
 }

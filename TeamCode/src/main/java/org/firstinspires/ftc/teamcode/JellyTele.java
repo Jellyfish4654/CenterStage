@@ -1,15 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.misc.GamepadEX;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 
 @TeleOp(name = "CenterStage JellyTele")
@@ -21,6 +22,8 @@ public class JellyTele extends BaseOpMode {
     private static final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
     private static final double MAX_SCALE = 1.0;
     private static final int ENDGAME_ALERT_TIME = 115; // Seconds
+    private GamepadEx gamepadEx1;
+    private GamepadEx gamepadEx2;
     protected enum DriveMode {
         MECANUM,
         FIELDCENTRIC
@@ -37,16 +40,15 @@ public class JellyTele extends BaseOpMode {
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
     private boolean Hanging = false;
     private boolean sliding = true;
-    private GamepadEX gamepadEX1;
-    private GamepadEX gamepadEX2;
-
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
         initializeSlewRateLimiters();
         intakeSystem.servoIntakeInit();
-        GamepadEX gamepadEX1 = new GamepadEX(gamepad1);
-        GamepadEX gamepadEX2 = new GamepadEX(gamepad2);
+        gamepadEx1 = new GamepadEx(gamepad1);
+        gamepadEx2 = new GamepadEx(gamepad2);
+
+
         DcMotorEx slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         DcMotorEx slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
@@ -54,8 +56,8 @@ public class JellyTele extends BaseOpMode {
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeOut();
         while (opModeIsActive()) {
-            gamepadEX1.readButtons();
-            gamepadEX2.readButtons();
+            gamepadEx1.readButtons();
+            gamepadEx2.readButtons();
             updateDriveModeFromGamepad();
             if (timer.seconds() == ENDGAME_ALERT_TIME) {
                 gamepad1.runRumbleEffect(effect);
@@ -68,27 +70,29 @@ public class JellyTele extends BaseOpMode {
             DriveMode(precisionMultiplier);
             OutakeControl();
             outakeServos.setOutput();
-            slideMotorLeft.setPower(-gamepad2.right_stick_y);
+            slideMotorLeft.setPower(gamepad2.right_stick_y);
             slideMotorRight.setPower(gamepad2.right_stick_y);
             intakeSystem.intakeMotor.setPower((gamepad2.left_stick_y)*0.75);
             DroneControl();
+            slides.update();
+            if(gamepad2.triangle){
+                slides.setTargetPosition(1000);
+            }
         }
     }
 
     public void DroneControl() {
-        if(gamepadEX2.justReleased(GamepadEX.Button.BACK)){
+        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
             droneServo.launchDrone();
         }
-
-
     }
 
     private void OutakeControl(){
 
-        if (gamepadEX2.justReleased(GamepadEX.Button.LEFT_BUMPER)){
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)){
             outakeServos.closeOutake();
         }
-        if (gamepadEX2.justReleased(GamepadEX.Button.RIGHT_BUMPER)){
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)){
             outakeServos.openOutake();
         }
     }
@@ -100,9 +104,9 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void updateDriveModeFromGamepad() {
-        if (gamepadEX1.justReleased(GamepadEX.Button.DPAD_UP)) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             driveMode = DriveMode.MECANUM;
-        } else if (gamepadEX1.justReleased(GamepadEX.Button.DPAD_DOWN)) {
+        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
             driveMode = DriveMode.FIELDCENTRIC;
         }
     }
@@ -130,7 +134,7 @@ public class JellyTele extends BaseOpMode {
     }
 
     private void resetIMU() {
-        if (gamepadEX1.justReleased(GamepadEX.Button.BACK)) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)) {
             imuSensor.resetYaw();
             gamepad1.rumbleBlips(3);
         }
