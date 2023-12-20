@@ -99,7 +99,6 @@ public class Slides {
         this.rightProfile = new TrapezoidProfile(rightConstraints,
                 new TrapezoidProfile.State(targetPositionRight, 0),
                 new TrapezoidProfile.State(currentPositionRight, 0));
-
         timer.reset();
     }
 
