@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Outake {
@@ -10,14 +11,16 @@ public class Outake {
 
     private final Servo outakeLeftServo;
     private final Servo outakeRightServo;
+    private final CRServo geckoServo;
 
 
     double positionL = 0.0;
     double positionR = 0.0;
 
-    public Outake(Servo servo1, Servo servo2) {
+    public Outake(Servo servo1, Servo servo2, CRServo servo3) {
         this.outakeLeftServo = servo1;
         this.outakeRightServo = servo2;
+        this.geckoServo = servo3;
     }
 
     public void openOutake() {

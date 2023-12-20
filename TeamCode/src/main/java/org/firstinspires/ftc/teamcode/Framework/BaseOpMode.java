@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Framework;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -45,7 +46,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
-        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
+        CRServo geckoServo = hardwareMap.get(CRServo.class, "geckoServo");
+        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo, geckoServo);
 
         slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
