@@ -1,75 +1,60 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
-import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
-
 public class Intake {
-
     public final DcMotorEx intakeMotor;
     private final Servo intakeServo;
-    public static int targetPosition = 0;
-    private static final double MAX_ACCELERATION = 1.0;
-    private static final double MAX_VELOCITY = 1.0;
-    private static final double MAX_DECELERATION = 1.0;
-    private static boolean isManualControl = false;
-    private BasicPID controller;
-    private static double profileStartTime;
-    PIDCoefficients coefficients;
-    public static ElapsedTime timer = new ElapsedTime();
-
     private ElapsedTime servoTimer;
-    public double KP = 0;
-    public double KI = 0;
-    public double KD = 0;
-    private MotionProfile motionProfile;
+    private PIDController controller;
+    private TrapezoidProfile profile;
+    private TrapezoidProfile.Constraints constraints;
+    private ElapsedTime motorTimer;
+    private double P = 0.0125;
+    private double I = 0.00125;
+    private double D = 0.0001;
+    double maxVelocity = 1800 * 1.0;
+    double maxAcceleration = 23886 * 1.0;
 
     public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;
         this.servoTimer = new ElapsedTime();
-        this.coefficients = new PIDCoefficients(KP, KI, KD);
-        this.controller = new BasicPID(coefficients);
-        initializeMotionProfiles();
+        this.controller = new PIDController(P, I, D);
+        this.constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
+        this.motorTimer = new ElapsedTime();
+        this.profile = new TrapezoidProfile(constraints, new TrapezoidProfile.State(0, 0));
     }
 
     public void update() {
-        double elapsedTime = timer.seconds();
-
-        // Update motion profiles
-        MotionProfile.State leftState = motionProfile.calculate(elapsedTime);
-        
-        // Calculate PID output for each motor
-        double PIDOutput = controller.calculate(targetPosition, intakeMotor.getCurrentPosition());
-
-        // Apply simple proportional control using the motion profile's target position
-        double motorPower = (leftState.x - intakeMotor.getCurrentPosition()) * PIDOutput;
-        
-        // Set motor power
-        intakeMotor.setPower(motorPower);
-    }
-    private void initializeMotionProfiles() {
-        // Set initial target as current position
-        int initialPosition = intakeMotor.getCurrentPosition();
-        this.motionProfile = new MotionProfile(initialPosition, initialPosition, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
-    }
-    public void setTargetPosition(int target) {
-        this.targetPosition = target;
-        // Reset the motion profiles with the current positions and the new target
-        this.motionProfile = new MotionProfile(intakeMotor.getCurrentPosition(), target, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
-        timer.reset();
+        double time = motorTimer.seconds();
+        TrapezoidProfile.State goal = profile.calculate(time);
+        control(goal.position, goal.velocity);
     }
 
-    public void setManualControl(boolean manualControl) {
-        isManualControl = manualControl;
-        if (!manualControl) {
-            profileStartTime = timer.seconds(); // Reset profile start time when switching back to automated control
-        }
+    private void control(double targetPosition, double targetVelocity){
+        this.controller.setPID(P, I, D);
+        int position = intakeMotor.getCurrentPosition();
+        double PIDOutput = controller.calculate(position, targetPosition);
+        intakeMotor.setPower(PIDOutput);
     }
+
+    public void setTargetPosition(int targetPosition) {
+        int currentPosition = intakeMotor.getCurrentPosition();
+        this.profile = new TrapezoidProfile(constraints,
+                new TrapezoidProfile.State(targetPosition, 0),
+                new TrapezoidProfile.State(currentPosition, 0));
+        motorTimer.reset();
+    }
+
+    public void setGain(double p){
+        this.P = p;
+    }
+
 
     public void servoIntakeInit() {
         intakeServo.setPosition(0.235);

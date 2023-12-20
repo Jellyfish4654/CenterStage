@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -15,31 +12,39 @@ import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
-    private static final double PRECISION_MULTIPLIER_LOW = 0.35;
-    private static final double PRECISION_MULTIPLIER_HIGH = 0.7;
-    private static final double RATE_LIMIT = 0.5;
-    private static final double DEADBAND_VALUE = 0.02;
-    private static final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
-    private static final double MAX_SCALE = 1.0;
-    private static final int ENDGAME_ALERT_TIME = 115; // Seconds
+    private final double PRECISION_MULTIPLIER_LOW = 0.35;
+    private final double PRECISION_MULTIPLIER_HIGH = 0.7;
+    private final double RATE_LIMIT = 0.9;
+    private final double DEADBAND_VALUE = 0.02;
+    private final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
+    private final double MAX_SCALE = 1.0;
+    private final double ENDGAME_ALERT_TIME = 110.0;
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
     protected enum DriveMode {
         MECANUM,
         FIELDCENTRIC
     }
-    public enum OutakeState {
-        SLIDES_RETRACT,
-        OUTAKE_OPEN,
-        OUTAKE_CLOSE
-    }
-
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
-    private int slidePosition = 0;
-    private final int[] autoSlidePositions = {0, 1000, 2000, 3000};
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
-    private boolean Hanging = false;
-    private boolean sliding = true;
+    double gain = 0.02;
+    double intakeMult = 1.0;
+    private Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .addStep(1.0, 1.0, 900)
+            .addStep(0.0, 0.0, 100)
+            .build();
     @Override
     public void runOpMode() throws InterruptedException {
         initHardware();
@@ -47,108 +52,68 @@ public class JellyTele extends BaseOpMode {
         intakeSystem.servoIntakeInit();
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
-
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeOut();
         while (opModeIsActive()) {
-            gamepadEx1.readButtons();
-            gamepadEx2.readButtons();
-            updateDriveModeFromGamepad();
+            readGamepadInputs();
+            if (timer.milliseconds() % 500 < 100) {
+                displayTelemetry(calculatePrecisionMultiplier());
+            }
             if (timer.seconds() >= ENDGAME_ALERT_TIME) {
-                gamepad1.runRumbleEffect(effect);
-                gamepad2.runRumbleEffect(effect);
+                alertEndGame(timer);
             }
-            intakeSystem.servoIntakeDrone();
-            double precisionMultiplier = calculatePrecisionMultiplier();
-            resetIMU();
-            displayTelemetry(precisionMultiplier);
-            DriveMode(precisionMultiplier);
-            OutakeControl();
-            outakeServos.setOutput();
-            intakeSystem.intakeMotor.setPower((gamepad2.left_stick_y)*0.75);
-            DroneControl();
+            controlDroneAndOutake();
+            controlSlideMotors();
+//            antiTipping.correctTilt();
+            updateDriveMode(calculatePrecisionMultiplier());
             slides.update();
-            if(gamepad2.triangle){
-                slides.setTargetPosition(1000);
-            }
-            if(gamepad2.circle){
-                slides.setTargetPosition(100);
-            }
-            telemetry.addData("LeftSlide", slideMotorLeft.getCurrentPosition());
-            telemetry.addData("RightSlide", slideMotorRight.getCurrentPosition());
         }
     }
+    private void controlSlideMotors() {
+        slideMotorLeft.setPower(-gamepad2.right_stick_y);
+        slideMotorRight.setPower(-gamepad2.right_stick_y);
 
-    public void DroneControl() {
-        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)){
-            droneServo.launchDrone();
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)) {
+            slides.setTargetPosition(2650);
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.B)) {
+            slides.setTargetPosition(0);
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.A)) {
+            slides.setTargetPosition(1500);
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
+            intakeMult -= 1;
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
+            intakeMult += 1;
         }
     }
-
-    private void OutakeControl(){
-
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)){
-            outakeServos.closeOutake();
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)){
-            outakeServos.openOutake();
-        }
-    }
-
-    private void initializeSlewRateLimiters() {
-        for (int i = 0; i < slewRateLimiters.length; i++) {
-            slewRateLimiters[i] = new SlewRateLimiter(RATE_LIMIT);
-        }
-    }
-
-    private void updateDriveModeFromGamepad() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
-            driveMode = DriveMode.MECANUM;
-        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
-            driveMode = DriveMode.FIELDCENTRIC;
-        }
-    }
-    Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
-            .addStep(0.0, 1.0, 1000)
-            .addStep(0.0, 0.0, 250)
-            .addStep(1.0, 0.0, 1000)
-            .addStep(0.0, 0.0, 250)
-            .addStep(0.0, 1.0, 1000)
-            .addStep(0.0, 0.0, 250)
-            .addStep(1.0, 0.0, 1000)
-            .build();
-
-    private void alertEndGame(ElapsedTime timer) {
-
-    }
-
-    private double calculatePrecisionMultiplier() {
-        if (gamepad1.left_bumper) {
-            return PRECISION_MULTIPLIER_LOW;
-        } else if (gamepad1.right_bumper) {
-            return PRECISION_MULTIPLIER_HIGH;
-        }
-        return MAX_SCALE;
-    }
-
-    private void resetIMU() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)) {
-            imuSensor.resetYaw();
-            gamepad1.rumbleBlips(3);
-        }
-    }
-
     private void displayTelemetry(double precisionMultiplier) {
         telemetry.addData("drive mode", driveMode);
         telemetry.addData("mX", gamepad2.left_stick_x);
         telemetry.addData("mY", gamepad2.left_stick_y);
         telemetry.addData("precision mode", precisionMultiplier);
+        telemetry.addData("LeftSlide", slideMotorLeft.getCurrentPosition());
+        telemetry.addData("RightSlide", slideMotorRight.getCurrentPosition());
+        telemetry.addData("LeftSlideTarget", slides.getTargetPositionLeft());
+        telemetry.addData("RightSlideTarget", slides.getTargetPositionRight());
+        telemetry.addData("IntakeMult", intakeMult);
+        telemetry.addData("Gain", gain);
         telemetry.update();
     }
-
-    private void DriveMode(double precisionMultiplier) {
-        double[] motorSpeeds = new double[4];
+    private void readGamepadInputs() {
+        gamepadEx1.readButtons();
+        gamepadEx2.readButtons();
+        updateDriveModeFromGamepad();
+    }
+    private void controlDroneAndOutake() {
+        DroneControl();
+        OutakeControl();
+    }
+    private void updateDriveMode(double precisionMultiplier) {
+        double[] motorSpeeds;
         switch (driveMode) {
             case MECANUM:
                 motorSpeeds = MecanumDrive();
@@ -156,10 +121,11 @@ public class JellyTele extends BaseOpMode {
             case FIELDCENTRIC:
                 motorSpeeds = FieldCentricDrive();
                 break;
+            default:
+                motorSpeeds = new double[4];
         }
         setMotorSpeeds(precisionMultiplier, motorSpeeds);
     }
-
     private double[] MecanumDrive() {
         double pivot = applyDeadband(gamepad1.right_stick_x);
         double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
@@ -171,7 +137,6 @@ public class JellyTele extends BaseOpMode {
                 forward - strafe + pivot
         };
     }
-
     private double[] FieldCentricDrive() {
         double forward = -applyDeadband(gamepad1.left_stick_y);
         double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
@@ -187,8 +152,10 @@ public class JellyTele extends BaseOpMode {
                 rotY - rotX + rotation
         };
     }
-
     protected void setMotorSpeeds(double multiplier, double[] powers) {
+        if (slides.getTargetPositionLeft() > 2000) {
+            applySlewRateLimit(powers);
+        }
 
         applyPrecisionAndScale(multiplier, powers);
 
@@ -196,13 +163,11 @@ public class JellyTele extends BaseOpMode {
             driveMotors[i].setPower(powers[i]);
         }
     }
-
     private void applySlewRateLimit(double[] powers) {
         for (int i = 0; i < slewRateLimiters.length; i++) {
             powers[i] = slewRateLimiters[i].calculate(powers[i]);
         }
     }
-
     private void applyPrecisionAndScale(double multiplier, double[] powers) {
         for (int i = 0; i < powers.length; i++) {
             powers[i] *= multiplier;
@@ -215,7 +180,6 @@ public class JellyTele extends BaseOpMode {
             powers[i] *= scale;
         }
     }
-
     private double findMaxPower(double[] powers) {
         double max = 0;
         for (double power : powers) {
@@ -223,9 +187,54 @@ public class JellyTele extends BaseOpMode {
         }
         return max;
     }
-
-    public double applyDeadband(double joystickValue) {
+    private double applyDeadband(double joystickValue) {
         double sign = Math.signum(joystickValue);
         return joystickValue + (-sign * DEADBAND_VALUE);
+    }
+    private void updateDriveModeFromGamepad() {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
+            driveMode = DriveMode.MECANUM;
+        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
+            driveMode = DriveMode.FIELDCENTRIC;
+            resetIMU();
+        }
+    }
+    public void DroneControl() {
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)) {
+            droneServo.launchDrone();
+        }
+    }
+    private void OutakeControl() {
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
+            outakeServos.closeOutake();
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+            outakeServos.openOutake();
+        }
+    }
+    private void alertEndGame(ElapsedTime timer) {
+        if (timer.seconds() >= ENDGAME_ALERT_TIME && timer.seconds() <= ENDGAME_ALERT_TIME + 0.2) {
+            gamepad1.runRumbleEffect(effect);
+            gamepad2.runRumbleEffect(effect);
+        }
+    }
+    private void initializeSlewRateLimiters() {
+        for (int i = 0; i < slewRateLimiters.length; i++) {
+            slewRateLimiters[i] = new SlewRateLimiter(RATE_LIMIT);
+        }
+    }
+    private double calculatePrecisionMultiplier() {
+        if (gamepad1.left_bumper) {
+            return PRECISION_MULTIPLIER_LOW;
+        } else if (gamepad1.right_bumper) {
+            return PRECISION_MULTIPLIER_HIGH;
+        }
+        return MAX_SCALE;
+    }
+    private void resetIMU() {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)) {
+            imuSensor.resetYaw();
+            gamepad1.rumbleBlips(3);
+        }
     }
 }

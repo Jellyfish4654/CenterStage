@@ -3,28 +3,34 @@ package org.firstinspires.ftc.teamcode.Framework;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.arcrobotics.ftclib.controller.PIDController;
 
 public class AntiTipping {
     private final DcMotor[] motors;
     private final IMU imuSensor;
-    PIDCoefficients pitchCoefficients = new PIDCoefficients(0,0,0);
-    PIDCoefficients rollCoefficients = new PIDCoefficients(0,0,0);
-    private final BasicPID pitchController = new BasicPID(pitchCoefficients);
-    private final BasicPID rollController = new BasicPID(rollCoefficients);
+    private PIDController pitchController;
+    private PIDController rollController;
+    private static double P = 0.005;
+    private static double I = 0;
+    private static double D = 0;
 
     public AntiTipping(DcMotor[] motors, IMU imuSensor) {
         this.motors = motors;
         this.imuSensor = imuSensor;
+
+        this.pitchController = new PIDController(P, I, D);
+        this.rollController = new PIDController(P, I, D);
     }
     
     public void correctTilt() {
+        this.pitchController.setPID(P, I, D);
+        this.rollController.setPID(P, I, D);
         double pitch = imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS);
         double roll = imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS);
         double targetPosition = 0;
-        double pitchCorrection = pitchController.calculate(targetPosition, pitch);
-        double rollCorrection = rollController.calculate(targetPosition, roll);
+
+        double pitchCorrection = pitchController.calculate(pitch, targetPosition);
+        double rollCorrection = rollController.calculate(roll, targetPosition);
 
         double correction = Math.abs(pitch) > Math.abs(roll) ? pitchCorrection : rollCorrection;
 

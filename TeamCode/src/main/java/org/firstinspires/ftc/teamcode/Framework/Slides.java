@@ -1,81 +1,117 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
-import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Framework.misc.MotionProfile;
-
 public class Slides {
-    private final DcMotorEx slideMotorLeft;
-    private final DcMotorEx slideMotorRight;
-    private BasicPID leftPIDController;
-    private BasicPID rightPIDController;
-    private ElapsedTime timer;
-    private MotionProfile leftProfile;
-    private MotionProfile rightProfile;
+    private DcMotorEx slideMotorLeft;
+    private DcMotorEx slideMotorRight;
+    private PIDController leftController;
+    private PIDController rightController;
 
-    // Constants for motion profiles and PID
-    private double MAX_ACCELERATION = 999;
-    private double MAX_VELOCITY = 999;
-    private double MAX_DECELERATION = 999;
-    private int targetPosition = 0;
-    public double lKP = 0.00002;
-        public double lKI = 0;
-        public double lKD = 0;
-//    public double lKP = 0.00002;
-//    public double lKI = 0.0000000000000000000005;
-//    public double lKD = 0.007;
-    PIDCoefficients leftCoefficients;
-    PIDCoefficients rightCoefficients;
+    // Separate motion profiles for each slide
+    private TrapezoidProfile leftProfile;
+    private TrapezoidProfile rightProfile;
+    private TrapezoidProfile.Constraints leftConstraints;
+    private TrapezoidProfile.Constraints rightConstraints;
+
+    private ElapsedTime timer;
+    private int targetPositionLeft;
+    private int targetPositionRight;
+    private int lowerThreshold = -10;
+    private int upperThreshold = 3000;
+
+    // PID Constants
+    private double lP = 2.0;
+    private double lI = 0;
+    private double lD = 0.02;
+    private double rP = 2.1;
+    private double rI = 0;
+    private double rD = 0.021;
+    double maxVelocity = 1800;
+    double maxAcceleration = 23886;
 
     public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
         this.slideMotorLeft = slideMotorLeft;
         this.slideMotorRight = slideMotorRight;
-        this.leftCoefficients = new PIDCoefficients(lKP, lKI, lKD);
-        // Create PID controllers for each motor
-        this.leftPIDController = new BasicPID(leftCoefficients);
-        this.rightPIDController = new BasicPID(leftCoefficients);
+        this.leftController = new PIDController(lP, lI, lD);
+        this.rightController = new PIDController(rP, rI, rD);
+
+        // Initialize separate constraints for each slide
+        this.leftConstraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
+        this.rightConstraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
+
         this.timer = new ElapsedTime();
-        initializeMotionProfiles();
+        this.leftProfile = new TrapezoidProfile(leftConstraints, new TrapezoidProfile.State(0, 0));
+        this.rightProfile = new TrapezoidProfile(rightConstraints, new TrapezoidProfile.State(0, 0));
     }
 
     public void update() {
-        double elapsedTime = timer.seconds();
+        double time = timer.seconds();
+        TrapezoidProfile.State leftGoal = leftProfile.calculate(time);
+        TrapezoidProfile.State rightGoal = rightProfile.calculate(time);
 
-        // Update motion profiles
-        MotionProfile.State leftState = leftProfile.calculate(elapsedTime);
-        MotionProfile.State rightState = rightProfile.calculate(elapsedTime);
+        leftControl(leftGoal.position, leftGoal.velocity);
+        rightControl(rightGoal.position, rightGoal.velocity);
+    }   
 
-        // Calculate PID output for each motor
-        double leftPIDOutput = leftPIDController.calculate(targetPosition, slideMotorLeft.getCurrentPosition());
-        double rightPIDOutput = rightPIDController.calculate(targetPosition, slideMotorRight.getCurrentPosition());
+    private void leftControl(double targetPosition, double targetVelocity){
+        this.leftController.setPID(lP, lI, lD);
+        int position = slideMotorLeft.getCurrentPosition();
+        double leftPIDOutput = leftController.calculate(position, targetPosition);
 
-        // Apply simple proportional control using the motion profile's target position
-        double leftMotorPower = (leftState.x - slideMotorLeft.getCurrentPosition()) * leftPIDOutput;
-        double rightMotorPower = (rightState.x - slideMotorRight.getCurrentPosition()) * rightPIDOutput;
+        if (position < lowerThreshold && leftPIDOutput < 0) {
+            leftPIDOutput = 0;
+        }
+        if (position > upperThreshold && leftPIDOutput > 0) {
+            leftPIDOutput = 0;
+        }
 
-        // Set motor power
-        slideMotorLeft.setPower(leftPIDOutput);
-        slideMotorRight.setPower(rightPIDOutput);
-        // Todo - Limit switches and synchronization
+        slideMotorLeft.setVelocity(leftPIDOutput);
     }
 
-    private void initializeMotionProfiles() {
-        // Set initial target as current position
-        int initialPosition = slideMotorLeft.getCurrentPosition();
-        this.leftProfile = new MotionProfile(initialPosition, initialPosition, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
-        initialPosition = slideMotorRight.getCurrentPosition();
-        this.rightProfile = new MotionProfile(initialPosition, initialPosition, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
+    private void rightControl(double targetPosition, double targetVelocity){
+        this.rightController.setPID(rP, rI, rD);
+        int position = slideMotorRight.getCurrentPosition();
+        double rightPIDOutput = rightController.calculate(position, targetPosition);
+
+        if (position < lowerThreshold && rightPIDOutput < 0) {
+            rightPIDOutput = 0;
+        }
+        if (position > upperThreshold && rightPIDOutput > 0) {
+            rightPIDOutput = 0;
+        }
+        slideMotorRight.setVelocity(rightPIDOutput);
     }
-    public void setTargetPosition(int target) {
-        this.targetPosition = target;
-        // Reset the motion profiles with the current positions and the new target
-        this.leftProfile = new MotionProfile(slideMotorLeft.getCurrentPosition(), target, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
-        this.rightProfile = new MotionProfile(slideMotorRight.getCurrentPosition(), target, new MotionProfile.Constraints(MAX_ACCELERATION, MAX_VELOCITY, MAX_DECELERATION));
+
+    public void setTargetPosition(int targetPosition) {
+        this.targetPositionLeft = targetPosition;
+        this.targetPositionRight = targetPosition;
+        int currentPositionLeft = slideMotorLeft.getCurrentPosition();
+        int currentPositionRight = slideMotorRight.getCurrentPosition();
+
+        this.leftProfile = new TrapezoidProfile(leftConstraints,
+                new TrapezoidProfile.State(targetPositionLeft, 0),
+                new TrapezoidProfile.State(currentPositionLeft, 0));
+
+        this.rightProfile = new TrapezoidProfile(rightConstraints,
+                new TrapezoidProfile.State(targetPositionRight, 0),
+                new TrapezoidProfile.State(currentPositionRight, 0));
+
         timer.reset();
+    }
+
+    public void setGain(double gain){
+        this.rP = gain;
+    }
+
+    public int getTargetPositionLeft() {
+        return targetPositionLeft;
+    }
+
+    public int getTargetPositionRight() {
+        return targetPositionRight;
     }
 }

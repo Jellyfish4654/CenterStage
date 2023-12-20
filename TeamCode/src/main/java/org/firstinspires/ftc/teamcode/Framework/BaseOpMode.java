@@ -16,7 +16,6 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotorEx slideMotorLeft;
     protected DcMotorEx slideMotorRight;
     protected Slides slides;
-    protected Hanger hanger;
     
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
@@ -52,17 +51,16 @@ public abstract class BaseOpMode extends LinearOpMode {
         slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
         slideMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
         slides = new Slides(slideMotorLeft, slideMotorRight);
-        slideMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
-        slideMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slideMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // Reset the motor encoder
-        slideMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slideMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slideMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotorRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotorLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        hanger = new Hanger(hardwareMap.get(DcMotorEx.class, "hangerMotor"));
-        
+        imuSensor = initializeIMUSensor();
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
-        imuSensor = initializeIMUSensor();
-
     }
 
     private IMU initializeIMUSensor() {
