@@ -56,6 +56,7 @@ public class JellyTele extends BaseOpMode {
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeOut();
         while (opModeIsActive()) {
+            intakeSystem.servoIntakeDrone();
             readGamepadInputs();
             if (timer.milliseconds() % 500 < 100) {
                 displayTelemetry(calculatePrecisionMultiplier());
@@ -65,16 +66,20 @@ public class JellyTele extends BaseOpMode {
             }
             controlDroneAndOutake();
             controlSlideMotors();
-//            antiTipping.correctTilt();
+            antiTipping.update();
             updateDriveMode(calculatePrecisionMultiplier());
-
+            if(gamepad1.y){
+                autoAlignment.setTargetAngle(90);
+                autoAlignment.update();
+            }
         }
     }
     private void controlSlideMotors() {
         if(applyDeadband(gamepad2.right_stick_y)>0 || applyDeadband(gamepad2.right_stick_y)<0){
             slideMotorLeft.setPower(-gamepad2.right_stick_y);
             slideMotorRight.setPower(-gamepad2.right_stick_y);
-            slides.setTargetPosition(slideMotorLeft.getCurrentPosition());
+            int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
+            slides.setTargetPosition(averageTarget);
         }else{
          slides.update();
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)) {
@@ -87,13 +92,13 @@ public class JellyTele extends BaseOpMode {
                 slides.setTargetPosition(1500);
             }
         }
-        
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
             intakeMult -= 1;
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
             intakeMult += 1;
         }
+        intakeMotor.setPower(applyDeadband(-gamepad2.left_stick_y));
     }
     private void displayTelemetry(double precisionMultiplier) {
         telemetry.addData("drive mode", driveMode);
@@ -106,6 +111,8 @@ public class JellyTele extends BaseOpMode {
         telemetry.addData("RightSlideTarget", slides.getTargetPositionRight());
         telemetry.addData("IntakeMult", intakeMult);
         telemetry.addData("Gain", gain);
+        telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+
         telemetry.update();
     }
     private void readGamepadInputs() {
@@ -201,8 +208,8 @@ public class JellyTele extends BaseOpMode {
             driveMode = DriveMode.MECANUM;
         } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
             driveMode = DriveMode.FIELDCENTRIC;
-            resetIMU();
         }
+        resetIMU();
     }
     public void DroneControl() {
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.BACK)) {
@@ -211,13 +218,23 @@ public class JellyTele extends BaseOpMode {
     }
     private void OutakeControl() {
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
-            outakeServos.closeOutake();
+            outakeServos.closeOuttake();
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            outakeServos.openOutake();
+            outakeServos.openOuttake();
         }
-        geckoServo.setPower(gamepad2.left_trigger);
-        geckoServo.setPower(-gamepad2.right_trigger);
+        if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
+            double servoPower = gamepad2.left_trigger > 0 ? gamepad2.left_trigger : -gamepad2.right_trigger;
+            outtakeCRServo.setPower(servoPower);
+        } else {
+            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.X)) {
+                wheelServo.startMovingForward();
+            }
+//        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)) {
+//            wheelServo.startMovingBackward();
+//        }
+            wheelServo.update();
+        }
     }
     private void alertEndGame(ElapsedTime timer) {
         if (timer.seconds() >= ENDGAME_ALERT_TIME && timer.seconds() <= ENDGAME_ALERT_TIME + 0.2) {

@@ -12,7 +12,7 @@ public class ServoTuner1 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         final Servo outtakeLeftServo;
-        outtakeLeftServo = hardwareMap.get(Servo.class, "droneServo");
+        outtakeLeftServo = hardwareMap.get(Servo.class, "intakeServo");
 
 //        outtakeLeftServo.setDirection(Servo.Direction.REVERSE);
         double position = 0.5; // Initialize to midpoint

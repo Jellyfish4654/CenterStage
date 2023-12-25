@@ -13,11 +13,13 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotor[] driveMotors;
     protected DroneLauncher droneServo;
     protected Intake intakeSystem;
-    protected Outake outakeServos;
+    protected outtakeServo outakeServos;
     protected DcMotorEx slideMotorLeft;
     protected DcMotorEx slideMotorRight;
+    protected DcMotorEx intakeMotor;
     protected Slides slides;
-    protected Gecko geckoServo;
+    protected CRServo outtakeCRServo;
+    protected outtakeCRServo wheelServo;
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
     protected AutoAlignment autoAlignment;
@@ -37,7 +39,9 @@ public abstract class BaseOpMode extends LinearOpMode {
         });
         
         droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
-        geckoServo = new Gecko(hardwareMap.get(CRServo.class, "geckoServo"));
+        outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
+        wheelServo = new outtakeCRServo(outtakeCRServo);
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
         intakeSystem = new Intake(
                 hardwareMap.get(DcMotorEx.class, "Tubing"),
                 hardwareMap.get(Servo.class, "intakeServo")
@@ -46,20 +50,18 @@ public abstract class BaseOpMode extends LinearOpMode {
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
-        CRServo geckoServo = hardwareMap.get(CRServo.class, "geckoServo");
-        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
+        outakeServos = new outtakeServo(outakeServosLeftServo, outakeServosRightServo);
 
         slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
         slideMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-        slides = new Slides(slideMotorLeft, slideMotorRight);
         slideMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slideMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slideMotorRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         slideMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slideMotorLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
+        slides = new Slides(slideMotorLeft, slideMotorRight);
         imuSensor = initializeIMUSensor();
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);

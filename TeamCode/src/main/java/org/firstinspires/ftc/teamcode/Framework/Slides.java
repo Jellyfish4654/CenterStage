@@ -24,12 +24,12 @@ public class Slides {
     private int upperThreshold = 3000;
 
     // PID Constants
-    private double lP = 2.0;
+    private double lP = 2.04;
     private double lI = 0;
-    private double lD = 0.02;
-    private double rP = 2.1;
+    private double lD = 0.0204;
+    private double rP = 2.15;
     private double rI = 0;
-    private double rD = 0.021;
+    private double rD = 0.0215;
     double maxVelocity = 1800;
     double maxAcceleration = 23886;
 

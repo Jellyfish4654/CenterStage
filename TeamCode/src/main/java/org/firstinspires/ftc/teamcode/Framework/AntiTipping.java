@@ -1,48 +1,55 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import com.arcrobotics.ftclib.controller.PIDController;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class AntiTipping {
     private final DcMotor[] motors;
     private final IMU imuSensor;
-    private PIDController pitchController;
-    private PIDController rollController;
-    private static double P = 0.005;
-    private static double I = 0;
-    private static double D = 0;
+    private final PIDController pitchController;
+    private static final double kP = 0.05;
+    private static final double kI = 0.0;
+    private static final double kD = 0;
+    private static final double THRESHOLD = 5;
 
+    // Constructor
     public AntiTipping(DcMotor[] motors, IMU imuSensor) {
         this.motors = motors;
         this.imuSensor = imuSensor;
-
-        this.pitchController = new PIDController(P, I, D);
-        this.rollController = new PIDController(P, I, D);
+        this.pitchController = new PIDController(kP, kI, kD);
     }
-    
-    public void correctTilt() {
-        this.pitchController.setPID(P, I, D);
-        this.rollController.setPID(P, I, D);
-        double pitch = imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.RADIANS);
-        double roll = imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.RADIANS);
-        double targetPosition = 0;
 
-        double pitchCorrection = pitchController.calculate(pitch, targetPosition);
-        double rollCorrection = rollController.calculate(roll, targetPosition);
-
-        double correction = Math.abs(pitch) > Math.abs(roll) ? pitchCorrection : rollCorrection;
-
-        MotorPowers(correction);
+    public void update() {
+        YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
+        double currentPitch = orientation.getPitch(AngleUnit.DEGREES);
+        currentPitch = normalizeAngle(currentPitch);
+        double pitchDifference = -currentPitch;
+        if (Math.abs(pitchDifference) > THRESHOLD) {
+            double correction = pitchController.calculate(0, pitchDifference);
+            MotorPowers(correction);
+        }
     }
 
     private void MotorPowers(double correction) {
-        int[] powerMap = {1, -1, 1, -1};
-        for (int i = 0; i < motors.length; i++) {
-            double power = correction * powerMap[i];
-            power = Math.max(-1, Math.min(1, power));
-            motors[i].setPower(power);
+        double power = -correction;
+        power = Math.max(-1, Math.min(1, power));
+
+        motors[0].setPower(power);
+        motors[1].setPower(power);
+        motors[2].setPower(power);
+        motors[3].setPower(power);
+    }
+
+    private double normalizeAngle(double angle) {
+        angle = angle % 360;
+        if (angle <= -180) {
+            angle += 360;
+        } else if (angle > 180) {
+            angle -= 360;
         }
+        return angle;
     }
 }
