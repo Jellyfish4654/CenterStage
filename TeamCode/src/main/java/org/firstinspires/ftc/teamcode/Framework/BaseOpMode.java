@@ -17,7 +17,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected DcMotorEx slideMotorLeft;
     protected DcMotorEx slideMotorRight;
     protected Slides slides;
-    
+    protected Gecko geckoServo;
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
     protected AutoAlignment autoAlignment;
@@ -37,7 +37,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         });
         
         droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
-        
+        geckoServo = new Gecko(hardwareMap.get(CRServo.class, "geckoServo"));
         intakeSystem = new Intake(
                 hardwareMap.get(DcMotorEx.class, "Tubing"),
                 hardwareMap.get(Servo.class, "intakeServo")
@@ -47,7 +47,7 @@ public abstract class BaseOpMode extends LinearOpMode {
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         CRServo geckoServo = hardwareMap.get(CRServo.class, "geckoServo");
-        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo, geckoServo);
+        outakeServos = new Outake(outakeServosLeftServo, outakeServosRightServo);
 
         slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");

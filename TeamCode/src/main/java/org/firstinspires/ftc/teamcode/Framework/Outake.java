@@ -11,16 +11,15 @@ public class Outake {
 
     private final Servo outakeLeftServo;
     private final Servo outakeRightServo;
-    private final CRServo geckoServo;
+
 
 
     double positionL = 0.0;
     double positionR = 0.0;
 
-    public Outake(Servo servo1, Servo servo2, CRServo servo3) {
+    public Outake(Servo servo1, Servo servo2) {
         this.outakeLeftServo = servo1;
         this.outakeRightServo = servo2;
-        this.geckoServo = servo3;
     }
 
     public void openOutake() {
@@ -32,6 +31,7 @@ public class Outake {
         positionL=CLOSE_POSITION_LEFT_SERVO;
         positionR=CLOSE_POSITION_RIGHT_SERVO;
     }
+
     public void hang() {
 //        positionL=CLOSE_POSITION_LEFT_SERVO;
 //        positionR=CLOSE_POSITION_RIGHT_SERVO;

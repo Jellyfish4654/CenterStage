@@ -211,6 +211,8 @@ public class JellyTele extends BaseOpMode {
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
             outakeServos.openOutake();
         }
+        geckoServo.setPower(gamepad2.left_trigger);
+        geckoServo.setPower(-gamepad2.right_trigger);
     }
     private void alertEndGame(ElapsedTime timer) {
         if (timer.seconds() >= ENDGAME_ALERT_TIME && timer.seconds() <= ENDGAME_ALERT_TIME + 0.2) {
