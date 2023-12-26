@@ -4,8 +4,8 @@ import androidx.core.math.MathUtils;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class SlewRateLimiter {
-    private final double maxIncreasePerSecond;
-    private final double maxDecreasePerSecond;
+    private double maxIncreasePerSecond;
+    private double maxDecreasePerSecond;
     private final ElapsedTime timer;
     private double lastValue;
     private double lastUpdateTime;
@@ -24,6 +24,11 @@ public class SlewRateLimiter {
 
     public SlewRateLimiter(double rateLimit) {
         this(rateLimit, 0);
+    }
+
+    public void setRate(double rateLimit) {
+        this.maxIncreasePerSecond = rateLimit;
+        this.maxDecreasePerSecond = -rateLimit;
     }
 
     public double calculate(double input) {

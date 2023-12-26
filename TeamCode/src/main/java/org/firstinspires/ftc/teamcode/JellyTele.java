@@ -194,9 +194,12 @@ public class JellyTele extends BaseOpMode {
     protected void setMotorSpeeds(double multiplier, double[] powers) {
         int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
 
-        if (averageTargetPosition >= 2000) {
-            applySlewRateLimit(powers);
+        double rate = 1.0;
+        if (averageTargetPosition >= 1500) {
+            rate = 0.99 - ((averageTargetPosition - 1500) / 100) * 0.01;
+            rate = Math.max(rate, 0);
         }
+        applySlewRateLimit(powers, rate);
 
         applyPrecisionAndScale(multiplier, powers);
 
@@ -204,8 +207,9 @@ public class JellyTele extends BaseOpMode {
             driveMotors[i].setPower(powers[i]);
         }
     }
-    private void applySlewRateLimit(double[] powers) {
+    private void applySlewRateLimit(double[] powers, double rate) {
         for (int i = 0; i < slewRateLimiters.length; i++) {
+            slewRateLimiters[i].setRate(rate);
             powers[i] = slewRateLimiters[i].calculate(powers[i]);
         }
     }
@@ -271,7 +275,7 @@ public class JellyTele extends BaseOpMode {
     }
     private void initializeSlewRateLimiters() {
         for (int i = 0; i < slewRateLimiters.length; i++) {
-            slewRateLimiters[i] = new SlewRateLimiter(RATE_LIMIT);
+            slewRateLimiters[i] = new SlewRateLimiter(1.0);
         }
     }
     private double calculatePrecisionMultiplier() {
