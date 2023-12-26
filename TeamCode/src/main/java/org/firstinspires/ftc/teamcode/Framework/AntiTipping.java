@@ -12,8 +12,8 @@ public class AntiTipping {
     private final PIDController pitchController;
     private static final double kP = 0.05;
     private static final double kI = 0.0;
-    private static final double kD = 0;
-    private static final double THRESHOLD = 5;
+    private static final double kD = 0.0005;
+    private static final double THRESHOLD = 8.5; //Our physical imu has degree error on pitch
 
     // Constructor
     public AntiTipping(DcMotor[] motors, IMU imuSensor) {
@@ -25,8 +25,7 @@ public class AntiTipping {
     public void update() {
         YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
         double currentPitch = orientation.getPitch(AngleUnit.DEGREES);
-        currentPitch = normalizeAngle(currentPitch);
-        double pitchDifference = -currentPitch;
+        double pitchDifference = -normalizeAngle(currentPitch);
         if (Math.abs(pitchDifference) > THRESHOLD) {
             double correction = pitchController.calculate(0, pitchDifference);
             MotorPowers(correction);

@@ -42,6 +42,9 @@ public abstract class BaseOpMode extends LinearOpMode {
         outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
         wheelServo = new outtakeCRServo(outtakeCRServo);
         intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
+        intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         intakeSystem = new Intake(
                 hardwareMap.get(DcMotorEx.class, "Tubing"),
                 hardwareMap.get(Servo.class, "intakeServo")

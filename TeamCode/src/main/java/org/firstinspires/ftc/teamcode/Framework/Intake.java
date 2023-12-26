@@ -7,62 +7,83 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Intake {
-    public final DcMotorEx intakeMotor;
+    private final DcMotorEx intakeMotor;
     private final Servo intakeServo;
+    private final PIDController intakeController;
+    private final TrapezoidProfile.Constraints constraints;
+
     private ElapsedTime servoTimer;
-    private PIDController controller;
-    private TrapezoidProfile profile;
-    private TrapezoidProfile.Constraints constraints;
     private ElapsedTime motorTimer;
-    private double P = 0.0125;
-    private double I = 0.00125;
-    private double D = 0.0001;
-    double maxVelocity = 1800 * 1.0;
-    double maxAcceleration = 23886 * 1.0;
+
+    private TrapezoidProfile intakeProfile;
+    private int targetPosition;
+
+    private double P = 2.05;
+    private double I = 0;
+    private double D = 0.0205;
+    private double maxVelocity = 2000 * 1.0;
+    private double maxAcceleration = 15000 * 1.0;
 
     public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;
         this.servoTimer = new ElapsedTime();
-        this.controller = new PIDController(P, I, D);
-        this.constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
         this.motorTimer = new ElapsedTime();
-        this.profile = new TrapezoidProfile(constraints, new TrapezoidProfile.State(0, 0));
+
+        this.intakeController = new PIDController(P, I, D);
+        this.constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
+        this.intakeProfile = new TrapezoidProfile(constraints, new TrapezoidProfile.State(0, 0));
     }
 
     public void update() {
         double time = motorTimer.seconds();
-        TrapezoidProfile.State goal = profile.calculate(time);
+        TrapezoidProfile.State goal = intakeProfile.calculate(time);
         control(goal.position, goal.velocity);
     }
 
     private void control(double targetPosition, double targetVelocity){
-        this.controller.setPID(P, I, D);
+        this.intakeController.setPID(P, I, D);
         int position = intakeMotor.getCurrentPosition();
-        double PIDOutput = controller.calculate(position, targetPosition);
-        intakeMotor.setPower(PIDOutput);
+        double PIDOutput = intakeController.calculate(position, targetPosition);
+        intakeMotor.setVelocity(PIDOutput);
     }
 
-    public void setTargetPosition(int targetPosition) {
+    public void setTargetPosition(int newPosition) {
+        this.targetPosition = newPosition;
         int currentPosition = intakeMotor.getCurrentPosition();
-        this.profile = new TrapezoidProfile(constraints,
+        this.intakeProfile = new TrapezoidProfile(constraints,
                 new TrapezoidProfile.State(targetPosition, 0),
                 new TrapezoidProfile.State(currentPosition, 0));
         motorTimer.reset();
+    }
+
+    public void moveForward(){
+        int target = intakeMotor.getCurrentPosition() + 5000;
+        setTargetPosition(target);
+    }
+
+    public void moveBackward(){
+        int target = intakeMotor.getCurrentPosition() - 5000;
+        setTargetPosition(target);
     }
 
     public void setGain(double p){
         this.P = p;
     }
 
+    public int getTargetPosition() {
+        return targetPosition;
+    }
 
     public void servoIntakeInit() {
         intakeServo.setPosition(0.385);
     }
+
     public void servoIntakeOut() {
         intakeServo.setPosition(0.1);
         servoTimer.reset();
     }
+
     public void servoIntakeDrone(){
         if(servoTimer.seconds() >= 0.75) {
             intakeServo.setPosition(0.935);
