@@ -34,6 +34,14 @@ public class outtakeServo {
         outakeLeftServo.setPosition(positionL);
         outakeRightServo.setPosition(positionR);
     }
+    public boolean check(){
+        if(getCurrentPositionLeftServo()==0.5){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
     public double getCurrentPositionLeftServo() {
         return outakeLeftServo.getPosition();
