@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 public class JellyTele extends BaseOpMode {
     private final double PRECISION_MULTIPLIER_LOW = 0.35;
     private final double PRECISION_MULTIPLIER_HIGH = 0.7;
-    private final double RATE_LIMIT = 0.9;
     private final double DEADBAND_VALUE = 0.02;
     private final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
     private final double MAX_SCALE = 1.0;
