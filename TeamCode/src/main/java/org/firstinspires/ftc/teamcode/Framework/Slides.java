@@ -10,20 +10,15 @@ public class Slides {
     private DcMotorEx slideMotorRight;
     private PIDController leftController;
     private PIDController rightController;
-
-    // Separate motion profiles for each slide
     private TrapezoidProfile leftProfile;
     private TrapezoidProfile rightProfile;
     private TrapezoidProfile.Constraints leftConstraints;
     private TrapezoidProfile.Constraints rightConstraints;
-
     private ElapsedTime timer;
     private int targetPositionLeft;
     private int targetPositionRight;
     private int lowerThreshold = -10;
     private int upperThreshold = 3000;
-
-    // PID Constants
     private double lP = 2.04;
     private double lI = 0;
     private double lD = 0.0204;
@@ -32,17 +27,15 @@ public class Slides {
     private double rD = 0.0215;
     double maxVelocity = 1800;
     double maxAcceleration = 23886;
+    private final int deadband = 3;
 
     public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
         this.slideMotorLeft = slideMotorLeft;
         this.slideMotorRight = slideMotorRight;
         this.leftController = new PIDController(lP, lI, lD);
         this.rightController = new PIDController(rP, rI, rD);
-
-        // Initialize separate constraints for each slide
         this.leftConstraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
         this.rightConstraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
-
         this.timer = new ElapsedTime();
         this.leftProfile = new TrapezoidProfile(leftConstraints, new TrapezoidProfile.State(0, 0));
         this.rightProfile = new TrapezoidProfile(rightConstraints, new TrapezoidProfile.State(0, 0));
@@ -52,23 +45,21 @@ public class Slides {
         double time = timer.seconds();
         TrapezoidProfile.State leftGoal = leftProfile.calculate(time);
         TrapezoidProfile.State rightGoal = rightProfile.calculate(time);
-
         leftControl(leftGoal.position, leftGoal.velocity);
         rightControl(rightGoal.position, rightGoal.velocity);
-    }   
+    }
 
     private void leftControl(double targetPosition, double targetVelocity){
         this.leftController.setPID(lP, lI, lD);
         int position = slideMotorLeft.getCurrentPosition();
         double leftPIDOutput = leftController.calculate(position, targetPosition);
-
-        if (position < lowerThreshold && leftPIDOutput < 0) {
+        if (Math.abs(position - targetPosition) <= deadband) {
+            leftPIDOutput = 0;
+        } else if (position < lowerThreshold && leftPIDOutput < 0) {
+            leftPIDOutput = 0;
+        } else if (position > upperThreshold && leftPIDOutput > 0) {
             leftPIDOutput = 0;
         }
-        if (position > upperThreshold && leftPIDOutput > 0) {
-            leftPIDOutput = 0;
-        }
-
         slideMotorLeft.setVelocity(leftPIDOutput);
     }
 
@@ -76,11 +67,11 @@ public class Slides {
         this.rightController.setPID(rP, rI, rD);
         int position = slideMotorRight.getCurrentPosition();
         double rightPIDOutput = rightController.calculate(position, targetPosition);
-
-        if (position < lowerThreshold && rightPIDOutput < 0) {
+        if (Math.abs(position - targetPosition) <= deadband) {
             rightPIDOutput = 0;
-        }
-        if (position > upperThreshold && rightPIDOutput > 0) {
+        } else if (position < lowerThreshold && rightPIDOutput < 0) {
+            rightPIDOutput = 0;
+        } else if (position > upperThreshold && rightPIDOutput > 0) {
             rightPIDOutput = 0;
         }
         slideMotorRight.setVelocity(rightPIDOutput);
@@ -91,11 +82,9 @@ public class Slides {
         this.targetPositionRight = targetPosition;
         int currentPositionLeft = slideMotorLeft.getCurrentPosition();
         int currentPositionRight = slideMotorRight.getCurrentPosition();
-
         this.leftProfile = new TrapezoidProfile(leftConstraints,
                 new TrapezoidProfile.State(targetPositionLeft, 0),
                 new TrapezoidProfile.State(currentPositionLeft, 0));
-
         this.rightProfile = new TrapezoidProfile(rightConstraints,
                 new TrapezoidProfile.State(targetPositionRight, 0),
                 new TrapezoidProfile.State(currentPositionRight, 0));
