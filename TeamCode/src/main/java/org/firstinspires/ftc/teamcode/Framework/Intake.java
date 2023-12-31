@@ -23,6 +23,7 @@ public class Intake {
     private double D = 0.0205;
     private double maxVelocity = 2000 * 1.0;
     private double maxAcceleration = 15000 * 1.0;
+    private double PIDOutput;
 
     public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
@@ -44,8 +45,8 @@ public class Intake {
     private void control(double targetPosition, double targetVelocity){
         this.intakeController.setPID(P, I, D);
         int position = intakeMotor.getCurrentPosition();
-        double PIDOutput = intakeController.calculate(position, targetPosition);
-        intakeMotor.setVelocity(PIDOutput);
+        this.PIDOutput = intakeController.calculate(position, targetPosition);
+        intakeMotor.setVelocity(this.PIDOutput);
     }
 
     public void setTargetPosition(int newPosition) {
@@ -88,5 +89,13 @@ public class Intake {
         if(servoTimer.seconds() >= 0.75) {
             intakeServo.setPosition(0.935);
         }
+    }
+
+    public double getPIDOutput() {
+        return PIDOutput;
+    }
+
+    public boolean checkIntake() {
+        return PIDOutput > 0;
     }
 }

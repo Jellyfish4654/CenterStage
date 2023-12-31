@@ -25,9 +25,10 @@ public class Slides {
     private double rP = 2.15;
     private double rI = 0;
     private double rD = 0.0215;
-    double maxVelocity = 1800;
-    double maxAcceleration = 23886;
-    private final int deadband = 3;
+    private double maxVelocity = 1800;
+    private double maxAcceleration = 23886;
+    private double rightPIDOutput;
+    private double leftPIDOutput;
 
     public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
         this.slideMotorLeft = slideMotorLeft;
@@ -52,29 +53,29 @@ public class Slides {
     private void leftControl(double targetPosition, double targetVelocity){
         this.leftController.setPID(lP, lI, lD);
         int position = slideMotorLeft.getCurrentPosition();
-        double leftPIDOutput = leftController.calculate(position, targetPosition);
-        if (Math.abs(position - targetPosition) <= deadband) {
-            leftPIDOutput = 0;
-        } else if (position < lowerThreshold && leftPIDOutput < 0) {
-            leftPIDOutput = 0;
-        } else if (position > upperThreshold && leftPIDOutput > 0) {
-            leftPIDOutput = 0;
+        this.leftPIDOutput = leftController.calculate(position, targetPosition);
+
+        if (position < lowerThreshold && this.leftPIDOutput < 0) {
+            this.leftPIDOutput = 0;
         }
-        slideMotorLeft.setVelocity(leftPIDOutput);
+        if (position > upperThreshold && this.leftPIDOutput > 0) {
+            this.leftPIDOutput = 0;
+        }
+        slideMotorLeft.setVelocity(this.leftPIDOutput);
     }
 
     private void rightControl(double targetPosition, double targetVelocity){
         this.rightController.setPID(rP, rI, rD);
         int position = slideMotorRight.getCurrentPosition();
-        double rightPIDOutput = rightController.calculate(position, targetPosition);
-        if (Math.abs(position - targetPosition) <= deadband) {
-            rightPIDOutput = 0;
-        } else if (position < lowerThreshold && rightPIDOutput < 0) {
-            rightPIDOutput = 0;
-        } else if (position > upperThreshold && rightPIDOutput > 0) {
-            rightPIDOutput = 0;
+        this.rightPIDOutput = rightController.calculate(position, targetPosition);
+
+        if (position < lowerThreshold && this.rightPIDOutput < 0) {
+            this.rightPIDOutput = 0;
         }
-        slideMotorRight.setVelocity(rightPIDOutput);
+        if (position > upperThreshold && this.rightPIDOutput > 0) {
+            this.rightPIDOutput = 0;
+        }
+        slideMotorRight.setVelocity(this.rightPIDOutput);
     }
 
     public void setTargetPosition(int targetPosition) {
@@ -91,8 +92,17 @@ public class Slides {
         timer.reset();
     }
 
-    public void setGain(double gain){
+    public void setGain(double gain) {
         this.rP = gain;
+    }
+    public double getLeftPIDOutput() {
+        return leftPIDOutput;
+    }
+    public double getRightPIDOutput() {
+        return rightPIDOutput;
+    }
+    public boolean slideCheck() {
+        return leftPIDOutput > 0 && rightPIDOutput > 0;
     }
 
     public int getTargetPositionLeft() {
