@@ -6,37 +6,54 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class outtakeCRServo {
     private final CRServo wheelServo;
     private ElapsedTime timer;
-    private boolean isMovingForward;
-    private boolean isMovingBackward;
+    private ServoState currentState;
+
+    private static final double FORWARD_TIME = 0.5;
+    private static final double BACKWARD_TIME = 2.0;
+
+    private enum ServoState {
+        FORWARD, BACKWARD, STOPPED
+    }
 
     public outtakeCRServo(CRServo wheelServo) {
         this.wheelServo = wheelServo;
         this.timer = new ElapsedTime();
-        this.isMovingForward = false;
-        this.isMovingBackward = false;
+        this.currentState = ServoState.STOPPED;
     }
 
     public void startMovingForward() {
         timer.reset();
-        isMovingForward = true;
-        isMovingBackward = false;
+        currentState = ServoState.FORWARD;
     }
 
     public void startMovingBackward() {
         timer.reset();
-        isMovingBackward = true;
-        isMovingForward = false;
+        currentState = ServoState.BACKWARD;
     }
 
     public void update() {
-        if (isMovingForward && timer.seconds() < 0.5) {
-            wheelServo.setPower(1);
-        } else if (isMovingBackward && timer.seconds() < 2) {
-            wheelServo.setPower(-1);
-        } else {
-            wheelServo.setPower(0);
-            isMovingForward = false;
-            isMovingBackward = false;
+        switch (currentState) {
+            case FORWARD:
+                if (timer.seconds() < FORWARD_TIME) {
+                    wheelServo.setPower(1);
+                } else {
+                    stopServo();
+                }
+                break;
+            case BACKWARD:
+                if (timer.seconds() < BACKWARD_TIME) {
+                    wheelServo.setPower(-1);
+                } else {
+                    stopServo();
+                }
+                break;
+            case STOPPED:
+                break;
         }
+    }
+
+    private void stopServo() {
+        wheelServo.setPower(0);
+        currentState = ServoState.STOPPED;
     }
 }
