@@ -9,7 +9,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="RedAuto", group="Linear Opmode")
+@Autonomous(name="RedAuto", group="LinearOpmode")
 public class RedAuto extends BaseOpMode {
     OpenCvCamera webcam;
     PropPipeline pipeline;
@@ -19,6 +19,7 @@ public class RedAuto extends BaseOpMode {
 
     @Override
     public void runOpMode() {
+        AutoSides.setColor(AutoSides.Color.RED);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new PropPipeline();

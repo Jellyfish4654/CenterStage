@@ -12,6 +12,10 @@ public class AutoSides {
     private static Color currentColor = Color.RED;
     private static Position currentPosition = Position.LEFT;
 
+    public static void setColor(Color color) {
+        currentColor = color;
+    }
+
     public static void setPosition(Position position) {
         currentPosition = position;
     }
