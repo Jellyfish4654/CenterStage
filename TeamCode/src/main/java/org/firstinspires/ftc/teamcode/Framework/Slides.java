@@ -30,6 +30,7 @@ public class Slides {
     private double rightPIDOutput;
     private double leftPIDOutput;
 
+
     public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
         this.slideMotorLeft = slideMotorLeft;
         this.slideMotorRight = slideMotorRight;
@@ -40,6 +41,7 @@ public class Slides {
         this.timer = new ElapsedTime();
         this.leftProfile = new TrapezoidProfile(leftConstraints, new TrapezoidProfile.State(0, 0));
         this.rightProfile = new TrapezoidProfile(rightConstraints, new TrapezoidProfile.State(0, 0));
+
     }
 
     public void update() {
