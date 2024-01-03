@@ -22,6 +22,8 @@ public class JellyTele extends BaseOpMode {
     private ElapsedTime joystickReleaseTimer = new ElapsedTime();
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
+    private int [] slidePositions = new int[] {0, 500, 1000,0};
+    private int position = 0;
     protected enum DriveMode {
         MECANUM,
         FIELDCENTRIC
@@ -121,6 +123,12 @@ public class JellyTele extends BaseOpMode {
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.A)) {
                 slides.setTargetPosition(1500);
+            }
+            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
+                slides.setTargetPosition(slidePositions[position++/slidePositions.length]);
+            }
+            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
+                slides.setTargetPosition(slidePositions[position--/slidePositions.length]);
             }
         }
     }
