@@ -56,12 +56,12 @@ public class PropPipeline extends OpenCvPipeline implements VisionProcessor, Cam
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
         updateThresholdBasedOnColor(AutoSides.getColor());
+
         // HSV Color Filtering
         Mat hsvMat = new Mat();
         Imgproc.cvtColor(frame, hsvMat, Imgproc.COLOR_RGB2HSV);
         Scalar blueLow = new Scalar(80, 100, 100);
         Scalar blueHigh = new Scalar(125, 255, 255);
-        // Red exists at both the start and the end of the hue range
         Scalar redLow1 = new Scalar(0, 100, 100);
         Scalar redHigh1 = new Scalar(25, 255, 255);
         Scalar redLow2 = new Scalar(130, 100, 100);
@@ -82,8 +82,12 @@ public class PropPipeline extends OpenCvPipeline implements VisionProcessor, Cam
         frame.copyTo(finalMat);
         Imgproc.GaussianBlur(finalMat, finalMat, new Size(5, 5), 0.0);
 
-        leftZoneArea = new Rect(AutoSides.getColor() == AutoSides.Color.RED ? redLeftX : blueLeftX, AutoSides.getColor() == AutoSides.Color.RED ? redLeftY : blueLeftY, width, height);
-        centerZoneArea = new Rect(AutoSides.getColor() == AutoSides.Color.RED ? redCenterX : blueCenterX, AutoSides.getColor() == AutoSides.Color.RED ? redCenterY : blueCenterY, width, height);
+        leftZoneArea = new Rect(AutoSides.getColor() == AutoSides.Color.RED ? redLeftX : blueLeftX,
+                AutoSides.getColor() == AutoSides.Color.RED ? redLeftY : blueLeftY,
+                width, height);
+        centerZoneArea = new Rect(AutoSides.getColor() == AutoSides.Color.RED ? redCenterX : blueCenterX,
+                AutoSides.getColor() == AutoSides.Color.RED ? redCenterY : blueCenterY,
+                width, height);
 
         Mat leftZone = finalMat.submat(leftZoneArea);
         Mat centerZone = finalMat.submat(centerZoneArea);
@@ -93,7 +97,7 @@ public class PropPipeline extends OpenCvPipeline implements VisionProcessor, Cam
 
         leftColor = left.val[0] / 1000000.0;
         centerColor = center.val[0] / 1000000.0;
-        // Zone detection
+
         if(AutoSides.getColor() == AutoSides.Color.BLUE) {
             if (leftColor < threshold) {
                 location = AutoSides.Position.LEFT;
@@ -112,14 +116,15 @@ public class PropPipeline extends OpenCvPipeline implements VisionProcessor, Cam
             }
         }
 
-        Imgproc.rectangle(finalMat, leftZoneArea, new Scalar(255, 255, 255));
-        Imgproc.rectangle(finalMat, centerZoneArea, new Scalar(255, 255, 255));
+        // Draw rectangles for the zones
+        Imgproc.rectangle(finalMat, leftZoneArea, new Scalar(255, 0, 0), 2); // Blue rectangle for left zone
+        Imgproc.rectangle(finalMat, centerZoneArea, new Scalar(0, 255, 0), 2); // Green rectangle for center zone
 
         Bitmap b = Bitmap.createBitmap(finalMat.width(), finalMat.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(finalMat, b);
         lastFrame.set(b);
 
-        // Release Matt when done
+        // Release Mat resources
         leftZone.release();
         centerZone.release();
         hsvMat.release();
@@ -128,7 +133,7 @@ public class PropPipeline extends OpenCvPipeline implements VisionProcessor, Cam
         redMask2.release();
         redMask.release();
 
-        return null;
+        return finalMat;
     }
 
     private void updateThresholdBasedOnColor(AutoSides.Color color) {
@@ -141,7 +146,7 @@ public class PropPipeline extends OpenCvPipeline implements VisionProcessor, Cam
 
     @Override
     public Mat processFrame(Mat input) {
-        return null;
+        return input;
     }
 
     @Override

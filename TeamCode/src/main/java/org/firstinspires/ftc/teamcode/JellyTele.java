@@ -52,6 +52,7 @@ public class JellyTele extends BaseOpMode {
         intakeSystem.servoIntakeInit();
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
+        antiTipping.initImuError();
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeOut();
@@ -82,7 +83,7 @@ public class JellyTele extends BaseOpMode {
         lastSmoothedValue = smoothedValue;
 
         if (Math.abs(smoothedValue) > DEADBAND_VALUE) {
-            intakeMotor.setPower(smoothedValue);
+            intakeMotor.setPower(smoothedValue*intakeMult);
             intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition());
             joystickReleaseTimer.reset();
         } else {
@@ -97,10 +98,10 @@ public class JellyTele extends BaseOpMode {
         }
 
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
-            intakeMult -= 1;
+            intakeMult -= 0.05;
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
-            intakeMult += 1;
+            intakeMult += 0.05;
         }
     }
 
