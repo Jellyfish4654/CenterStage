@@ -72,7 +72,7 @@ public class Intake {
         setTargetPosition(target);
     }
     public void eject(){
-        int target = intakeMotor.getCurrentPosition()+100;
+        int target = intakeMotor.getCurrentPosition()-500;
         setTargetPosition(target);
     }
 
