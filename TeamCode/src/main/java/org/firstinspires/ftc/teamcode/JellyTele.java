@@ -213,7 +213,7 @@ public class JellyTele extends BaseOpMode {
 
         double rate = 1.0;
         if (averageTargetPosition >= 1500) {
-            rate = 0.99 - ((averageTargetPosition - 1500) / 100) * 0.01;
+            rate = 0.99 - ((averageTargetPosition - 1500) / 10) * 0.0005;
             rate = Math.max(rate, 0);
         }
         applySlewRateLimit(powers, rate);
