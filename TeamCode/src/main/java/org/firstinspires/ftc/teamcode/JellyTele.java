@@ -156,7 +156,7 @@ public class JellyTele extends BaseOpMode {
         telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("imupitch", imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
         telemetry.addData("imuroll", imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
-
+        telemetry.addData("intakeOutput", intakeSystem.getPIDOutput());
         telemetry.update();
     }
     private void readGamepadInputs() {
@@ -209,17 +209,15 @@ public class JellyTele extends BaseOpMode {
         };
     }
     protected void setMotorSpeeds(double multiplier, double[] powers) {
-        int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
-
-        double rate = 1.0;
-        if (averageTargetPosition >= 1500) {
-            rate = 0.99 - ((averageTargetPosition - 1500) / 10) * 0.0005;
-            rate = Math.max(rate, 0);
-        }
-        applySlewRateLimit(powers, rate);
-
         applyPrecisionAndScale(multiplier, powers);
 
+        int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
+        double rate = 1.0;
+        if (averageTargetPosition >= 1500) {
+            rate = 0.99 - ((averageTargetPosition - 1500) / 100) * 0.005;
+            rate = Math.max(rate, 0);
+            applySlewRateLimit(powers, rate);
+        }
         for (int i = 0; i < driveMotors.length; i++) {
             driveMotors[i].setPower(powers[i]);
         }

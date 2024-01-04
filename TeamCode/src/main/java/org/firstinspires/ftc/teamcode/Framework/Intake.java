@@ -46,7 +46,11 @@ public class Intake {
         this.intakeController.setPID(P, I, D);
         int position = intakeMotor.getCurrentPosition();
         this.PIDOutput = intakeController.calculate(position, targetPosition);
-        intakeMotor.setVelocity(this.PIDOutput);
+        double power = this.PIDOutput;
+        if(Math.abs(power)<40){
+            power=0;
+        }
+        intakeMotor.setVelocity(power);
     }
 
     public void setTargetPosition(int newPosition) {
