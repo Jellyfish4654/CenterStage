@@ -128,12 +128,12 @@ public class JellyTele extends BaseOpMode {
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
-                slides.setTargetPosition(averageTarget);
+                slides.setTargetPosition(averageTarget+100);
             }
 
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
-                slides.setTargetPosition(averageTarget);
+                slides.setTargetPosition(averageTarget+100);
             }
         }
     }
