@@ -13,7 +13,7 @@ public class AntiTipping {
     private static final double kP = 0.05;
     private static final double kI = 0.0;
     private static final double kD = 0.0005;
-    private static final double THRESHOLD = 2.5;
+    private static final double THRESHOLD = 10;
     private static double IMU_ERROR = -7.5; // Error in IMU pitch reading
 
     // Constructor
