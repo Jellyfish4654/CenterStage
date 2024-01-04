@@ -72,9 +72,14 @@ public class Intake {
         setTargetPosition(target);
     }
     public void eject(){
-        int target = intakeMotor.getCurrentPosition()-150;
+        int target = intakeMotor.getCurrentPosition()-100;
         setTargetPosition(target);
     }
+    public void eject2(){
+        int target = intakeMotor.getCurrentPosition()-50;
+        setTargetPosition(target);
+    }
+
 
     public void setGain(double p){
         this.P = p;
