@@ -75,10 +75,6 @@ public class Intake {
         int target = intakeMotor.getCurrentPosition()-100;
         setTargetPosition(target);
     }
-    public void eject2(){
-        int target = intakeMotor.getCurrentPosition()-50;
-        setTargetPosition(target);
-    }
 
 
     public void setGain(double p){
