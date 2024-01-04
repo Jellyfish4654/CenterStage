@@ -98,7 +98,9 @@ public class JellyTele extends BaseOpMode {
 
             intakeSystem.update();
         }
-
+        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_STICK_BUTTON)){
+            intakeSystem.eject();
+        }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
             intakeMult -= 0.05;
         }
