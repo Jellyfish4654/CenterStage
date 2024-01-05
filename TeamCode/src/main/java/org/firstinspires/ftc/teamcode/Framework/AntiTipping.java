@@ -37,7 +37,7 @@ public class AntiTipping {
     private void MotorPowers(double correction) {
         double power = -correction;
         power = Math.max(-1, Math.min(1, power));
-        if(power<Math.abs(0.05)){
+        if(power<Math.abs(0.065)){
             power = 0;
         }
         motors[0].setPower(power);

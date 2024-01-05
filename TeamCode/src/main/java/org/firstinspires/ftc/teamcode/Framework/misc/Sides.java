@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Framework.misc;
 
-public class AutoSides {
+public class Sides {
 
     public enum Position {
         LEFT, CENTER, RIGHT

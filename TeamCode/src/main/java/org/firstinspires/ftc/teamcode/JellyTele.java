@@ -92,14 +92,14 @@ public class JellyTele extends BaseOpMode {
             if (joystickReleaseTimer.seconds() <= 0.5) {
                 intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition());
             }
-            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.X)) {
-                intakeSystem.moveForward();
-            }
 
             intakeSystem.update();
         }
         if(gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_STICK_BUTTON)){
             intakeSystem.eject();
+        }
+        if(gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_STICK_BUTTON)){
+            intakeSystem.moveForward();
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
             intakeMult -= 0.05;
@@ -264,6 +264,13 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void OutakeControl() {
+        if (gamepad2.left_stick_y < 0) {
+            outtakeCRServo.setPower(gamepad2.left_stick_y);
+        } else if(gamepad2.x) {
+            outtakeCRServo.setPower(0.1);
+        } else{
+            outtakeCRServo.setPower(0);
+        }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
             outakeServos.closeOuttake();
             if(outakeServos.check()){
@@ -272,15 +279,6 @@ public class JellyTele extends BaseOpMode {
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
             outakeServos.openOuttake();
-        }
-        if (gamepad2.right_trigger > 0 || gamepad2.left_trigger > 0) {
-            double servoPower = gamepad2.left_trigger > 0 ? gamepad2.left_trigger : -gamepad2.right_trigger;
-            outtakeCRServo.setPower(servoPower);
-        } else {
-//        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)) {
-//            wheelServo.startMovingBackward();
-//        }
-            wheelServo.update();
         }
     }
     private void alertEndGame(ElapsedTime timer) {

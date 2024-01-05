@@ -1,44 +1,41 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.Framework.misc.PropPipeline;
-import org.firstinspires.ftc.teamcode.Framework.misc.AutoSides;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="RedAuto", group="LinearOpmode")
-public class RedAuto extends BaseOpMode {
+@Autonomous(name="RedAuto", group="Auto")
+public class RedAuto extends LinearOpMode {
     OpenCvCamera webcam;
-    PropPipeline pipeline;
-
-    private static final int CAMERA_WIDTH  = 1920;
-    private static final int CAMERA_HEIGHT = 1080;
+    PropPipeline detectionPipeline;
 
     @Override
     public void runOpMode() {
-        AutoSides.setColor(AutoSides.Color.RED);
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new PropPipeline();
-        webcam.setPipeline(pipeline);
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                webcam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
-            }
+        Sides.setColor(Sides.Color.RED);
+        // Initialize hardware and pipeline
+        initHardware(hardwareMap);
+        initCamera();
 
-            @Override
-            public void onError(int errorCode) {
-            }
-        });
+        // Wait for the start button to be pressed, updating telemetry
+        while (!isStarted()) {
+            telemetry.addData("Position", Sides.getPosition().toString());
+            telemetry.update();
+        }
 
-        waitForStart();
+        // After starting, stop the camera stream
+        webcam.stopStreaming();
 
-        while (opModeIsActive()) {
-            AutoSides.Position detectedPosition = pipeline.getLocation();
+        if (opModeIsActive()) {
+            // Get the detected position
+            Sides.Position detectedPosition = Sides.getPosition();
+
+            // Run the autonomous path based on the detected position
             switch (detectedPosition) {
                 case LEFT:
                     runAutonomousPathA();
@@ -50,23 +47,46 @@ public class RedAuto extends BaseOpMode {
                     runAutonomousPathC();
                     break;
                 default:
+                    // Handle the default case if needed
                     break;
             }
-
-            telemetry.addData("Detected Position", detectedPosition);
-            telemetry.update();
         }
     }
 
-    public void runAutonomousPathA() {
-        telemetry.addLine("Running Autonomous Path A");
+    private void initHardware(HardwareMap hwMap) {
+        // Initialize your robot's hardware here
     }
 
-    public void runAutonomousPathB() {
-        telemetry.addLine("Running Autonomous Path B");
+    private void initCamera() {
+        // Initialize camera
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        detectionPipeline = new PropPipeline(telemetry);
+        webcam.setPipeline(detectionPipeline);
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                // Error handling
+            }
+        });
     }
 
-    public void runAutonomousPathC() {
-        telemetry.addLine("Running Autonomous Path C");
+    private void runAutonomousPathA() {
+        // Define the autonomous path A
+    }
+
+    private void runAutonomousPathB() {
+        // Define the autonomous path B
+    }
+
+    private void runAutonomousPathC() {
+        // Define the autonomous path C
     }
 }
