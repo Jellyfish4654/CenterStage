@@ -127,10 +127,10 @@ public class JellyTele extends BaseOpMode {
                 slides.setTargetPosition(2650);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.B)) {
-                slides.setTargetPosition(0);
+                slides.setTargetPosition(1500);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.A)) {
-                slides.setTargetPosition(1500);
+                slides.setTargetPosition(0);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
@@ -141,6 +141,43 @@ public class JellyTele extends BaseOpMode {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
                 slides.setTargetPosition(averageTarget+100);
             }
+        }
+    }
+    private void OutakeControl() {
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
+            outakeServos.closeOuttake();
+//            if(outakeServos.check()){
+//                slides.setTargetPosition(0);
+//            }
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+            outakeServos.openOuttake();
+        }
+        switch (currentState) {
+            case IDLE:
+                if (gamepad2.left_stick_y < 0) {
+                    currentState = Outtake.INTAKE;
+                } else if (gamepad2.x) {
+                    currentState = Outtake.DEPOSIT;
+                }
+                outtakeCRServo.setPower(0);
+                break;
+            case INTAKE:
+                if (gamepad2.x) {
+                    currentState = Outtake.DEPOSIT;
+                } else if (!(gamepad2.left_stick_y < 0)) {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(gamepad2.left_stick_y);
+                break;
+            case DEPOSIT:
+                if (gamepad2.left_stick_y < 0) {
+                    currentState = Outtake.INTAKE;
+                } else if (!gamepad2.x) {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(0.1);
+                break;
         }
     }
     private void displayTelemetry(double precisionMultiplier) {
@@ -266,43 +303,7 @@ public class JellyTele extends BaseOpMode {
             droneServo.launchDrone();
         }
     }
-    private void OutakeControl() {
-        switch (currentState) {
-            case IDLE:
-                if (gamepad2.left_stick_y < 0) {
-                    currentState = Outtake.INTAKE;
-                } else if (gamepad2.x) {
-                    currentState = Outtake.DEPOSIT;
-                }
-                outtakeCRServo.setPower(0);
-                break;
-            case INTAKE:
-                if (gamepad2.x) {
-                    currentState = Outtake.DEPOSIT;
-                } else if (!(gamepad2.left_stick_y < 0)) {
-                    currentState = Outtake.IDLE;
-                }
-                outtakeCRServo.setPower(gamepad2.left_stick_y);
-                break;
-            case DEPOSIT:
-                if (gamepad2.left_stick_y < 0) {
-                    currentState = Outtake.INTAKE;
-                } else if (!gamepad2.x) {
-                    currentState = Outtake.IDLE;
-                }
-                outtakeCRServo.setPower(0.1);
-                break;
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
-            outakeServos.closeOuttake();
-//            if(outakeServos.check()){
-//                slides.setTargetPosition(0);
-//            }
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            outakeServos.openOuttake();
-        }
-    }
+
     private void alertEndGame(ElapsedTime timer) {
         if (timer.seconds() >= ENDGAME_ALERT_TIME && timer.seconds() <= ENDGAME_ALERT_TIME + 0.2) {
             gamepad1.runRumbleEffect(effect);
