@@ -28,7 +28,13 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
+    private enum Outtake {
+        IDLE,
+        DEPOSIT,
+        INTAKE
+    }
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
+    private Outtake currentState = Outtake.IDLE;
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
     double intakeMult = 1.0;
     private Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
@@ -261,18 +267,37 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void OutakeControl() {
-        if (gamepad2.left_stick_y < 0) {
-            outtakeCRServo.setPower(gamepad2.left_stick_y);
-        } else if(gamepad2.x) {
-            outtakeCRServo.setPower(0.1);
-        } else{
-            outtakeCRServo.setPower(0);
+        switch (currentState) {
+            case IDLE:
+                if (gamepad2.left_stick_y < 0) {
+                    currentState = Outtake.INTAKE;
+                } else if (gamepad2.x) {
+                    currentState = Outtake.DEPOSIT;
+                }
+                outtakeCRServo.setPower(0);
+                break;
+            case INTAKE:
+                if (gamepad2.x) {
+                    currentState = Outtake.DEPOSIT;
+                } else if (!(gamepad2.left_stick_y < 0)) {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(gamepad2.left_stick_y);
+                break;
+            case DEPOSIT:
+                if (gamepad2.left_stick_y < 0) {
+                    currentState = Outtake.INTAKE;
+                } else if (!gamepad2.x) {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(0.1);
+                break;
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
             outakeServos.closeOuttake();
-            if(outakeServos.check()){
-                slides.setTargetPosition(0);
-            }
+//            if(outakeServos.check()){
+//                slides.setTargetPosition(0);
+//            }
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
             outakeServos.openOuttake();
