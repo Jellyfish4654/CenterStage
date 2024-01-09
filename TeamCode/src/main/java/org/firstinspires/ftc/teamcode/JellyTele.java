@@ -144,6 +144,7 @@ public class JellyTele extends BaseOpMode {
         }
     }
     private void OutakeControl() {
+        outakeServos.setOutput();
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
             outakeServos.closeOuttake();
 //            if(outakeServos.check()){
