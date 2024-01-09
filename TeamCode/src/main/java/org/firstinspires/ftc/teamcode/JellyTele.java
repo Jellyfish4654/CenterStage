@@ -206,15 +206,10 @@ public class JellyTele extends BaseOpMode {
     }
     protected void setMotorSpeeds(double multiplier, double[] powers) {
         applyPrecisionAndScale(multiplier, powers);
-        if(gamepad1.a) {
-            for (int i = 0; i < powers.length; i++) {
-                powers[i] = Math.pow(powers[i], 3);
-            }
-        }
         int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
         double rate = 1.0;
-        if (averageTargetPosition >= 1500) {
-            rate = 0.99 - ((double) (averageTargetPosition - 1500) / 10) * 0.0005;
+        if (averageTargetPosition >= 2000) {
+            rate = 0.99 - ((double) (averageTargetPosition - 2000) / 10) * 0.0005;
             rate = Math.max(rate, 0);
             applySlewRateLimit(powers, rate);
         }
