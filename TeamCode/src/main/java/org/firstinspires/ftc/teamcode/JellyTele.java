@@ -28,7 +28,13 @@ public class JellyTele extends BaseOpMode {
         MECANUM,
         FIELDCENTRIC
     }
+    private enum Outtake {
+        IDLE,
+        DEPOSIT,
+        INTAKE
+    }
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
+    private Outtake currentState = Outtake.IDLE;
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
     double intakeMult = 1.0;
     private Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
@@ -118,23 +124,61 @@ public class JellyTele extends BaseOpMode {
         }else{
          slides.update();
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)) {
-                slides.setTargetPosition(2650);
+                slides.setTargetPosition(2000);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.B)) {
-                slides.setTargetPosition(0);
+                slides.setTargetPosition(1775);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.A)) {
-                slides.setTargetPosition(1500);
+                slides.setTargetPosition(0);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
-                slides.setTargetPosition(averageTarget+100);
+                slides.setTargetPosition(averageTarget+300);
             }
 
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
-                slides.setTargetPosition(averageTarget+100);
+                slides.setTargetPosition(averageTarget-300);
             }
+        }
+    }
+    private void OutakeControl() {
+        outakeServos.setOutput();
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
+            outakeServos.closeOuttake();
+//            if(outakeServos.check()){
+//                slides.setTargetPosition(0);
+//            }
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
+            outakeServos.openOuttake();
+        }
+        switch (currentState) {
+            case IDLE:
+                if (gamepad2.left_stick_y < 0) {
+                    currentState = Outtake.INTAKE;
+                } else if (gamepad2.x) {
+                    currentState = Outtake.DEPOSIT;
+                }
+                outtakeCRServo.setPower(0);
+                break;
+            case INTAKE:
+                if (gamepad2.x) {
+                    currentState = Outtake.DEPOSIT;
+                } else if (!(gamepad2.left_stick_y < 0)) {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(gamepad2.left_stick_y);
+                break;
+            case DEPOSIT:
+                if (gamepad2.left_stick_y < 0) {
+                    currentState = Outtake.INTAKE;
+                } else if (!gamepad2.x) {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(0.75);
+                break;
         }
     }
     private void displayTelemetry(double precisionMultiplier) {
@@ -206,15 +250,10 @@ public class JellyTele extends BaseOpMode {
     }
     protected void setMotorSpeeds(double multiplier, double[] powers) {
         applyPrecisionAndScale(multiplier, powers);
-        if(gamepad1.a) {
-            for (int i = 0; i < powers.length; i++) {
-                powers[i] = Math.pow(powers[i], 3);
-            }
-        }
         int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
         double rate = 1.0;
-        if (averageTargetPosition >= 1500) {
-            rate = 0.99 - ((double) (averageTargetPosition - 1500) / 10) * 0.0005;
+        if (averageTargetPosition >= 2000) {
+            rate = 0.99 - ((double) (averageTargetPosition - 2000) / 10) * 0.0005;
             rate = Math.max(rate, 0);
             applySlewRateLimit(powers, rate);
         }
@@ -265,24 +304,7 @@ public class JellyTele extends BaseOpMode {
             droneServo.launchDrone();
         }
     }
-    private void OutakeControl() {
-        if (gamepad2.left_stick_y < 0) {
-            outtakeCRServo.setPower(gamepad2.left_stick_y);
-        } else if(gamepad2.x) {
-            outtakeCRServo.setPower(0.1);
-        } else{
-            outtakeCRServo.setPower(0);
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
-            outakeServos.closeOuttake();
-            if(outakeServos.check()){
-                slides.setTargetPosition(0);
-            }
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
-            outakeServos.openOuttake();
-        }
-    }
+
     private void alertEndGame(ElapsedTime timer) {
         if (timer.seconds() >= ENDGAME_ALERT_TIME && timer.seconds() <= ENDGAME_ALERT_TIME + 0.2) {
             gamepad1.runRumbleEffect(effect);

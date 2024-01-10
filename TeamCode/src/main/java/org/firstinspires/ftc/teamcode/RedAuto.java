@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
-import org.firstinspires.ftc.teamcode.Framework.misc.PropPipeline;
+import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous(name="RedAuto", group="Auto")
 public class RedAuto extends LinearOpMode {
     OpenCvCamera webcam;
-    PropPipeline detectionPipeline;
+    RedPipeline detectionPipeline;
 
     @Override
     public void runOpMode() {
@@ -41,13 +41,11 @@ public class RedAuto extends LinearOpMode {
                     runAutonomousPathA();
                     break;
                 case CENTER:
+                case UNKNOWN:
                     runAutonomousPathB();
                     break;
                 case RIGHT:
                     runAutonomousPathC();
-                    break;
-                default:
-                    // Handle the default case if needed
                     break;
             }
         }
@@ -62,7 +60,7 @@ public class RedAuto extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        detectionPipeline = new PropPipeline(telemetry);
+        detectionPipeline = new RedPipeline(telemetry);
         webcam.setPipeline(detectionPipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {

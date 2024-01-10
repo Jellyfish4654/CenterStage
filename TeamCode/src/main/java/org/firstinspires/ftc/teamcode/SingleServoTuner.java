@@ -7,8 +7,8 @@ package org.firstinspires.ftc.teamcode;
         import com.qualcomm.robotcore.hardware.Servo;
 
 
-@TeleOp(name = "Servo Test Drone")
-public class ServoTuner1 extends LinearOpMode {
+@TeleOp(name = "Single Servo Test")
+public class SingleServoTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         final Servo outtakeLeftServo;

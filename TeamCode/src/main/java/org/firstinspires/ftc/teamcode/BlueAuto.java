@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
-import org.firstinspires.ftc.teamcode.Framework.misc.PropPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -13,11 +13,11 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 @Autonomous(name="BlueAuto", group="Auto")
 public class BlueAuto extends LinearOpMode {
     OpenCvCamera webcam;
-    PropPipeline detectionPipeline;
+    BluePipeline detectionPipeline;
 
     @Override
     public void runOpMode() {
-        Sides.setColor(Sides.Color.RED);
+        Sides.setColor(Sides.Color.BLUE);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
         initCamera();
@@ -41,13 +41,11 @@ public class BlueAuto extends LinearOpMode {
                     runAutonomousPathA();
                     break;
                 case CENTER:
+                case UNKNOWN:
                     runAutonomousPathB();
                     break;
                 case RIGHT:
                     runAutonomousPathC();
-                    break;
-                default:
-                    // Handle the default case if needed
                     break;
             }
         }
@@ -62,7 +60,7 @@ public class BlueAuto extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        detectionPipeline = new PropPipeline(telemetry);
+        detectionPipeline = new BluePipeline(telemetry);
         webcam.setPipeline(detectionPipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {

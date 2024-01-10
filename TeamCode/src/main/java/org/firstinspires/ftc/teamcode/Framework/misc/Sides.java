@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Framework.misc;
 public class Sides {
 
     public enum Position {
-        LEFT, CENTER, RIGHT
+        LEFT, CENTER, RIGHT, UNKNOWN
     }
 
     public enum Color {
