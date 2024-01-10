@@ -23,8 +23,6 @@ public class JellyTele extends BaseOpMode {
     private ElapsedTime joystickReleaseTimer = new ElapsedTime();
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
-    private int [] slidePositions = new int[] {0, 500, 1000,0};
-    private int position = 0;
     protected enum DriveMode {
         MECANUM,
         FIELDCENTRIC
