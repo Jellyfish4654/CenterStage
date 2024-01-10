@@ -124,22 +124,22 @@ public class JellyTele extends BaseOpMode {
         }else{
          slides.update();
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.Y)) {
-                slides.setTargetPosition(2650);
+                slides.setTargetPosition(2000);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.B)) {
-                slides.setTargetPosition(1500);
+                slides.setTargetPosition(1775);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.A)) {
                 slides.setTargetPosition(0);
             }
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
-                slides.setTargetPosition(averageTarget+100);
+                slides.setTargetPosition(averageTarget+300);
             }
 
             if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
                 int averageTarget = (slideMotorLeft.getCurrentPosition()+slideMotorRight.getCurrentPosition())/2;
-                slides.setTargetPosition(averageTarget+100);
+                slides.setTargetPosition(averageTarget-300);
             }
         }
     }
@@ -177,7 +177,7 @@ public class JellyTele extends BaseOpMode {
                 } else if (!gamepad2.x) {
                     currentState = Outtake.IDLE;
                 }
-                outtakeCRServo.setPower(0.1);
+                outtakeCRServo.setPower(0.75);
                 break;
         }
     }

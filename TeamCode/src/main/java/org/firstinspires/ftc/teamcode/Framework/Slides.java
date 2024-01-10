@@ -22,9 +22,9 @@ public class Slides {
     private double lP = 2.04;
     private double lI = 0;
     private double lD = 0.0204;
-    private double rP = 2.15;
+    private double rP = 2.1;
     private double rI = 0;
-    private double rD = 0.0215;
+    private double rD = 0.021;
     private double maxVelocity = 1800;
     private double maxAcceleration = 23886;
     private double rightPIDOutput;
