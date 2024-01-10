@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 public class JellyTele extends BaseOpMode {
     private final double PRECISION_MULTIPLIER_LOW = 0.35;
     private final double PRECISION_MULTIPLIER_HIGH = 0.7;
+    private double PRECISION_MULTIPLIER_INTAKE = 1;
     private final double DEADBAND_VALUE = 0.02;
     private final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
     private final double MAX_SCALE = 1.0;
@@ -36,7 +37,6 @@ public class JellyTele extends BaseOpMode {
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
     private Outtake currentState = Outtake.IDLE;
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
-    double intakeMult = 1.0;
     private Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
             .addStep(1.0, 1.0, 900)
             .addStep(0.0, 0.0, 100)
@@ -91,7 +91,7 @@ public class JellyTele extends BaseOpMode {
         lastSmoothedValue = smoothedValue;
 
         if (Math.abs(smoothedValue) > DEADBAND_VALUE) {
-            intakeMotor.setPower(smoothedValue*intakeMult);
+            intakeMotor.setPower(smoothedValue*PRECISION_MULTIPLIER_INTAKE);
             intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition());
             joystickReleaseTimer.reset();
         } else {
@@ -106,12 +106,6 @@ public class JellyTele extends BaseOpMode {
         }
         if(gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_STICK_BUTTON)){
             intakeSystem.moveForward();
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)) {
-            intakeMult -= 0.05;
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)) {
-            intakeMult += 0.05;
         }
     }
 
@@ -192,7 +186,7 @@ public class JellyTele extends BaseOpMode {
         telemetry.addData("RightSlideTarget", slides.getTargetPositionRight());
         telemetry.addData("intakeCurrentPosition", intakeMotor.getCurrentPosition());
         telemetry.addData("intakeTargetPosition", intakeSystem.getTargetPosition());
-        telemetry.addData("IntakeMult", intakeMult);
+        telemetry.addData("intake precision", PRECISION_MULTIPLIER_INTAKE);
         telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("imupitch", imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
         telemetry.addData("imuroll", imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
@@ -321,6 +315,12 @@ public class JellyTele extends BaseOpMode {
             return PRECISION_MULTIPLIER_LOW;
         } else if (gamepad1.right_bumper) {
             return PRECISION_MULTIPLIER_HIGH;
+        }
+        if(gamepad2.right_trigger>0.5){
+            PRECISION_MULTIPLIER_INTAKE = 0.75;
+        }
+        else{
+            PRECISION_MULTIPLIER_INTAKE = 1;
         }
         return MAX_SCALE;
     }
