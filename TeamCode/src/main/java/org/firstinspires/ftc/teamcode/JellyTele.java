@@ -20,6 +20,7 @@ public class JellyTele extends BaseOpMode {
     private final double MAX_SCALE = 1.0;
     private final double ENDGAME_ALERT_TIME = 110.0;
     private double lastSmoothedValue = 0;
+    private double resetHeading = 0;
     private ElapsedTime joystickReleaseTimer = new ElapsedTime();
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
@@ -76,8 +77,12 @@ public class JellyTele extends BaseOpMode {
             controlIntakeMotor();
             antiTipping.update();
             updateDriveMode(calculatePrecisionMultiplier());
-            if(gamepad1.y){
+            if(gamepad1.dpad_left){
                 autoAlignment.setTargetAngle(90);
+                autoAlignment.update();
+            }
+            else if(gamepad1.dpad_right){
+                autoAlignment.setTargetAngle(-90);
                 autoAlignment.update();
             }
         }
@@ -229,7 +234,7 @@ public class JellyTele extends BaseOpMode {
         double forward = -applyDeadband(gamepad1.left_stick_y);
         double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
         double rotation = applyDeadband(gamepad1.right_stick_x);
-        double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-resetHeading;
 
         double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
@@ -323,8 +328,24 @@ public class JellyTele extends BaseOpMode {
         return MAX_SCALE;
     }
     private void resetIMU() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.Y)) {
             imuSensor.resetYaw();
+            resetHeading = 0;
+            gamepad1.rumbleBlips(3);
+        }
+        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.X)){
+            imuSensor.resetYaw();
+            resetHeading = -90;
+            gamepad1.rumbleBlips(3);
+        }
+        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.B)){
+            imuSensor.resetYaw();
+            resetHeading = 90;
+            gamepad1.rumbleBlips(3);
+        }
+        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.A)){
+            imuSensor.resetYaw();
+            resetHeading = -180;
             gamepad1.rumbleBlips(3);
         }
     }
