@@ -78,11 +78,11 @@ public class JellyTele extends BaseOpMode {
             antiTipping.update();
             updateDriveMode(calculatePrecisionMultiplier());
             if(gamepad1.dpad_left){
-                autoAlignment.setTargetAngle(90);
+                autoAlignment.setTargetAngle(-90);
                 autoAlignment.update();
             }
             else if(gamepad1.dpad_right){
-                autoAlignment.setTargetAngle(-90);
+                autoAlignment.setTargetAngle(90);
                 autoAlignment.update();
             }
         }
@@ -234,7 +234,7 @@ public class JellyTele extends BaseOpMode {
         double forward = -applyDeadband(gamepad1.left_stick_y);
         double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
         double rotation = applyDeadband(gamepad1.right_stick_x);
-        double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-resetHeading;
+        double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - Math.toRadians(resetHeading);
 
         double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
