@@ -78,6 +78,7 @@ public class RedAutoCloseRight extends BaseOpMode {
                                         .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
                                         .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
                                         .build()
+
                         )
                 );
                 break;
@@ -120,9 +121,10 @@ public class RedAutoCloseRight extends BaseOpMode {
 //                                            .build(),
 //                                    // Red Right Park
                                 drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
-                                        .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(90))
-                                        .splineToLinearHeading(new Pose2d(20, -60, 0), Math.toRadians(0))
-                                        .lineToX(60)
+                                        .strafeTo(new Vector2d(12,-54))
+                                        .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(90)), Math.toRadians(0))
+                                        .splineToSplineHeading(new Pose2d(12, -58, Math.toRadians(90)), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
                                         .build()
                         )
                 );
