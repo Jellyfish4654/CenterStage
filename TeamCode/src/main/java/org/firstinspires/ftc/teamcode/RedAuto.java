@@ -29,74 +29,77 @@ public class RedAuto extends LinearOpMode {
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
         initCamera();
-
+        Sides.Position detectedPosition = Sides.getPosition();
         // Wait for the start button to be pressed, updating telemetry
         while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("Position", Sides.getPosition().toString());
+            telemetry.addData("Position", detectedPosition.toString());
             telemetry.update();
         }
         // After starting, stop the camera stream
         webcam.stopStreaming();
-        while (opModeIsActive() && !isStopRequested()) {
-            // Get the detected position
-            Sides.Position detectedPosition = Sides.getPosition();
 
-            // Run the autonomous path based on the detected position
-            switch (detectedPosition) {
-                case LEFT:
-                    Actions.runBlocking(new SequentialAction(
-                                    // Red Right Purple Left
-                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                            .splineTo(new Vector2d(8, -34), Math.toRadians(135))
-                                            .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-                                            .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                                            .build(),
-                                    // Red Right Yellow Left
-                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-                                            .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
-                                            .splineToLinearHeading(new Pose2d(49, -28, 0), 0)
-                                            .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
-                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-                                            .build(),
-                                    // Red Right Park
-                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
-                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
-                                            .build()
-                            )
-                    );
-                    break;
-                case CENTER:
-                case UNKNOWN:
-                    Actions.runBlocking(new SequentialAction(
-                                    // Red Right Purple Middle
-                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                            .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-                                            .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
-                                            .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
-                                            .build(),
-                                    // Red Right Yellow Center
-                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-                                            .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
-                                            .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
-                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-                                            .build(),
-                                    // Red Right Park
-                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
-                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
-                                            .build()
-                            )
-                    );
-                    break;
-                case RIGHT:
-                    Actions.runBlocking(new SequentialAction(
-                                    // Red Right Purple Right
-                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                            .splineTo(new Vector2d(15, -46), Math.toRadians(90))
-                                            .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-                                            .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(240))
-                                            .splineToSplineHeading(new Pose2d(31, -46, Math.toRadians(0)), Math.toRadians(0))
-                                            .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
-                                            .build()
+//        while (opModeIsActive() && !isStopRequested()) {
+            // Get the detected position
+
+
+
+//        }
+        // Run the autonomous path based on the detected position
+        switch (detectedPosition) {
+            case LEFT:
+                Actions.runBlocking(new SequentialAction(
+                                // Red Right Purple Left
+                                drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                        .splineTo(new Vector2d(8, -38), Math.toRadians(135))
+//                                        .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
+//                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+                                        .build()
+                                // Red Right Yellow Left
+//                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
+//                                            .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
+//                                            .splineToLinearHeading(new Pose2d(49, -28, 0), 0)
+//                                            .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
+//                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
+//                                            .build(),
+//                                    // Red Right Park
+//                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
+//                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
+//                                            .build()
+                        )
+                );
+                break;
+            case CENTER:
+            case UNKNOWN:
+                Actions.runBlocking(new SequentialAction(
+                                // Red Right Purple Middle
+                                drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                        .splineTo(new Vector2d(15, -32), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
+                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                                        .build()
+                                // Red Right Yellow Center
+//                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
+//                                            .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
+//                                            .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
+//                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
+//                                            .build(),
+//                                    // Red Right Park
+//                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
+//                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
+//                                            .build()
+                        )
+                );
+                break;
+            case RIGHT:
+                Actions.runBlocking(new SequentialAction(
+                                // Red Right Purple Right
+                                drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                        .splineTo(new Vector2d(15, -46), Math.toRadians(90))
+                                        .splineTo(new Vector2d(18, -38), Math.toRadians(60))
+                                        .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(240))
+                                        .splineToSplineHeading(new Pose2d(31, -46, Math.toRadians(0)), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
+                                        .build()
 //                                    // Red Right Yellow Right
 //                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
 //                                            .splineToConstantHeading(new Vector2d(47.4, -41.2), Math.toRadians(0))
@@ -108,10 +111,9 @@ public class RedAuto extends LinearOpMode {
 //                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
 //                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
 //                                            .build()
-                            )
-                    );
-                    break;
-            }
+                        )
+                );
+                break;
         }
     }
 
