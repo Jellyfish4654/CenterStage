@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -94,6 +96,7 @@ public class RedAuto extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
                 .build()))
+
         );
     }
 
