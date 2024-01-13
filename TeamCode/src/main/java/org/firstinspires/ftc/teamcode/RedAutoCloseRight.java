@@ -28,6 +28,7 @@ public class RedAutoCloseRight extends BaseOpMode {
         Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
+        initHardware();
         initCamera();
         // Wait for the start button to be pressed, updating telemetry
         while (!isStarted() && !isStopRequested()) {
@@ -37,6 +38,7 @@ public class RedAutoCloseRight extends BaseOpMode {
             telemetry.addData("Right Pixels", RedPipeline.getRight());
             telemetry.update();
             detectedPosition = Sides.getPosition();
+            intakeSystem.servoIntakeInit();
         }
         // After starting, stop the camera stream
         webcam.stopStreaming();

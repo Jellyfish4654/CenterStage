@@ -63,6 +63,9 @@ public class Slides {
         if (position > upperThreshold && this.leftPIDOutput > 0) {
             this.leftPIDOutput = 0;
         }
+        if (Math.abs(this.leftPIDOutput)>10) {
+            this.leftPIDOutput = 0;
+        }
         slideMotorLeft.setVelocity(this.leftPIDOutput);
     }
 
@@ -75,6 +78,9 @@ public class Slides {
             this.rightPIDOutput = 0;
         }
         if (position > upperThreshold && this.rightPIDOutput > 0) {
+            this.rightPIDOutput = 0;
+        }
+        if (Math.abs(this.rightPIDOutput)>10) {
             this.rightPIDOutput = 0;
         }
         slideMotorRight.setVelocity(this.rightPIDOutput);

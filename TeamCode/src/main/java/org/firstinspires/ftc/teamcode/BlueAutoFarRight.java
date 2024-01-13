@@ -28,6 +28,7 @@ public class BlueAutoFarRight extends BaseOpMode {
         Sides.setColor(Sides.Color.BLUE);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
+        initHardware();
         initCamera();
 
         // Wait for the start button to be pressed, updating telemetry
@@ -38,6 +39,7 @@ public class BlueAutoFarRight extends BaseOpMode {
             telemetry.addData("Right Pixels", BluePipeline.getRight());
             telemetry.update();
             detectedPosition = Sides.getPosition();
+            intakeSystem.servoIntakeInit();
         }
 
         // After starting, stop the camera stream

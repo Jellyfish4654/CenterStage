@@ -94,9 +94,9 @@ public class BluePipeline extends OpenCvPipeline {
     }
 
     private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount) {
-        int leftThreshold = 40000; // Minimum difference to consider a change in position
-        int rightThreshold = 40000;
-        int centerThreshold = 16000;
+        int leftThreshold = 30000; // Minimum difference to consider a change in position
+        int rightThreshold = 30000;
+        int centerThreshold = 30000;
         boolean leftIsValid = leftCount > leftThreshold;
         boolean rightIsValid = rightCount > rightThreshold;
         boolean centerIsValid = centerCount > centerThreshold;
