@@ -26,6 +26,7 @@ public abstract class BaseOpMode extends LinearOpMode {
     
     protected void initHardware() {
         driveMotors = new DcMotor[] {
+                //control hub
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
                 hardwareMap.dcMotor.get("motorFL"),
@@ -37,7 +38,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 DcMotorSimple.Direction.FORWARD, // motorFL
                 DcMotorSimple.Direction.FORWARD  // motorBL
         });
-        
+        // expansion hub
         droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
         outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
         outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
