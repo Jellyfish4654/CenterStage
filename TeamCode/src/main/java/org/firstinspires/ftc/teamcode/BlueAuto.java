@@ -79,12 +79,7 @@ public class BlueAuto extends LinearOpMode {
 
     private void runAutonomousPathA() {
         // Define the autonomous path A
-        Actions.runBlocking(new SequentialAction(
-        drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
-                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
-                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                .build());
+
     }
 
     private void runAutonomousPathB() {
