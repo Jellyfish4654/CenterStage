@@ -185,6 +185,8 @@ public class JellyTele extends BaseOpMode {
         telemetry.addData("precision mode", precisionMultiplier);
         telemetry.addData("LeftSlide", slideMotorLeft.getCurrentPosition());
         telemetry.addData("RightSlide", slideMotorRight.getCurrentPosition());
+        telemetry.addData("LeftSlideOutput", slides.getLeftPIDOutput());
+        telemetry.addData("RightSlideOutput", slides.getRightPIDOutput());
         telemetry.addData("LeftSlideTarget", slides.getTargetPositionLeft());
         telemetry.addData("RightSlideTarget", slides.getTargetPositionRight());
         telemetry.addData("intakeCurrentPosition", intakeMotor.getCurrentPosition());

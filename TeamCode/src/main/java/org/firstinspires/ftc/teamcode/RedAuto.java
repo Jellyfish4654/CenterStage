@@ -39,6 +39,9 @@ public class RedAuto extends BaseOpMode {
         // Wait for the start button to be pressed, updating telemetry
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", detectedPosition.toString());
+            telemetry.addData("Left Pixels", RedPipeline.getLeft());
+            telemetry.addData("Center Pixels", RedPipeline.getCenter());
+            telemetry.addData("Right Pixels", RedPipeline.getRight());
             telemetry.update();
         }
         // After starting, stop the camera stream
@@ -55,7 +58,9 @@ public class RedAuto extends BaseOpMode {
                 Actions.runBlocking(new SequentialAction(
                                 // Red Right Purple Left
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                        .splineTo(new Vector2d(8, -38), Math.toRadians(135))
+                                        .splineTo(new Vector2d(11.3, -35.7), Math.toRadians(160))
+                                        .splineToConstantHeading(new Vector2d(11.3, -36), Math.toRadians(315))
+                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
                                         .build(),
                                 new ParallelAction(
                                         telemetryPacket -> {

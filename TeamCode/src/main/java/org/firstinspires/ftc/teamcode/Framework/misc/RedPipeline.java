@@ -37,9 +37,25 @@ public class RedPipeline extends OpenCvPipeline {
         int rectWidth = CAMERA_WIDTH / 3;
         int rectHeight = CAMERA_HEIGHT;
 
-        leftRect = new Rect(0, 350, 500, 350);
-        centerRect = new Rect(760, 250, 400, 400);
-        rightRect = new Rect(1370, 350, 500, 350);
+        leftRect = new Rect(0, 100, 500, 750);
+        centerRect = new Rect(760, 50, 400, 750);
+        rightRect = new Rect(1370, 100, 500, 750);
+    }
+
+    static int leftCount;
+    static int centerCount;
+    static int rightCount;
+
+    public static int getLeft(){
+        return leftCount;
+    }
+
+    public static int getCenter(){
+        return centerCount;
+    }
+
+    public static int getRight(){
+        return rightCount;
     }
 
     @Override
@@ -53,9 +69,9 @@ public class RedPipeline extends OpenCvPipeline {
         Core.bitwise_or(maskRed1, maskRed2, maskRed);
 
         // Count red pixels in each rectangle
-        int leftCount = countRed(maskRed, leftRect);
-        int centerCount = countRed(maskRed, centerRect);
-        int rightCount = countRed(maskRed, rightRect);
+        leftCount = countRed(maskRed, leftRect);
+        centerCount = countRed(maskRed, centerRect);
+        rightCount = countRed(maskRed, rightRect);
 
         // Determine the position with the most red
         Sides.Position detectedPosition = determinePosition(leftCount, centerCount, rightCount);
@@ -74,6 +90,8 @@ public class RedPipeline extends OpenCvPipeline {
         // Telemetry for debugging
         telemetry.addData("Red Detected on", detectedPosition);
         return input;
+
+
     }
 
     private int countRed(Mat mask, Rect rect) {
@@ -84,9 +102,9 @@ public class RedPipeline extends OpenCvPipeline {
     }
 
     private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount) {
-        int leftThreshold = 40000; // Minimum difference to consider a change in position
-        int rightThreshold = 30000;
-        int centerThreshold = 15000;
+        int leftThreshold = 50000; // Minimum difference to consider a change in position
+        int rightThreshold = 50000;
+        int centerThreshold = 50000;
         boolean leftIsValid = leftCount > leftThreshold;
         boolean rightIsValid = rightCount > rightThreshold;
         boolean centerIsValid = centerCount > centerThreshold;
@@ -103,4 +121,5 @@ public class RedPipeline extends OpenCvPipeline {
             return Sides.Position.UNKNOWN;
         }
     }
+
 }
