@@ -29,10 +29,6 @@ public class BluePipeline extends OpenCvPipeline {
     public BluePipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
 
-        // Divide camera view into rectangles
-        int rectWidth = CAMERA_WIDTH / 3;
-        int rectHeight = CAMERA_HEIGHT;
-
         leftRect = new Rect(0, 350, 500, 350);
         centerRect = new Rect(760, 250, 400, 400);
         rightRect = new Rect(1370, 350, 500, 350);
