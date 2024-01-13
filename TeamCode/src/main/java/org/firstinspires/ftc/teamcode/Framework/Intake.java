@@ -17,6 +17,7 @@ public class Intake {
     private double D = 0.00009;
     private double PIDOutput;
 
+
     public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
         this.intakeMotor = intakeMotor;
         this.intakeServo = intakeServo;

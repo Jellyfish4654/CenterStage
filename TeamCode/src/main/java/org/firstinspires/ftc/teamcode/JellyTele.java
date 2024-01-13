@@ -62,9 +62,9 @@ public class JellyTele extends BaseOpMode {
         antiTipping.initImuError();
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
-//        intakeSystem.servoIntakeOut();
+        intakeSystem.servoIntakeOut();
         while (opModeIsActive()) {
-//            intakeSystem.servoIntakeDrone();
+            intakeSystem.servoIntakeDrone();
             readGamepadInputs();
             if (timer.milliseconds() % 500 < 100) {
                 displayTelemetry(calculatePrecisionMultiplier());

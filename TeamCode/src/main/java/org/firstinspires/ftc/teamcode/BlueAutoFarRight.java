@@ -51,6 +51,12 @@ public class BlueAutoFarRight extends BaseOpMode {
 
                 Actions.runBlocking(new SequentialAction(
                         // Red Right Purple Left
+                        drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+
+                                .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(90))
+                                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
+                                .build(),
+                        //park
                         drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(9135)))
 
                                 .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
@@ -64,6 +70,11 @@ public class BlueAutoFarRight extends BaseOpMode {
 
                 Actions.runBlocking(new SequentialAction(
                         // Red Right Purple Middle
+                        // Red Right Purple Middle
+                        drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
+                                .build(),
+                        //park
                         drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
                                 .lineToY(-40)
                                 .splineToConstantHeading(new Vector2d(15, -58), Math.toRadians(90))
@@ -75,6 +86,11 @@ public class BlueAutoFarRight extends BaseOpMode {
             case RIGHT:
                 Actions.runBlocking(new SequentialAction(
                         // Red Right Purple Right
+                        drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                .splineTo(new Vector2d(15, -46), Math.toRadians(90))
+                                .splineTo(new Vector2d(18, -38), Math.toRadians(60))
+                                .build(),
+                        //park
                         drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
                                 .strafeTo(new Vector2d(12,-54))
                                 .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(90)), Math.toRadians(0))

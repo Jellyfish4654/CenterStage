@@ -49,10 +49,20 @@ public class RedAutoFarLeft extends BaseOpMode {
                 Actions.runBlocking(new SequentialAction(
                         // Blue Left Purple Left
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
-
                                 .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
-                                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                                .build())
+                                .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
+
+                                .build(),
+
+
+//                //park
+                                drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
+                                .strafeTo(new Vector2d(9.7,-39.3))
+                                .turn(Math.toRadians(-45))
+                                .strafeTo(new Vector2d(9.7,-58.9))
+                                .strafeTo(new Vector2d(107, -58))
+                                .build()
+                        )
                 );
 //                                ,
 //                                new ParallelAction(
@@ -83,7 +93,13 @@ public class RedAutoFarLeft extends BaseOpMode {
                         // Red Right Purple Middle
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
-                                .build())
+                                .build(),
+                        //park
+                        drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
+                        .strafeTo(new Vector2d(13, -60))
+                        .strafeTo(new Vector2d(105, -58))
+                        .build()
+                        )
                 );
                 break;
             case RIGHT:
