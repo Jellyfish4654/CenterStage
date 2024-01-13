@@ -29,11 +29,11 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(270), Math.toRadians(90), 18)
                 .build();
 // Red Right Purple Left
-//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-//                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
-//                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-//                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-//                .build());
+        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                .splineTo(new Vector2d(10.5, -35.7), Math.toRadians(160))
+                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
+                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+                .build());
 // Red Right Purple Middle
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
 //                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
@@ -80,17 +80,17 @@ public class MeepMeepTesting {
 //        Blue Starts Here
 
 // Blue Left Purple Left
-        BLUE_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
-                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                .build());
+//        BLUE_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+//                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
+//                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
+//                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+//                .build());
 // Blue Right Purple Middle
-        BLUE_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
-                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(270))
-                .build());
+//        BLUE_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+//                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
+//                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(270))
+//                .build());
         // Blue Right Purple Right
 //        BLUE_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
 //                .splineTo(new Vector2d(15, -46), Math.toRadians(90))
@@ -144,14 +144,14 @@ public class MeepMeepTesting {
 //
 //                .build());
         // Blue Right Park
-        BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(46.3, 12, Math.toRadians(0)))
-                .splineToConstantHeading(new Vector2d(59, 12), Math.toRadians(0))
-
-                .build());
+//        BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(46.3, 12, Math.toRadians(0)))
+//                .splineToConstantHeading(new Vector2d(59, 12), Math.toRadians(0))
+//
+//                .build());
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(BLUE_RIGHT_PURPLE)
+                .addEntity(RED_RIGHT_PURPLE)
 
                 .start();
     }
