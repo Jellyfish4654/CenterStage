@@ -51,19 +51,21 @@ public class RedAutoFarLeft extends BaseOpMode {
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
                                 .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
+                ),
+                                new SleepAction(
+                                        sleep(7500)
+                                ),
 
-                                .build(),
+                                //park
+                        new SequentialAction(
+                                drive.actionBuilder(new Pose2d(7.5, -36.5, Math.toRadians(135)))
+                                        .strafeTo(new Vector2d(9.7, -39.3))
+                                        .turn(Math.toRadians(-45))
+                                        .strafeTo(new Vector2d(9.7, -58.9))
+                                        .strafeTo(new Vector2d(107, -58))
+                                        .build())
 
-
-//                //park
-                                drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
-                                .strafeTo(new Vector2d(9.7,-39.3))
-                                .turn(Math.toRadians(-45))
-                                .strafeTo(new Vector2d(9.7,-58.9))
-                                .strafeTo(new Vector2d(107, -58))
-                                .build()
-                        )
-                );
+                        );
 //                                ,
 //                                new ParallelAction(
 //                                        telemetryPacket -> {
@@ -93,13 +95,16 @@ public class RedAutoFarLeft extends BaseOpMode {
                         // Red Right Purple Middle
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
-                                .build(),
+                                .build()),
+                        new SleepAction(
+                                sleep(7500)
+                        ),
+                        new SequentialAction(
                         //park
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                         .strafeTo(new Vector2d(13, -60))
                         .strafeTo(new Vector2d(105, -58))
-                        .build()
-                        )
+                        .build())
                 );
                 break;
             case RIGHT:
@@ -108,9 +113,18 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(13, -46), Math.toRadians(90))
                                         .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-                                        .build()
-                        )
-                );
+                                        .build()),
+                        new SleepAction(
+                                sleep(7500)
+                        ),
+                        new SequentialAction(
+                        //park
+                                        drive.splineToConstantHeading(new Vector2d(13, -46), Math.toRadians(60))
+                                        .turn(Math.toRadians(30))
+                                        .strafeTo(new Vector2d(9.7, -58.9))
+                                        .strafeTo(new Vector2d(107, -58))
+                                        .build())
+                        );
                 break;
         }
     }

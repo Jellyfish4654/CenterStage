@@ -54,8 +54,14 @@ public class BlueAutoCloseLeft extends BaseOpMode {
                                 drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
 
                                         .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
-                                        .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                                        .build())
+                                        .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
+                                        .build(),
+                                        //park
+                                        .strafeTo(new Vector2d(9.7, -39.3))
+                                        .turn(Math.toRadians(-45))
+                                        .strafeTo(new Vector2d(9.7, -58.9))
+                                        .strafeTo(new Vector2d(-35, -58))
+                                        .build());
                 );
                 break;
             case CENTER:
