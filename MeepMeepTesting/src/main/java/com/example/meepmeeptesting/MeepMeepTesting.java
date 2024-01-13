@@ -29,52 +29,48 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(270), Math.toRadians(90), 18)
                 .build();
 // Red Right Purple Left
-        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                .splineTo(new Vector2d(10.5, -35.7), Math.toRadians(160))
-                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                .build());
+//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+//                .splineTo(new Vector2d(11.3, -35.7), Math.toRadians(160))
+//                .splineToConstantHeading(new Vector2d(11.3, -36), Math.toRadians(315))
+//                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+//                .build());
 // Red Right Purple Middle
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-//                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-//                .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
+//                .splineTo(new Vector2d(15, -35), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(15.2, -38), Math.toRadians(270))
 //                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
 //                .build());
         // Red Right Purple Right
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-//                .splineTo(new Vector2d(15, -46), Math.toRadians(90))
-//                .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-//                .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(240))
+//                .splineTo(new Vector2d(15, -44), Math.toRadians(90))
+//                .splineTo(new Vector2d(16, -40), Math.toRadians(65))
+//                .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(70))
 //                .splineToSplineHeading(new Pose2d(31, -46, Math.toRadians(0)), Math.toRadians(0))
 //                .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
 //                .build());
 //        Red Right Yellow Left
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
 //                .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
-//                .splineToLinearHeading(new Pose2d(49, -28, 0), 0)
+//                .splineToLinearHeading(new Pose2d(47.2, -28, 0), 0)
 //        .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
 //                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-//
 //                .build());
 //         Red Right Yellow Center
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-//                .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
+//                .splineToConstantHeading(new Vector2d(47.2, -36), Math.toRadians(0))
 //        .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
 //                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
 //                .build());
         // Red Right Yellow Right
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
 //                .splineToConstantHeading(new Vector2d(47.4, -41.2), Math.toRadians(0))
-//                .splineToLinearHeading(new Pose2d(49.3, -41.2, 0), Math.toRadians(0))
+//                .splineToLinearHeading(new Pose2d(47.2, -41.2, 0), Math.toRadians(0))
 //                .splineToLinearHeading(new Pose2d(46.3, -41.2, 0), Math.toRadians(90))
-//
 //                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-//                              //  .splineToSplineHeading()
 //                .build());
         // Red Right Park
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
 //                .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
-//
 //                .build());
 
 //        Blue Starts Here
