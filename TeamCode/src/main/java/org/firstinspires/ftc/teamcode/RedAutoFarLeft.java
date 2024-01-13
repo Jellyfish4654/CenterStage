@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.roadrunner.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -51,13 +55,15 @@ public class RedAutoFarLeft extends BaseOpMode {
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
                                 .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
-                ),
-                                new SleepAction(
-                                        sleep(9000)
-                                ),
-
-                                //park
-                        new SequentialAction(
+                                .build(),
+//                ),
+//
+//                        (telemetryPacket) -> {
+//                            sleep(9000);
+//                            return false; // Returning true causes the action to run again, returning false causes it to cease
+//                        },
+//                                //park
+//                        new SequentialAction(
                                 drive.actionBuilder(new Pose2d(7.5, -36.5, Math.toRadians(135)))
                                         .strafeTo(new Vector2d(9.7, -39.3))
                                         .turn(Math.toRadians(-45))
@@ -96,16 +102,20 @@ public class RedAutoFarLeft extends BaseOpMode {
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
                                 .build()),
-                        new SleepAction(
-                                sleep(9000)
-                        ),
+
+                        new Action() {
+                            @Override
+                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                                sleep(9000);
+                                return false;
+                            }
+                        },
                         new SequentialAction(
                         //park
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                         .strafeTo(new Vector2d(13, -60))
                         .strafeTo(new Vector2d(105, -58))
-                        .build())
-                );
+                        .build()));
                 break;
             case RIGHT:
                 Actions.runBlocking(new SequentialAction(
@@ -114,9 +124,10 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         .splineTo(new Vector2d(13, -46), Math.toRadians(90))
                                         .splineTo(new Vector2d(18, -38), Math.toRadians(60))
                                         .build()),
-                        new SleepAction(
-                                sleep(9000)
-                        ),
+                        (telemetryPacket) -> {
+                            sleep(9000);
+                            return false; // Returning true causes the action to run again, returning false causes it to cease
+                        },
                         new SequentialAction(
                         //park
                                         drive.splineToConstantHeading(new Vector2d(13, -46), Math.toRadians(60))

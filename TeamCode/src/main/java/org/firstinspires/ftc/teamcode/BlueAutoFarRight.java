@@ -56,9 +56,6 @@ public class BlueAutoFarRight extends BaseOpMode {
                                 .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(90))
                                 .splineTo(new Vector2d(5, -34), Math.toRadians(135))
                                 .build()),
-                        new SleepAction(
-                                sleep(9000)
-                        ),
                         //park
                         new SequentialAction(
                         drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(9135)))
@@ -78,9 +75,11 @@ public class BlueAutoFarRight extends BaseOpMode {
                         drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(15, -32), Math.toRadians(90))
                                 .build()),
-                new SleepAction(
-                        sleep(9000)
-                ),
+                        (telemetryPacket) -> {
+                            sleep(9000);
+                            return false; // Returning true causes the action to run again, returning false causes it to cease
+                        },
+
                 new SequentialAction(
                         //park
                         drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
@@ -99,9 +98,10 @@ public class BlueAutoFarRight extends BaseOpMode {
                                 .splineTo(new Vector2d(18, -38), Math.toRadians(60))
                                 .build()),
                         //park
-                new SleepAction(
-                        sleep(9000)
-                ),
+                        (telemetryPacket) -> {
+                            sleep(9000);
+                            return false; // Returning true causes the action to run again, returning false causes it to cease
+                        },
                         new SequentialAction(
                         drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
                                 .strafeTo(new Vector2d(12,-54))
