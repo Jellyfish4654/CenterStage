@@ -24,7 +24,7 @@ public class RedAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
         Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
@@ -46,7 +46,7 @@ public class RedAuto extends LinearOpMode {
                 case LEFT:
                     Actions.runBlocking(new SequentialAction(
                                     // Red Right Purple Left
-                                    drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                             .splineTo(new Vector2d(8, -34), Math.toRadians(135))
                                             .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
                                             .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
@@ -69,7 +69,7 @@ public class RedAuto extends LinearOpMode {
                 case UNKNOWN:
                     Actions.runBlocking(new SequentialAction(
                                     // Red Right Purple Middle
-                                    drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                             .splineTo(new Vector2d(15, -32), Math.toRadians(90))
                                             .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
                                             .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
@@ -90,7 +90,7 @@ public class RedAuto extends LinearOpMode {
                 case RIGHT:
                     Actions.runBlocking(new SequentialAction(
                                     // Red Right Purple Right
-                                    drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                             .splineTo(new Vector2d(15, -46), Math.toRadians(90))
                                             .splineTo(new Vector2d(18, -38), Math.toRadians(60))
                                             .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(240))

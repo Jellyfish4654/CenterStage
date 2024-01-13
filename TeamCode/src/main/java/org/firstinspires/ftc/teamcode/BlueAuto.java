@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.arcrobotics.ftclib.geometry.Pose2d;
-import com.arcrobotics.ftclib.geometry.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
+import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -19,6 +24,7 @@ public class BlueAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
         Sides.setColor(Sides.Color.BLUE);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
@@ -39,11 +45,50 @@ public class BlueAuto extends LinearOpMode {
             // Run the autonomous path based on the detected position
             switch (detectedPosition) {
                 case LEFT:
-                    runAutonomousPathA();
+
+                    Actions.runBlocking(new SequentialAction(
+                                    // Blue Left Purple Left
+                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                            .splineTo(new Vector2d(8, -34), Math.toRadians(135))
+                                            .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
+                                            .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+                                            .build(),
+                                    // Blue Right Yellow Left
+                                    drive.actionBuilder(new Pose2d(40, 36, Math.toRadians(0)))
+                                            .splineToConstantHeading(new Vector2d(47.4, 41.2), Math.toRadians(0))
+                                            .splineToLinearHeading(new Pose2d(49.3, 41.2, 0), Math.toRadians(0))
+                                            .splineToLinearHeading(new Pose2d(46.3, 41.2, 0), Math.toRadians(270))
+                                            .splineToLinearHeading(new Pose2d(46.3, 12, 0), Math.toRadians(270))
+                                            .build(),
+                                    // Blue Right Park
+                                    drive.actionBuilder(new Pose2d(46.3, 12, Math.toRadians(0)))
+                                            .splineToConstantHeading(new Vector2d(59, 12), Math.toRadians(0))
+                                            .build()
+                            )
+                    );
                     break;
                 case CENTER:
                 case UNKNOWN:
-                    runAutonomousPathB();
+
+                    Actions.runBlocking(new SequentialAction(
+                                    // Red Right Purple Middle
+                                    drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+                                            .splineTo(new Vector2d(15, -32), Math.toRadians(90))
+                                            .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
+                                            .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                                            .build(),
+                                    // Red Right Yellow Center
+                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
+                                            .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
+                                            .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
+                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
+                                            .build(),
+                                    // Red Right Park
+                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
+                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
+                                            .build()
+                            )
+                    );
                     break;
                 case RIGHT:
                     runAutonomousPathC();
@@ -79,50 +124,11 @@ public class BlueAuto extends LinearOpMode {
 
     private void runAutonomousPathA() {
         // Define the autonomous path A
-        Actions.runBlocking(new SequentialAction(
-                        // Blue Left Purple Left
-                        drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
-                                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
-                                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-                                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                                .build(),
-                        // Blue Right Yellow Left
-                        drive.actionBuilder(new Pose2d(40, 36, Math.toRadians(0)))
-                                .splineToConstantHeading(new Vector2d(47.4, 41.2), Math.toRadians(0))
-                                .splineToLinearHeading(new Pose2d(49.3, 41.2, 0), Math.toRadians(0))
-                                .splineToLinearHeading(new Pose2d(46.3, 41.2, 0), Math.toRadians(270))
-                                .splineToLinearHeading(new Pose2d(46.3, 12, 0), Math.toRadians(270))
-                                .build(),
-                        // Blue Right Park
-                        drive.actionBuilder(new Pose2d(46.3, 12, Math.toRadians(0)))
-                                .splineToConstantHeading(new Vector2d(59, 12), Math.toRadians(0))
-                                .build()
-                )
-        );
     }
 
     private void runAutonomousPathB() {
         // Define the autonomous path B
         // Define the autonomous path B
-        Actions.runBlocking(new SequentialAction(
-                        // Red Right Purple Middle
-                        drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
-                                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-                                .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
-                                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
-                                .build(),
-                        // Red Right Yellow Center
-                        drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-                                .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
-                                .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
-                                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-                                .build(),
-                        // Red Right Park
-                        drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
-                                .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
-                                .build()
-                )
-        );
     }
 
     private void runAutonomousPathC() {
