@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 public class RedAuto extends BaseOpMode {
     OpenCvCamera webcam;
     RedPipeline detectionPipeline;
+    Sides.Position detectedPosition;
 
     @Override
     public void runOpMode() {
@@ -35,23 +36,18 @@ public class RedAuto extends BaseOpMode {
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
         initCamera();
-        Sides.Position detectedPosition = Sides.getPosition();
         // Wait for the start button to be pressed, updating telemetry
         while (!isStarted() && !isStopRequested()) {
-            telemetry.addData("Position", detectedPosition.toString());
+            telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.addData("Left Pixels", RedPipeline.getLeft());
             telemetry.addData("Center Pixels", RedPipeline.getCenter());
             telemetry.addData("Right Pixels", RedPipeline.getRight());
             telemetry.update();
+            detectedPosition = Sides.getPosition();
         }
         // After starting, stop the camera stream
         webcam.stopStreaming();
 
-//        while (opModeIsActive() && !isStopRequested()) {
-        // Get the detected position
-
-
-//        }
         // Run the autonomous path based on the detected position
         switch (detectedPosition) {
             case LEFT:
@@ -59,19 +55,20 @@ public class RedAuto extends BaseOpMode {
                                 // Red Right Purple Left
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(11.3, -35.7), Math.toRadians(160))
-                                        .splineToConstantHeading(new Vector2d(11.3, -36), Math.toRadians(315))
-                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                                        .build(),
-                                new ParallelAction(
-                                        telemetryPacket -> {
-                                            slides.setTargetPosition(1775);
-                                            return slides.slideCheck();
-                                        },
-                                        telemetryPacket -> {
-                                            slides.update();
-                                            return slides.slideCheck();
-                                        }
-                                )
+//                                        .splineToConstantHeading(new Vector2d(11.3, -36), Math.toRadians(315))
+//                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+                                        .build()
+//                                ,
+//                                new ParallelAction(
+//                                        telemetryPacket -> {
+//                                            slides.setTargetPosition(1775);
+//                                            return slides.slideCheck();
+//                                        },
+//                                        telemetryPacket -> {
+//                                            slides.update();
+//                                            return slides.slideCheck();
+//                                        }
+//                                )
                         // Red Right Yellow Left
 //                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
 //                                            .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
@@ -92,8 +89,8 @@ public class RedAuto extends BaseOpMode {
                                 // Red Right Purple Middle
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
-                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+//                                        .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
+//                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
                                         .build()
                                 // Red Right Yellow Center
 //                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
@@ -114,9 +111,9 @@ public class RedAuto extends BaseOpMode {
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(15, -46), Math.toRadians(90))
                                         .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-                                        .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(240))
-                                        .splineToSplineHeading(new Pose2d(31, -46, Math.toRadians(0)), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
+//                                        .splineToConstantHeading(new Vector2d(15, -46), Math.toRadians(240))
+//                                        .splineToSplineHeading(new Pose2d(31, -46, Math.toRadians(0)), Math.toRadians(0))
+//                                        .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
                                         .build()
 //                                    // Red Right Yellow Right
 //                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))

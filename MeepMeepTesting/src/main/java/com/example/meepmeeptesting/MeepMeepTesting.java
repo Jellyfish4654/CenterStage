@@ -49,9 +49,8 @@ public class MeepMeepTesting {
 //                .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
 //                .build());
 //        Red Right Yellow Left
-//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-//                .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
-//                .splineToLinearHeading(new Pose2d(47.2, -28, 0), 0)
+        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(0)))
+                .splineTo(new Vector2d(11.3, -35.7), Math.toRadians(160))
 //        .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
 //                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
 //                .build());
