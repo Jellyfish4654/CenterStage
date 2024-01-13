@@ -53,7 +53,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
                 ),
                                 new SleepAction(
-                                        sleep(7500)
+                                        sleep(9000)
                                 ),
 
                                 //park
@@ -97,7 +97,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
                                 .build()),
                         new SleepAction(
-                                sleep(7500)
+                                sleep(9000)
                         ),
                         new SequentialAction(
                         //park
@@ -115,7 +115,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         .splineTo(new Vector2d(18, -38), Math.toRadians(60))
                                         .build()),
                         new SleepAction(
-                                sleep(7500)
+                                sleep(9000)
                         ),
                         new SequentialAction(
                         //park

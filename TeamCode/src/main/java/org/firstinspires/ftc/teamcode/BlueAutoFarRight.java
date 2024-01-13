@@ -55,14 +55,18 @@ public class BlueAutoFarRight extends BaseOpMode {
 
                                 .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(90))
                                 .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                                .build())
+                                .build()),
+                        new SleepAction(
+                                sleep(9000)
+                        ),
                         //park
-//                        drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(9135)))
-//
-//                                .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
-//                                .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
-//                                .build())
+                        new SequentialAction(
+                        drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(9135)))
+
+                                .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
+                                .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
+                                .build())
                 );
                 break;
             case CENTER:
@@ -73,14 +77,18 @@ public class BlueAutoFarRight extends BaseOpMode {
                         // Red Right Purple Middle
                         drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-                                .build())
+                                .build()),
+                new SleepAction(
+                        sleep(9000)
+                ),
+                new SequentialAction(
                         //park
-//                        drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
-//                                .lineToY(-40)
-//                                .splineToConstantHeading(new Vector2d(15, -58), Math.toRadians(90))
-//                                .splineToSplineHeading(new Pose2d(22, -58, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
-//                                .build())
+                        drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
+                                .lineToY(-40)
+                                .splineToConstantHeading(new Vector2d(15, -58), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(22, -58, Math.toRadians(90)), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
+                                .build())
                 );
                 break;
             case RIGHT:
@@ -89,14 +97,18 @@ public class BlueAutoFarRight extends BaseOpMode {
                         drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(15, -46), Math.toRadians(90))
                                 .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-                                .build())
+                                .build()),
                         //park
-//                        drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
-//                                .strafeTo(new Vector2d(12,-54))
-//                                .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToSplineHeading(new Pose2d(12, -58, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
-//                                .build())
+                new SleepAction(
+                        sleep(9000)
+                ),
+                        new SequentialAction(
+                        drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
+                                .strafeTo(new Vector2d(12,-54))
+                                .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(90)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(12, -58, Math.toRadians(90)), Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
+                                .build())
                 );
                 break;
         }
