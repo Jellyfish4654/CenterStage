@@ -19,6 +19,14 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(0), 18)
                 .build();
+        RoadRunnerBotEntity BLUE_RIGHT_PURPLE = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
+                .build();
+        RoadRunnerBotEntity BLUE_RIGHT_YELLOW = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(0), 18)
+                .build();
 // Red Right Purple Left
 //        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
 //                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
@@ -71,7 +79,7 @@ public class MeepMeepTesting {
 //        Blue Starts Here
 
 // Blue Left Purple Left
-//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
 //                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
 //                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
 //                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
