@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -7,9 +12,10 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -17,8 +23,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
-@Autonomous(name="RedAuto", group="Auto")
-public class RedAuto extends LinearOpMode {
+@Autonomous(name = "RedAuto", group = "Auto")
+public class RedAuto extends BaseOpMode {
     OpenCvCamera webcam;
     RedPipeline detectionPipeline;
 
@@ -39,8 +45,7 @@ public class RedAuto extends LinearOpMode {
         webcam.stopStreaming();
 
 //        while (opModeIsActive() && !isStopRequested()) {
-            // Get the detected position
-
+        // Get the detected position
 
 
 //        }
@@ -51,10 +56,18 @@ public class RedAuto extends LinearOpMode {
                                 // Red Right Purple Left
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(8, -38), Math.toRadians(135))
-//                                        .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
-//                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
-                                        .build()
-                                // Red Right Yellow Left
+                                        .build(),
+                                new ParallelAction(
+                                        telemetryPacket -> {
+                                            slides.setTargetPosition(1775);
+                                            return slides.slideCheck();
+                                        },
+                                        telemetryPacket -> {
+                                            slides.update();
+                                            return slides.slideCheck();
+                                        }
+                                )
+                        // Red Right Yellow Left
 //                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
 //                                            .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
 //                                            .splineToLinearHeading(new Pose2d(49, -28, 0), 0)
@@ -65,7 +78,7 @@ public class RedAuto extends LinearOpMode {
 //                                    drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
 //                                            .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
 //                                            .build()
-                        )
+                )
                 );
                 break;
             case CENTER:
