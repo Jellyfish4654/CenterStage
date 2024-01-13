@@ -33,13 +33,25 @@ public class BluePipeline extends OpenCvPipeline {
         int rectWidth = CAMERA_WIDTH / 3;
         int rectHeight = CAMERA_HEIGHT;
 
-        leftRect = new Rect(0, 100, 500, 750);
-        centerRect = new Rect(760, 50, 400, 750);
-        rightRect = new Rect(1370, 100, 500, 750);
+        leftRect = new Rect(200, 0, 500, 750);
+        centerRect = new Rect(910, 0, 400, 750);
+        rightRect = new Rect(1420, 0, 500, 750);
+    }
 
-        leftRect = new Rect(0, 350, 500, 350);
-        centerRect = new Rect(760, 250, 400, 400);
-        rightRect = new Rect(1370, 350, 500, 350);
+    static int leftCount;
+    static int centerCount;
+    static int rightCount;
+
+    public static int getLeft(){
+        return leftCount;
+    }
+
+    public static int getCenter(){
+        return centerCount;
+    }
+
+    public static int getRight(){
+        return rightCount;
     }
 
     @Override
@@ -51,9 +63,9 @@ public class BluePipeline extends OpenCvPipeline {
         Core.inRange(mat, blueLow, blueHigh, maskBlue);
 
         // Count blue pixels in each rectangle
-        int leftCount = countColor(maskBlue, leftRect);
-        int centerCount = countColor(maskBlue, centerRect);
-        int rightCount = countColor(maskBlue, rightRect);
+        leftCount = countColor(maskBlue, leftRect);
+        centerCount = countColor(maskBlue, centerRect);
+        rightCount = countColor(maskBlue, rightRect);
 
         // Determine the position with the most blue
         Sides.Position detectedPosition = determinePosition(leftCount, centerCount, rightCount);
@@ -83,8 +95,8 @@ public class BluePipeline extends OpenCvPipeline {
 
     private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount) {
         int leftThreshold = 40000; // Minimum difference to consider a change in position
-        int rightThreshold = 30000;
-        int centerThreshold = 15000;
+        int rightThreshold = 40000;
+        int centerThreshold = 16000;
         boolean leftIsValid = leftCount > leftThreshold;
         boolean rightIsValid = rightCount > rightThreshold;
         boolean centerIsValid = centerCount > centerThreshold;

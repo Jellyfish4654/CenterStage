@@ -54,7 +54,9 @@ public class RedAuto extends BaseOpMode {
                 Actions.runBlocking(new SequentialAction(
                                 // Red Right Purple Left
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                        .splineTo(new Vector2d(11.3, -35.7), Math.toRadians(160))
+
+                                        .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(90))
+                                        .splineTo(new Vector2d(5, -34), Math.toRadians(135))
 //                                        .splineToConstantHeading(new Vector2d(11.3, -36), Math.toRadians(315))
 //                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
                                         .build()
