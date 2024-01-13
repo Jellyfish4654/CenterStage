@@ -50,15 +50,17 @@ public class MeepMeepTesting {
 //                .build());
 
 //
-        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
-                        .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
-                        .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
-                        //park
+//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(13, -60, Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
+//                .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
+//                .build()));
+                //park
+                RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(7.5, -36.5, Math.toRadians(135))
                         .strafeTo(new Vector2d(9.7, -39.3))
                         .turn(Math.toRadians(-45))
                         .strafeTo(new Vector2d(9.7, -58.9))
                         .strafeTo(new Vector2d(-35, -58))
-                        .build());
+                        .build()));
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
