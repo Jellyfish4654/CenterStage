@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Autonomous(name="RedAuto", group="Auto")
 public class RedAuto extends LinearOpMode {
@@ -17,6 +18,7 @@ public class RedAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
         Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
@@ -78,6 +80,21 @@ public class RedAuto extends LinearOpMode {
 
     private void runAutonomousPathA() {
         // Define the autonomous path A
+        Actions.runBlocking(new SequentialAction(
+                // Red Right Purple Left
+                drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
+                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
+                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+                .build()),
+                // Red Right Yellow Left
+                drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(49, -28, 0), 0)
+                .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
+                .build()))
+        );
     }
 
     private void runAutonomousPathB() {
