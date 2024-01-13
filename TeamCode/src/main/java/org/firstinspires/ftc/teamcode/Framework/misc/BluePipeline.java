@@ -36,6 +36,10 @@ public class BluePipeline extends OpenCvPipeline {
         leftRect = new Rect(0, 100, 500, 750);
         centerRect = new Rect(760, 50, 400, 750);
         rightRect = new Rect(1370, 100, 500, 750);
+
+        leftRect = new Rect(0, 350, 500, 350);
+        centerRect = new Rect(760, 250, 400, 400);
+        rightRect = new Rect(1370, 350, 500, 350);
     }
 
     @Override

@@ -56,6 +56,10 @@ public class RedPipeline extends OpenCvPipeline {
 
     public static int getRight(){
         return rightCount;
+
+        leftRect = new Rect(0, 350, 500, 350);
+        centerRect = new Rect(760, 250, 400, 400);
+        rightRect = new Rect(1370, 350, 500, 350);
     }
 
     @Override
