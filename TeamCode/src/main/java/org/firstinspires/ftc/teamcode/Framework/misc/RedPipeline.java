@@ -37,9 +37,9 @@ public class RedPipeline extends OpenCvPipeline {
         int rectWidth = CAMERA_WIDTH / 3;
         int rectHeight = CAMERA_HEIGHT;
 
-        leftRect = new Rect(0, 0, rectWidth, rectHeight);
-        centerRect = new Rect(rectWidth, 0, rectWidth, rectHeight);
-        rightRect = new Rect(2 * rectWidth, 0, rectWidth, rectHeight);
+        leftRect = new Rect(0, 350, 500, 350);
+        centerRect = new Rect(760, 250, 400, 400);
+        rightRect = new Rect(1370, 350, 500, 350);
     }
 
     @Override
@@ -84,12 +84,20 @@ public class RedPipeline extends OpenCvPipeline {
     }
 
     private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount) {
-        int threshold = 25; // Minimum difference to consider a change in position
-        if (Math.abs(leftCount - centerCount) > threshold && leftCount > rightCount) {
+        int leftThreshold = 40000; // Minimum difference to consider a change in position
+        int rightThreshold = 30000;
+        int centerThreshold = 15000;
+        boolean leftIsValid = leftCount > leftThreshold;
+        boolean rightIsValid = rightCount > rightThreshold;
+        boolean centerIsValid = centerCount > centerThreshold;
+        if (leftIsValid && (!rightIsValid || leftCount > rightCount)
+                && (!centerIsValid || leftCount > centerCount)) {
             return Sides.Position.LEFT;
-        } else if (Math.abs(centerCount - leftCount) > threshold && centerCount > rightCount) {
+        } else if (centerIsValid && (!rightIsValid || centerCount > rightCount)
+                && (!leftIsValid || centerCount > leftCount)) {
             return Sides.Position.CENTER;
-        } else if (Math.abs(rightCount - leftCount) > threshold && rightCount > centerCount) {
+        } else if (rightIsValid && (!leftIsValid || rightCount > leftCount)
+                && (!centerIsValid || rightCount > centerCount)) {
             return Sides.Position.RIGHT;
         } else {
             return Sides.Position.UNKNOWN;
