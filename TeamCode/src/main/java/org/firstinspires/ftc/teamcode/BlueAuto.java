@@ -23,15 +23,14 @@ public class BlueAuto extends LinearOpMode {
         initCamera();
 
         // Wait for the start button to be pressed, updating telemetry
-        while (!isStarted()) {
+        while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.update();
         }
 
         // After starting, stop the camera stream
         webcam.stopStreaming();
-
-        if (opModeIsActive()) {
+        while (opModeIsActive() && !isStopRequested()) {
             // Get the detected position
             Sides.Position detectedPosition = Sides.getPosition();
 

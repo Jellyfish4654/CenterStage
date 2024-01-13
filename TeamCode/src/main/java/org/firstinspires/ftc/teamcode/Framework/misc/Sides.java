@@ -9,8 +9,8 @@ public class Sides {
     public enum Color {
         BLUE, RED
     }
-    private static Color currentColor = Color.RED;
-    private static Position currentPosition = Position.LEFT;
+    public static Color currentColor = Color.RED;
+    public static Position currentPosition = Position.UNKNOWN;
 
     public static void setColor(Color color) {
         currentColor = color;

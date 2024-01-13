@@ -61,11 +61,11 @@ public class Intake {
     }
 
     public void servoIntakeInit() {
-        intakeServo.setPosition(0.327300000000019);
+        intakeServo.setPosition(0.254);
     }
 
     public void servoIntakeOut() {
-        intakeServo.setPosition(0.1);
+        intakeServo.setPosition(0.12);
     }
 
     public void servoIntakeDrone(){
