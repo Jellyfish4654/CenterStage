@@ -60,11 +60,11 @@ public class JellyTele extends BaseOpMode {
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
         antiTipping.initImuError();
+        intakeSystem.servoIntakeOut();  
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
-        intakeSystem.servoIntakeOut();
+        intakeSystem.servoIntakeDrone();
         while (opModeIsActive()) {
-            intakeSystem.servoIntakeDrone();
             readGamepadInputs();
             if (timer.milliseconds() % 500 < 100) {
                 displayTelemetry(calculatePrecisionMultiplier());
@@ -77,11 +77,11 @@ public class JellyTele extends BaseOpMode {
             controlIntakeMotor();
             antiTipping.update();
             updateDriveMode(calculatePrecisionMultiplier());
-            if(gamepad1.dpad_left){
+            if(gamepad1.x){
                 autoAlignment.setTargetAngle(-90);
                 autoAlignment.update();
             }
-            else if(gamepad1.dpad_right){
+            else if(gamepad1.b){
                 autoAlignment.setTargetAngle(90);
                 autoAlignment.update();
             }
@@ -236,7 +236,7 @@ public class JellyTele extends BaseOpMode {
         double forward = -applyDeadband(gamepad1.left_stick_y);
         double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
         double rotation = applyDeadband(gamepad1.right_stick_x);
-        double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - Math.toRadians(resetHeading);
+        double botHeading = imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - resetHeading;
 
         double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
         double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
@@ -290,9 +290,9 @@ public class JellyTele extends BaseOpMode {
         return joystickValue + (-sign * DEADBAND_VALUE);
     }
     private void updateDriveModeFromGamepad() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.Y)) {
             driveMode = DriveMode.MECANUM;
-        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)) {
+        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.A)) {
             driveMode = DriveMode.FIELDCENTRIC;
             resetIMU();
         }
@@ -330,22 +330,22 @@ public class JellyTele extends BaseOpMode {
         return MAX_SCALE;
     }
     private void resetIMU() {
-        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.Y)) {
+        if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             imuSensor.resetYaw();
             resetHeading = 0;
             gamepad1.rumbleBlips(3);
         }
-        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.X)){
+        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)){
             imuSensor.resetYaw();
             resetHeading = -90;
             gamepad1.rumbleBlips(3);
         }
-        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.B)){
+        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_RIGHT)){
             imuSensor.resetYaw();
             resetHeading = 90;
             gamepad1.rumbleBlips(3);
         }
-        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.A)){
+        else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_DOWN)){
             imuSensor.resetYaw();
             resetHeading = -180;
             gamepad1.rumbleBlips(3);
