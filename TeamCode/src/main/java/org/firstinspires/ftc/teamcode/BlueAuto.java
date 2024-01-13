@@ -79,11 +79,50 @@ public class BlueAuto extends LinearOpMode {
 
     private void runAutonomousPathA() {
         // Define the autonomous path A
-
+        Actions.runBlocking(new SequentialAction(
+                        // Blue Left Purple Left
+                        drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+                                .splineTo(new Vector2d(8, -34), Math.toRadians(135))
+                                .splineToConstantHeading(new Vector2d(10, -36), Math.toRadians(315))
+                                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(315))
+                                .build(),
+                        // Blue Right Yellow Left
+                        drive.actionBuilder(new Pose2d(40, 36, Math.toRadians(0)))
+                                .splineToConstantHeading(new Vector2d(47.4, 41.2), Math.toRadians(0))
+                                .splineToLinearHeading(new Pose2d(49.3, 41.2, 0), Math.toRadians(0))
+                                .splineToLinearHeading(new Pose2d(46.3, 41.2, 0), Math.toRadians(270))
+                                .splineToLinearHeading(new Pose2d(46.3, 12, 0), Math.toRadians(270))
+                                .build(),
+                        // Blue Right Park
+                        drive.actionBuilder(new Pose2d(46.3, 12, Math.toRadians(0)))
+                                .splineToConstantHeading(new Vector2d(59, 12), Math.toRadians(0))
+                                .build()
+                )
+        );
     }
 
     private void runAutonomousPathB() {
         // Define the autonomous path B
+        // Define the autonomous path B
+        Actions.runBlocking(new SequentialAction(
+                        // Red Right Purple Middle
+                        drive.actionBuilder(new Pose2d(15, -68, Math.toRadians(90)))
+                                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
+                                .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
+                                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                                .build(),
+                        // Red Right Yellow Center
+                        drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
+                                .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
+                                .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
+                                .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
+                                .build(),
+                        // Red Right Park
+                        drive.actionBuilder(new Pose2d(46.3, -12, Math.toRadians(0)))
+                                .splineToConstantHeading(new Vector2d(59, -12), Math.toRadians(0))
+                                .build()
+                )
+        );
     }
 
     private void runAutonomousPathC() {
