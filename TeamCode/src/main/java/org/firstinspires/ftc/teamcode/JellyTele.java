@@ -303,7 +303,7 @@ public class JellyTele extends BaseOpMode {
             droneServo.launchDrone();
         }
     }
-
+//tarir was here
     private void alertEndGame(ElapsedTime timer) {
         if (timer.seconds() >= ENDGAME_ALERT_TIME && timer.seconds() <= ENDGAME_ALERT_TIME + 0.2) {
             gamepad1.runRumbleEffect(effect);
