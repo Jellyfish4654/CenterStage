@@ -1,27 +1,23 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
-import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "BlueAuto", group = "Auto")
-public class BlueAuto extends BaseOpMode {
+@Autonomous(name = "BlueAutoCloseLeft", group = "Auto")
+public class BlueAutoCloseLeft extends BaseOpMode {
     OpenCvCamera webcam;
     BluePipeline detectionPipeline;
     Sides.Position detectedPosition;
@@ -67,8 +63,6 @@ public class BlueAuto extends BaseOpMode {
                         // Red Right Purple Middle
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
-//                                        .splineToConstantHeading(new Vector2d(15, -38), Math.toRadians(270))
-//                                        .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
                                 .build())
                 );
                 break;
