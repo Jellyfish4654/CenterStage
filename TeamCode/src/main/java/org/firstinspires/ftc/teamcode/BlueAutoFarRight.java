@@ -75,10 +75,10 @@ public class BlueAutoFarRight extends BaseOpMode {
                         drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(15, -32), Math.toRadians(90))
                                 .build()),
-                        (telemetryPacket) -> {
-                            sleep(9000);
-                            return false; // Returning true causes the action to run again, returning false causes it to cease
-                        },
+//                        (telemetryPacket) -> {
+//                            sleep(9000);
+//                            return false; // Returning true causes the action to run again, returning false causes it to cease
+//                        },
 
                 new SequentialAction(
                         //park
@@ -98,10 +98,10 @@ public class BlueAutoFarRight extends BaseOpMode {
                                 .splineTo(new Vector2d(18, -38), Math.toRadians(60))
                                 .build()),
                         //park
-                        (telemetryPacket) -> {
-                            sleep(9000);
-                            return false; // Returning true causes the action to run again, returning false causes it to cease
-                        },
+//                        (telemetryPacket) -> {
+//                            sleep(9000);
+//                            return false; // Returning true causes the action to run again, returning false causes it to cease
+//                        },
                         new SequentialAction(
                         drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
                                 .strafeTo(new Vector2d(12,-54))

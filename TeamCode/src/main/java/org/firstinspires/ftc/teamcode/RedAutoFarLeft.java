@@ -50,12 +50,12 @@ public class RedAutoFarLeft extends BaseOpMode {
         // Run the autonomous path based on the detected position
         switch (detectedPosition) {
             case LEFT:
-                Actions.runBlocking(new SequentialAction(
+//                Actions.runBlocking(new SequentialAction(
                         // Blue Left Purple Left
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
                                 .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
-                                .build(),
+                                .build();
 //                ),
 //
 //                        (telemetryPacket) -> {
@@ -69,9 +69,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         .turn(Math.toRadians(-45))
                                         .strafeTo(new Vector2d(9.7, -58.9))
                                         .strafeTo(new Vector2d(107, -58))
-                                        .build())
-
-                        );
+                                        .build();
 //                                ,
 //                                new ParallelAction(
 //                                        telemetryPacket -> {
@@ -97,45 +95,43 @@ public class RedAutoFarLeft extends BaseOpMode {
                 break;
             case CENTER:
             case UNKNOWN:
-                Actions.runBlocking(new SequentialAction(
+//                Actions.runBlocking(new SequentialAction(
                         // Red Right Purple Middle
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
-                                .build()),
+                                .build();
 
-                        new Action() {
-                            @Override
-                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                                sleep(9000);
-                                return false;
-                            }
-                        },
-                        new SequentialAction(
+//                        new Action() {
+//                            @Override
+//                            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//                                sleep(9000);
+//                                return false;
+//                            }
+//                        },
                         //park
                         drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                         .strafeTo(new Vector2d(13, -60))
                         .strafeTo(new Vector2d(105, -58))
-                        .build()));
+                        .build();
                 break;
             case RIGHT:
-                Actions.runBlocking(new SequentialAction(
+//                Actions.runBlocking(new SequentialAction(
                                 // Red Right Purple Right
                                 drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(13, -46), Math.toRadians(90))
                                         .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-                                        .build()),
-                        (telemetryPacket) -> {
-                            sleep(9000);
-                            return false; // Returning true causes the action to run again, returning false causes it to cease
-                        },
-                        new SequentialAction(
+                                        .build();
+//                        (telemetryPacket) -> {
+//                            sleep(9000);
+//                            return false; // Returning true causes the action to run again, returning false causes it to cease
+//                        },
                         //park
-                                        drive.splineToConstantHeading(new Vector2d(13, -46), Math.toRadians(60))
+                                        drive.actionBuilder(new Pose2d(18,-38,Math.toRadians(60)))
+                                                .splineToConstantHeading(new Vector2d(13, -46), Math.toRadians(60))
                                         .turn(Math.toRadians(30))
                                         .strafeTo(new Vector2d(9.7, -58.9))
                                         .strafeTo(new Vector2d(107, -58))
-                                        .build())
-                        );
+                                        .build();
                 break;
         }
     }
