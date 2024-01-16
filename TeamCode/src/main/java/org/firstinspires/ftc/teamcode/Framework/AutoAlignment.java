@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.JellyTele;
 
 public class AutoAlignment {
     private final DcMotor[] motors;
@@ -28,7 +29,8 @@ public class AutoAlignment {
 
     public void update() {
         YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
-        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
+//        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
+        double currentYaw = JellyTele.getHeading();
         currentYaw = normalizeAngle(currentYaw);
         double angleDifference = normalizeAngle(targetAngle - currentYaw);
         double correction = pidController.calculate(0, angleDifference);

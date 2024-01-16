@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.Rotation2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -40,7 +37,7 @@ public class JellyTele extends BaseOpMode {
         INTAKE
     }
     protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
-    private MecanumDrive drive;
+    private static MecanumDrive drive;
     private Outtake currentState = Outtake.IDLE;
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
     private Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
@@ -68,7 +65,7 @@ public class JellyTele extends BaseOpMode {
         gamepadEx2 = new GamepadEx(gamepad2);
         antiTipping.initImuError();
         intakeSystem.servoIntakeOut();
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,resetHeading));
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeDrone();
@@ -362,7 +359,7 @@ public class JellyTele extends BaseOpMode {
         if (gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_UP)) {
             imuSensor.resetYaw();
             resetHeading = 0;
-            drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,0));
+            drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,resetHeading));
             gamepad1.rumbleBlips(3);
         }
         else if(gamepadEx1.wasJustReleased(GamepadKeys.Button.DPAD_LEFT)){
@@ -385,5 +382,8 @@ public class JellyTele extends BaseOpMode {
             drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,resetHeading));
             gamepad1.rumbleBlips(3);
         }
+    }
+    public static double getHeading(){
+        return Math.toDegrees(drive.pose.heading.toDouble());
     }
 }
