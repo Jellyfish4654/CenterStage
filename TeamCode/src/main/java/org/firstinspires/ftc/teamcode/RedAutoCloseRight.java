@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -42,42 +43,32 @@ public class RedAutoCloseRight extends BaseOpMode {
         }
         // After starting, stop the camera stream
         webcam.stopStreaming();
-
         // Run the autonomous path based on the detected position
+        Action leftPurple = drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(15, -48), Math.toRadians(90))
+                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
+                .setReversed(true)
+                .splineTo(new Vector2d(5-(4*Math.sin(Math.toRadians(315))), -34+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
+                .setReversed(false)
+                .setTangent(Math.toRadians(-15))
+                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                .build();
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
-                                // Red Right Purple Left
-                                drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-
-                                        .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(90))
-                                        .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                                        .build(),
-//                                ,
-//                                new ParallelAction(
-//                                        telemetryPacket -> {
-//                                            slides.setTargetPosition(1775);
-//                                            return slides.slideCheck();
-//                                        },
-//                                        telemetryPacket -> {
-//                                            slides.update();
-//                                            return slides.slideCheck();
-//                                        }
-//                                )
-                                // Red Right Yellow Left
-//                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-//                                            .splineToConstantHeading(new Vector2d(44.4, -28), Math.toRadians(0))
-//                                            .splineToLinearHeading(new Pose2d(49, -28, 0), 0)
-//                                            .splineToLinearHeading(new Pose2d(46.3, -28, 0), Math.toRadians(90))
-//                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-//                                            .build(),
+                                leftPurple,
 //                                    // Red Right Park
-                                drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(9135)))
+                                drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(135)))
 
                                         .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
                                         .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
                                         .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
-                                        .build()
+                                        .build(),
+                                (telemetryPacket) -> {
+                                    slides.setTargetPosition(1750);
+                                    slides.update();
+                                    return slides.slideCheck();
+                                }
 
                         )
                 );
