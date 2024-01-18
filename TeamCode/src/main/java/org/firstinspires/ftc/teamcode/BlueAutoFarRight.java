@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 
 @Autonomous(name = "BlueAutoFarRight", group = "Auto")
 public class BlueAutoFarRight extends BaseOpMode {
@@ -112,6 +113,7 @@ public class BlueAutoFarRight extends BaseOpMode {
                 );
                 break;
         }
+        PoseStorage.currentPose = drive.pose;
     }
     
 

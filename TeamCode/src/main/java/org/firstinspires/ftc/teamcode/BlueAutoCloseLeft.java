@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 
 @Autonomous(name = "BlueAutoCloseLeft", group = "Auto")
 public class BlueAutoCloseLeft extends BaseOpMode {
@@ -49,22 +50,6 @@ public class BlueAutoCloseLeft extends BaseOpMode {
         switch (detectedPosition) {
             case LEFT:
 
-                Actions.runBlocking(new SequentialAction(
-                                // Blue Left Purple Left
-                                drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(13, -48), Math.toRadians(90))
-                                        .splineTo(new Vector2d(7.5, -36.5), Math.toRadians(135))
-                                        .build()),
-                                        //park
-                                        drive.actionBuilder(new Pose2d(7.5, -36.5, Math.toRadians(135))
-                                        .strafeTo(new Vector2d(9.7, -39.3))
-                                        .turn(Math.toRadians(-45))
-                                        .strafeTo(new Vector2d(9.7, -58.9))
-                                        .strafeTo(new Vector2d(-35, -58))
-                                        .build())
-
-
-                ));
                 break;
             case CENTER:
             case UNKNOWN:
@@ -87,6 +72,7 @@ public class BlueAutoCloseLeft extends BaseOpMode {
                 );
                 break;
         }
+        PoseStorage.currentPose = drive.pose;
     }
     
 

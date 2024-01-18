@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Framework.ActionStorage;
+import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
@@ -17,6 +17,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 
 @Autonomous(name = "RedAutoCloseRight", group = "Auto")
 public class RedAutoCloseRight extends BaseOpMode {
@@ -102,6 +103,7 @@ public class RedAutoCloseRight extends BaseOpMode {
                 );
                 break;
         }
+        PoseStorage.currentPose = drive.pose;
     }
 
     private void initHardware(HardwareMap hwMap) {

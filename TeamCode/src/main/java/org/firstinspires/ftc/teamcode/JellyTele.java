@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
+import org.firstinspires.ftc.teamcode.drive.advanced.PoseStorage;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -65,7 +66,7 @@ public class JellyTele extends BaseOpMode {
         gamepadEx2 = new GamepadEx(gamepad2);
         antiTipping.initImuError();
         intakeSystem.servoIntakeOut();
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0,0,resetHeading));
+        drive = new MecanumDrive(hardwareMap, PoseStorage.currentPose);
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeDrone();
