@@ -61,15 +61,30 @@ public class MeepMeepTesting {
 //                        .splineTo(new Vector2d(5, -34), Math.toRadians(135))
 //                        .build());
 
+//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+//                .splineTo(new Vector2d(15, -48), Math.toRadians(90))
+//                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
+//                .setReversed(true)
+//                .splineTo(new Vector2d(5+(4*Math.cos(Math.toRadians(315))), -34+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
+//                .setReversed(false)
+//                .setTangent(Math.toRadians(-15))
+//                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+//                .build());
+//        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
+//                        .splineTo(new Vector2d(11.7,-33),Math.toRadians(90))
+//                .setReversed(true)
+//                .splineTo(new Vector2d(11.7+(0*Math.cos(Math.toRadians(270))), -33+(4*Math.sin(Math.toRadians(270)))), Math.toRadians(270))
+//              .setReversed(false)
+//                .setTangent(Math.toRadians(-90))
+//                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+//                                .build());
         RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                 .splineTo(new Vector2d(15, -48), Math.toRadians(90))
-                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                .setReversed(true)
-                .splineTo(new Vector2d(5-(4*Math.sin(Math.toRadians(315))), -34+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
-                .setReversed(false)
-                .setTangent(Math.toRadians(-15))
-                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                .splineTo(new Vector2d(16.5, -35), Math.toRadians(45))
+                .splineTo(new Vector2d(16.5+(-4*Math.cos(Math.toRadians(45))), -35+(4*Math.sin(Math.toRadians(45))) ), Math.toRadians(45))
+//                .setReversed(false)
                 .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
