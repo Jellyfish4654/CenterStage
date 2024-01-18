@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Framework.ActionStorage;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
@@ -26,6 +27,7 @@ public class RedAutoCloseRight extends BaseOpMode {
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
+        ActionStorage actionStorage = new ActionStorage(drive);
         Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
@@ -44,15 +46,7 @@ public class RedAutoCloseRight extends BaseOpMode {
         // After starting, stop the camera stream
         webcam.stopStreaming();
         // Run the autonomous path based on the detected position
-        Action leftPurple = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(15, -48), Math.toRadians(90))
-                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                .setReversed(true)
-                .splineTo(new Vector2d(5-(4*Math.sin(Math.toRadians(315))), -34+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
-                .setReversed(false)
-                .setTangent(Math.toRadians(-15))
-                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
-                .build();
+        Action leftPurple = actionStorage.getLeftPurpleAction();
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
@@ -80,12 +74,6 @@ public class RedAutoCloseRight extends BaseOpMode {
                                 drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                                         .splineTo(new Vector2d(15, -32), Math.toRadians(90))
                                         .build(),
-                                // Red Right Yellow Center
-//                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-//                                            .splineToConstantHeading(new Vector2d(49, -36), Math.toRadians(0))
-//                                            .splineToLinearHeading(new Pose2d(46.3, -36, 0), Math.toRadians(90))
-//                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-//                                            .build(),
 //                                    // Red Right Park
                                 drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
                                         .lineToY(-40)
@@ -103,13 +91,6 @@ public class RedAutoCloseRight extends BaseOpMode {
                                         .splineTo(new Vector2d(15, -46), Math.toRadians(90))
                                         .splineTo(new Vector2d(18, -38), Math.toRadians(60))
                                         .build(),
-//                                    // Red Right Yellow Right
-//                                    drive.actionBuilder(new Pose2d(40, -36, Math.toRadians(0)))
-//                                            .splineToConstantHeading(new Vector2d(47.4, -41.2), Math.toRadians(0))
-//                                            .splineToLinearHeading(new Pose2d(49.3, -41.2, 0), Math.toRadians(0))
-//                                            .splineToLinearHeading(new Pose2d(46.3, -41.2, 0), Math.toRadians(90))
-//                                            .splineToLinearHeading(new Pose2d(46.3, -12, 0), Math.toRadians(90))
-//                                            .build(),
 //                                    // Red Right Park
                                 drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
                                         .strafeTo(new Vector2d(12,-54))
