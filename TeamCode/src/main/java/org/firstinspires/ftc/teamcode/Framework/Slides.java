@@ -110,7 +110,7 @@ public class Slides {
         return rightPIDOutput;
     }
     public boolean slideCheck() {
-        return leftPIDOutput > 0 && rightPIDOutput > 0;
+        return leftPIDOutput > 25 && rightPIDOutput > 25;
     }
 
     public int getTargetPositionLeft() {

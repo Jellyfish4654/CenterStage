@@ -47,7 +47,7 @@ public class RedAutoCloseRight extends BaseOpMode {
         // After starting, stop the camera stream
         webcam.stopStreaming();
         // Run the autonomous path based on the detected position
-        Action leftPurple = actionStorage.getLeftPurpleAction();
+        Action leftPurple = actionStorage.getRedCloseRight_LeftPurpleAction();
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(

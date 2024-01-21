@@ -13,25 +13,28 @@ public class ActionStorage {
         this.drive = drive;
     }
 
-    public Action getLeftPurpleAction() {
+    public Action getRedCloseRight_LeftPurpleAction() {
         return drive.actionBuilder(drive.pose)
                 .splineTo(new Vector2d(15, -48), Math.toRadians(90))
                 .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-                .setReversed(true)
-                .splineTo(new Vector2d(5+(4*Math.cos(Math.toRadians(315))), -34+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
-                .setReversed(false)
-                .setTangent(Math.toRadians(-15))
-                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(5+(4*Math.cos(Math.toRadians(315))), -34+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
+                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build();
     }
-    public Action getCenterPurpleAction(){
+    public Action getRedCloseRight_CenterPurpleAction(){
         return drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(11.7,-33),Math.toRadians(90))
-                .setReversed(true)
-                .splineTo(new Vector2d(11.7+(0*Math.cos(Math.toRadians(270))), -33+(4*Math.sin(Math.toRadians(270)))), Math.toRadians(270))
-                .setReversed(false)
-                .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
-                .build());
+                .splineTo(new Vector2d(15,-33),Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(15, -36), Math.toRadians(270))
+                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                .build();
+    }
+    public Action getRedCloseRight_RightPurpleAction(){
+        return drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(15, -48), Math.toRadians(90))
+                .splineTo(new Vector2d(18, -34), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(18+(4*Math.cos(Math.toRadians(225))), -34+(4*Math.sin(Math.toRadians(225))) ), Math.toRadians(225))
+                .splineToConstantHeading(new Vector2d(25.17+(4*Math.cos(Math.toRadians(225))), -41.17+(4*Math.sin(Math.toRadians(225))) ), Math.toRadians(25))
+                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                .build();
     }
 }
