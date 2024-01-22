@@ -5,14 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="MaxAccelerationTest", group="Test")
-public class MaxAccelerationTest extends LinearOpMode {
+@TeleOp(name = "MaxAccelerationTest", group = "Test")
+public class MaxAccelerationTest extends LinearOpMode
+{
 
     private DcMotor testMotor;
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         testMotor = hardwareMap.get(DcMotor.class, "Tubing");
         testMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         testMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -24,14 +26,16 @@ public class MaxAccelerationTest extends LinearOpMode {
         double previousTime = 0;
         double maxAcceleration = 0;
 
-        while (opModeIsActive()) {
+        while (opModeIsActive())
+        {
             testMotor.setPower(1.0); // Set motor to full power
 
             double currentTime = runtime.seconds();
             double currentPosition = testMotor.getCurrentPosition();
             double currentVelocity = currentPosition / currentTime;
 
-            if (currentTime > 0) { // Avoid division by zero
+            if (currentTime > 0)
+            { // Avoid division by zero
                 double currentAcceleration = (currentVelocity - previousVelocity) / (currentTime - previousTime);
                 maxAcceleration = Math.max(maxAcceleration, currentAcceleration);
 

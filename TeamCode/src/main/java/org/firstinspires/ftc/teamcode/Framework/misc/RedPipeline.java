@@ -9,7 +9,8 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class RedPipeline extends OpenCvPipeline {
+public class RedPipeline extends OpenCvPipeline
+{
     Telemetry telemetry;
     // HSV thresholds for red color detection
     Scalar redLow1 = new Scalar(0, 100, 20);
@@ -30,7 +31,8 @@ public class RedPipeline extends OpenCvPipeline {
     private static final int CAMERA_WIDTH = 1920;
     private static final int CAMERA_HEIGHT = 1080;
 
-    public RedPipeline(Telemetry telemetry) {
+    public RedPipeline(Telemetry telemetry)
+    {
         this.telemetry = telemetry;
 
         // Divide camera view into rectangles
@@ -46,20 +48,24 @@ public class RedPipeline extends OpenCvPipeline {
     static int centerCount;
     static int rightCount;
 
-    public static int getLeft(){
+    public static int getLeft()
+    {
         return leftCount;
     }
 
-    public static int getCenter(){
+    public static int getCenter()
+    {
         return centerCount;
     }
 
-    public static int getRight(){
+    public static int getRight()
+    {
         return rightCount;
     }
 
     @Override
-    public Mat processFrame(Mat input) {
+    public Mat processFrame(Mat input)
+    {
         // Convert image from RGB to HSV color space
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
         Imgproc.GaussianBlur(mat, mat, new Size(5, 5), 0.0);
@@ -94,14 +100,16 @@ public class RedPipeline extends OpenCvPipeline {
 
     }
 
-    private int countRed(Mat mask, Rect rect) {
+    private int countRed(Mat mask, Rect rect)
+    {
         Mat subMat = mask.submat(rect);
         int count = Core.countNonZero(subMat);
         subMat.release();
         return count;
     }
 
-    private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount) {
+    private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount)
+    {
         int leftThreshold = 25000; // Minimum difference to consider a change in position
         int rightThreshold = 25000;
         int centerThreshold = 25000;
@@ -109,15 +117,22 @@ public class RedPipeline extends OpenCvPipeline {
         boolean rightIsValid = rightCount > rightThreshold;
         boolean centerIsValid = centerCount > centerThreshold;
         if (leftIsValid && (!rightIsValid || leftCount > rightCount)
-                && (!centerIsValid || leftCount > centerCount)) {
+                && (!centerIsValid || leftCount > centerCount))
+        {
             return Sides.Position.LEFT;
-        } else if (centerIsValid && (!rightIsValid || centerCount > rightCount)
-                && (!leftIsValid || centerCount > leftCount)) {
+        }
+        else if (centerIsValid && (!rightIsValid || centerCount > rightCount)
+                && (!leftIsValid || centerCount > leftCount))
+        {
             return Sides.Position.CENTER;
-        } else if (rightIsValid && (!leftIsValid || rightCount > leftCount)
-                && (!centerIsValid || rightCount > centerCount)) {
+        }
+        else if (rightIsValid && (!leftIsValid || rightCount > leftCount)
+                && (!centerIsValid || rightCount > centerCount))
+        {
             return Sides.Position.RIGHT;
-        } else {
+        }
+        else
+        {
             return Sides.Position.UNKNOWN;
         }
     }

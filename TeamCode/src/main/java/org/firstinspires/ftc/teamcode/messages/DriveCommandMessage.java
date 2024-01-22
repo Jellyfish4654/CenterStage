@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.messages;
 import com.acmerobotics.roadrunner.PoseVelocity2dDual;
 import com.acmerobotics.roadrunner.Time;
 
-public final class DriveCommandMessage {
+public final class DriveCommandMessage
+{
     public long timestamp;
     public double forwardVelocity;
     public double forwardAcceleration;
@@ -12,7 +13,8 @@ public final class DriveCommandMessage {
     public double angularVelocity;
     public double angularAcceleration;
 
-    public DriveCommandMessage(PoseVelocity2dDual<Time> poseVelocity) {
+    public DriveCommandMessage(PoseVelocity2dDual<Time> poseVelocity)
+    {
         this.timestamp = System.nanoTime();
         this.forwardVelocity = poseVelocity.linearVel.x.get(0);
         this.forwardAcceleration = poseVelocity.linearVel.x.get(1);

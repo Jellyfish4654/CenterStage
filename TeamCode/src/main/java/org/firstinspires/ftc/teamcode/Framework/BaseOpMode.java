@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public abstract class BaseOpMode extends LinearOpMode {
+public abstract class BaseOpMode extends LinearOpMode
+{
     protected DcMotor[] driveMotors;
     protected DroneLauncher droneServo;
     protected Intake intakeSystem;
@@ -23,16 +24,17 @@ public abstract class BaseOpMode extends LinearOpMode {
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
     protected AutoAlignment autoAlignment;
-    
-    protected void initHardware() {
-        driveMotors = new DcMotor[] {
+
+    protected void initHardware()
+    {
+        driveMotors = new DcMotor[]{
                 //control hub
                 hardwareMap.dcMotor.get("motorFR"),
                 hardwareMap.dcMotor.get("motorBR"),
                 hardwareMap.dcMotor.get("motorFL"),
                 hardwareMap.dcMotor.get("motorBL")
         };
-        setMotorDirections(new DcMotorSimple.Direction[] {
+        setMotorDirections(new DcMotorSimple.Direction[]{
                 DcMotorSimple.Direction.REVERSE, // motorFR
                 DcMotorSimple.Direction.REVERSE, // motorBR
                 DcMotorSimple.Direction.FORWARD, // motorFL
@@ -51,7 +53,7 @@ public abstract class BaseOpMode extends LinearOpMode {
                 hardwareMap.get(DcMotorEx.class, "Tubing"),
                 hardwareMap.get(Servo.class, "intakeServo")
         );
-        
+
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
@@ -72,7 +74,8 @@ public abstract class BaseOpMode extends LinearOpMode {
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
     }
 
-    private IMU initializeIMUSensor() {
+    private IMU initializeIMUSensor()
+    {
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -82,8 +85,11 @@ public abstract class BaseOpMode extends LinearOpMode {
         imu.initialize(parameters);
         return imu;
     }
-    private void setMotorDirections(DcMotorSimple.Direction[] directions) {
-        for (int i = 0; i < driveMotors.length; i++) {
+
+    private void setMotorDirections(DcMotorSimple.Direction[] directions)
+    {
+        for (int i = 0; i < driveMotors.length; i++)
+        {
             driveMotors[i].setDirection(directions[i]);
         }
     }

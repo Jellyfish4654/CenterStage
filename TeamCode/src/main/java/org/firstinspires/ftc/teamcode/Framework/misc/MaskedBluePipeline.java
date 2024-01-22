@@ -9,7 +9,8 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class MaskedBluePipeline extends OpenCvPipeline {
+public class MaskedBluePipeline extends OpenCvPipeline
+{
     Telemetry telemetry;
     // HSV thresholds for blue color detection
     Scalar blueLow = new Scalar(80, 25, 25);
@@ -27,7 +28,8 @@ public class MaskedBluePipeline extends OpenCvPipeline {
     private static final int CAMERA_WIDTH = 1920;
     private static final int CAMERA_HEIGHT = 1080;
 
-    public MaskedBluePipeline(Telemetry telemetry) {
+    public MaskedBluePipeline(Telemetry telemetry)
+    {
         this.telemetry = telemetry;
 
         // Divide camera view into rectangles
@@ -40,7 +42,8 @@ public class MaskedBluePipeline extends OpenCvPipeline {
     }
 
     @Override
-    public Mat processFrame(Mat input) {
+    public Mat processFrame(Mat input)
+    {
         // Convert image from RGB to HSV color space
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
         Imgproc.GaussianBlur(mat, mat, new Size(5, 5), 0.0);
@@ -58,24 +61,33 @@ public class MaskedBluePipeline extends OpenCvPipeline {
         return maskedInput; // Return the masked input
     }
 
-    private String getDetectedPosition(Mat mask) {
+    private String getDetectedPosition(Mat mask)
+    {
         int leftCount = Core.countNonZero(mask.submat(leftRect));
         int centerCount = Core.countNonZero(mask.submat(centerRect));
         int rightCount = Core.countNonZero(mask.submat(rightRect));
 
         // Determine the position with the most blue
-        if (leftCount > centerCount && leftCount > rightCount) {
+        if (leftCount > centerCount && leftCount > rightCount)
+        {
             return "LEFT";
-        } else if (centerCount > leftCount && centerCount > rightCount) {
+        }
+        else if (centerCount > leftCount && centerCount > rightCount)
+        {
             return "CENTER";
-        } else if (rightCount > centerCount && rightCount > leftCount) {
+        }
+        else if (rightCount > centerCount && rightCount > leftCount)
+        {
             return "RIGHT";
-        } else {
+        }
+        else
+        {
             return "UNKNOWN";
         }
     }
 
-    public void cleanup() {
+    public void cleanup()
+    {
         mat.release();
         maskBlue.release();
         maskedInput.release();

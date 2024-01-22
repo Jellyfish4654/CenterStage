@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.*;
+import com.acmerobotics.roadrunner.AccelConstraint;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Actions;
 import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.DualNum;
 import com.acmerobotics.roadrunner.HolonomicController;
@@ -14,7 +16,10 @@ import com.acmerobotics.roadrunner.MinVelConstraint;
 import com.acmerobotics.roadrunner.MotorFeedforward;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Pose2dDual;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
+import com.acmerobotics.roadrunner.PoseVelocity2dDual;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Time;
 import com.acmerobotics.roadrunner.TimeTrajectory;
 import com.acmerobotics.roadrunner.TimeTurn;
@@ -45,14 +50,15 @@ import org.firstinspires.ftc.teamcode.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.messages.MecanumEncodersMessage;
 import org.firstinspires.ftc.teamcode.messages.PoseMessage;
 
-import java.lang.Math;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 @Config
-public final class MecanumDrive {
-    public static class Params {
+public final class MecanumDrive
+{
+    public static class Params
+    {
         // IMU orientation
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
@@ -121,13 +127,15 @@ public final class MecanumDrive {
     private final DownsampledWriter driveCommandWriter = new DownsampledWriter("DRIVE_COMMAND", 50_000_000);
     private final DownsampledWriter mecanumCommandWriter = new DownsampledWriter("MECANUM_COMMAND", 50_000_000);
 
-    public class DriveLocalizer implements Localizer {
+    public class DriveLocalizer implements Localizer
+    {
         public final Encoder leftFront, leftBack, rightBack, rightFront;
 
         private int lastLeftFrontPos, lastLeftBackPos, lastRightBackPos, lastRightFrontPos;
         private Rotation2d lastHeading;
 
-        public DriveLocalizer() {
+        public DriveLocalizer()
+        {
             leftFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftFront));
             leftBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.leftBack));
             rightBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightBack));
@@ -146,7 +154,8 @@ public final class MecanumDrive {
         }
 
         @Override
-        public Twist2dDual<Time> update() {
+        public Twist2dDual<Time> update()
+        {
             PositionVelocityPair leftFrontPosVel = leftFront.getPositionAndVelocity();
             PositionVelocityPair leftBackPosVel = leftBack.getPositionAndVelocity();
             PositionVelocityPair rightBackPosVel = rightBack.getPositionAndVelocity();
@@ -191,12 +200,14 @@ public final class MecanumDrive {
         }
     }
 
-    public MecanumDrive(HardwareMap hardwareMap, Pose2d pose) {
+    public MecanumDrive(HardwareMap hardwareMap, Pose2d pose)
+    {
         this.pose = pose;
 
         LynxFirmware.throwIfModulesAreOutdated(hardwareMap);
 
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class))
+        {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
@@ -230,12 +241,14 @@ public final class MecanumDrive {
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
 
-    public void setDrivePowers(PoseVelocity2d powers) {
+    public void setDrivePowers(PoseVelocity2d powers)
+    {
         MecanumKinematics.WheelVelocities<Time> wheelVels = new MecanumKinematics(1).inverse(
                 PoseVelocity2dDual.constant(powers, 1));
 
         double maxPowerMag = 1;
-        for (DualNum<Time> power : wheelVels.all()) {
+        for (DualNum<Time> power : wheelVels.all())
+        {
             maxPowerMag = Math.max(maxPowerMag, power.value());
         }
 
@@ -245,13 +258,15 @@ public final class MecanumDrive {
         rightFront.setPower(wheelVels.rightFront.get(0) / maxPowerMag);
     }
 
-    public final class FollowTrajectoryAction implements Action {
+    public final class FollowTrajectoryAction implements Action
+    {
         public final TimeTrajectory timeTrajectory;
         private double beginTs = -1;
 
         private final double[] xPoints, yPoints;
 
-        public FollowTrajectoryAction(TimeTrajectory t) {
+        public FollowTrajectoryAction(TimeTrajectory t)
+        {
             timeTrajectory = t;
 
             List<Double> disps = com.acmerobotics.roadrunner.Math.range(
@@ -259,7 +274,8 @@ public final class MecanumDrive {
                     Math.max(2, (int) Math.ceil(t.path.length() / 2)));
             xPoints = new double[disps.size()];
             yPoints = new double[disps.size()];
-            for (int i = 0; i < disps.size(); i++) {
+            for (int i = 0; i < disps.size(); i++)
+            {
                 Pose2d p = t.path.get(disps.get(i), 1).value();
                 xPoints[i] = p.position.x;
                 yPoints[i] = p.position.y;
@@ -267,16 +283,21 @@ public final class MecanumDrive {
         }
 
         @Override
-        public boolean run(@NonNull TelemetryPacket p) {
+        public boolean run(@NonNull TelemetryPacket p)
+        {
             double t;
-            if (beginTs < 0) {
+            if (beginTs < 0)
+            {
                 beginTs = Actions.now();
                 t = 0;
-            } else {
+            }
+            else
+            {
                 t = Actions.now() - beginTs;
             }
 
-            if (t >= timeTrajectory.duration) {
+            if (t >= timeTrajectory.duration)
+            {
                 leftFront.setPower(0);
                 leftBack.setPower(0);
                 rightBack.setPower(0);
@@ -342,33 +363,41 @@ public final class MecanumDrive {
         }
 
         @Override
-        public void preview(Canvas c) {
+        public void preview(Canvas c)
+        {
             c.setStroke("#4CAF507A");
             c.setStrokeWidth(1);
             c.strokePolyline(xPoints, yPoints);
         }
     }
 
-    public final class TurnAction implements Action {
+    public final class TurnAction implements Action
+    {
         private final TimeTurn turn;
 
         private double beginTs = -1;
 
-        public TurnAction(TimeTurn turn) {
+        public TurnAction(TimeTurn turn)
+        {
             this.turn = turn;
         }
 
         @Override
-        public boolean run(@NonNull TelemetryPacket p) {
+        public boolean run(@NonNull TelemetryPacket p)
+        {
             double t;
-            if (beginTs < 0) {
+            if (beginTs < 0)
+            {
                 beginTs = Actions.now();
                 t = 0;
-            } else {
+            }
+            else
+            {
                 t = Actions.now() - beginTs;
             }
 
-            if (t >= turn.duration) {
+            if (t >= turn.duration)
+            {
                 leftFront.setPower(0);
                 leftBack.setPower(0);
                 rightBack.setPower(0);
@@ -422,18 +451,21 @@ public final class MecanumDrive {
         }
 
         @Override
-        public void preview(Canvas c) {
+        public void preview(Canvas c)
+        {
             c.setStroke("#7C4DFF7A");
             c.fillCircle(turn.beginPose.position.x, turn.beginPose.position.y, 2);
         }
     }
 
-    public PoseVelocity2d updatePoseEstimate() {
+    public PoseVelocity2d updatePoseEstimate()
+    {
         Twist2dDual<Time> twist = localizer.update();
         pose = pose.plus(twist.value());
 
         poseHistory.add(pose);
-        while (poseHistory.size() > 100) {
+        while (poseHistory.size() > 100)
+        {
             poseHistory.removeFirst();
         }
 
@@ -442,12 +474,14 @@ public final class MecanumDrive {
         return twist.velocity().value();
     }
 
-    private void drawPoseHistory(Canvas c) {
+    private void drawPoseHistory(Canvas c)
+    {
         double[] xPoints = new double[poseHistory.size()];
         double[] yPoints = new double[poseHistory.size()];
 
         int i = 0;
-        for (Pose2d t : poseHistory) {
+        for (Pose2d t : poseHistory)
+        {
             xPoints[i] = t.position.x;
             yPoints[i] = t.position.y;
 
@@ -459,7 +493,8 @@ public final class MecanumDrive {
         c.strokePolyline(xPoints, yPoints);
     }
 
-    private static void drawRobot(Canvas c, Pose2d t) {
+    private static void drawRobot(Canvas c, Pose2d t)
+    {
         final double ROBOT_RADIUS = 9;
 
         c.setStrokeWidth(1);
@@ -471,7 +506,8 @@ public final class MecanumDrive {
         c.strokeLine(p1.x, p1.y, p2.x, p2.y);
     }
 
-    public TrajectoryActionBuilder actionBuilder(Pose2d beginPose) {
+    public TrajectoryActionBuilder actionBuilder(Pose2d beginPose)
+    {
         return new TrajectoryActionBuilder(
                 TurnAction::new,
                 FollowTrajectoryAction::new,

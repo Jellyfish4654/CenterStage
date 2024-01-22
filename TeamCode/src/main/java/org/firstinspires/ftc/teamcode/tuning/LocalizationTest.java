@@ -8,15 +8,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.TankDrive;
 
-public class LocalizationTest extends LinearOpMode {
+public class LocalizationTest extends LinearOpMode
+{
     @Override
-    public void runOpMode() throws InterruptedException {
-        if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
+    public void runOpMode() throws InterruptedException
+    {
+        if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class))
+        {
             MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
             waitForStart();
 
-            while (opModeIsActive()) {
+            while (opModeIsActive())
+            {
                 drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(
                                 -gamepad1.left_stick_y,
@@ -32,12 +36,15 @@ public class LocalizationTest extends LinearOpMode {
                 telemetry.addData("heading (deg)", Math.toDegrees(drive.pose.heading.toDouble()));
                 telemetry.update();
             }
-        } else if (TuningOpModes.DRIVE_CLASS.equals(TankDrive.class)) {
+        }
+        else if (TuningOpModes.DRIVE_CLASS.equals(TankDrive.class))
+        {
             TankDrive drive = new TankDrive(hardwareMap, new Pose2d(0, 0, 0));
 
             waitForStart();
 
-            while (opModeIsActive()) {
+            while (opModeIsActive())
+            {
                 drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(
                                 -gamepad1.left_stick_y,
@@ -53,7 +60,9 @@ public class LocalizationTest extends LinearOpMode {
                 telemetry.addData("heading (deg)", Math.toDegrees(drive.pose.heading.toDouble()));
                 telemetry.update();
             }
-        } else {
+        }
+        else
+        {
             throw new RuntimeException();
         }
     }

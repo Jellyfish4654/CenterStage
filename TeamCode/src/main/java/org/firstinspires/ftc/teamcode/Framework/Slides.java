@@ -4,9 +4,9 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.acmerobotics.roadrunner.Profiles;
 
-public class Slides {
+public class Slides
+{
     private DcMotorEx slideMotorLeft;
     private DcMotorEx slideMotorRight;
     private PIDController leftController;
@@ -32,7 +32,8 @@ public class Slides {
     private double leftPIDOutput;
 
 
-    public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
+    public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight)
+    {
         this.slideMotorLeft = slideMotorLeft;
         this.slideMotorRight = slideMotorRight;
         this.leftController = new PIDController(lP, lI, lD);
@@ -45,7 +46,8 @@ public class Slides {
 
     }
 
-    public void update() {
+    public void update()
+    {
         double time = timer.seconds();
         TrapezoidProfile.State leftGoal = leftProfile.calculate(time);
         TrapezoidProfile.State rightGoal = rightProfile.calculate(time);
@@ -53,41 +55,50 @@ public class Slides {
         rightControl(rightGoal.position, rightGoal.velocity);
     }
 
-    private void leftControl(double targetPosition, double targetVelocity){
+    private void leftControl(double targetPosition, double targetVelocity)
+    {
         this.leftController.setPID(lP, lI, lD);
         int position = slideMotorLeft.getCurrentPosition();
         this.leftPIDOutput = leftController.calculate(position, targetPosition);
 
-        if (position < lowerThreshold && this.leftPIDOutput < 0) {
+        if (position < lowerThreshold && this.leftPIDOutput < 0)
+        {
             this.leftPIDOutput = 0;
         }
-        if (position > upperThreshold && this.leftPIDOutput > 0) {
+        if (position > upperThreshold && this.leftPIDOutput > 0)
+        {
             this.leftPIDOutput = 0;
         }
-        if (Math.abs(this.leftPIDOutput)>10) {
+        if (Math.abs(this.leftPIDOutput) > 10)
+        {
             this.leftPIDOutput = 0;
         }
         slideMotorLeft.setVelocity(this.leftPIDOutput);
     }
 
-    private void rightControl(double targetPosition, double targetVelocity){
+    private void rightControl(double targetPosition, double targetVelocity)
+    {
         this.rightController.setPID(rP, rI, rD);
         int position = slideMotorRight.getCurrentPosition();
         this.rightPIDOutput = rightController.calculate(position, targetPosition);
 
-        if (position < lowerThreshold && this.rightPIDOutput < 0) {
+        if (position < lowerThreshold && this.rightPIDOutput < 0)
+        {
             this.rightPIDOutput = 0;
         }
-        if (position > upperThreshold && this.rightPIDOutput > 0) {
+        if (position > upperThreshold && this.rightPIDOutput > 0)
+        {
             this.rightPIDOutput = 0;
         }
-        if (Math.abs(this.rightPIDOutput)>10) {
+        if (Math.abs(this.rightPIDOutput) > 10)
+        {
             this.rightPIDOutput = 0;
         }
         slideMotorRight.setVelocity(this.rightPIDOutput);
     }
 
-    public void setTargetPosition(int targetPosition) {
+    public void setTargetPosition(int targetPosition)
+    {
         this.targetPositionLeft = targetPosition;
         this.targetPositionRight = targetPosition;
         int currentPositionLeft = slideMotorLeft.getCurrentPosition();
@@ -101,24 +112,33 @@ public class Slides {
         timer.reset();
     }
 
-    public void setGain(double gain) {
+    public void setGain(double gain)
+    {
         this.rP = gain;
     }
-    public double getLeftPIDOutput() {
+
+    public double getLeftPIDOutput()
+    {
         return leftPIDOutput;
     }
-    public double getRightPIDOutput() {
+
+    public double getRightPIDOutput()
+    {
         return rightPIDOutput;
     }
-    public boolean slideCheck() {
+
+    public boolean slideCheck()
+    {
         return leftPIDOutput > 25 && rightPIDOutput > 25;
     }
 
-    public int getTargetPositionLeft() {
+    public int getTargetPositionLeft()
+    {
         return targetPositionLeft;
     }
 
-    public int getTargetPositionRight() {
+    public int getTargetPositionRight()
+    {
         return targetPositionRight;
     }
 }

@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.Framework;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.JellyTele;
 
-public class AutoAlignment {
+public class AutoAlignment
+{
     private final DcMotor[] motors;
     private final IMU imuSensor;
     private final PIDController pidController;
@@ -17,17 +18,20 @@ public class AutoAlignment {
     double kD = 0.00017;
 
     // Constructor
-    public AutoAlignment(DcMotor[] motors, IMU imuSensor) {
+    public AutoAlignment(DcMotor[] motors, IMU imuSensor)
+    {
         this.motors = motors;
         this.imuSensor = imuSensor;
         this.pidController = new PIDController(kP, kI, kD);
     }
 
-    public void setTargetAngle(double targetAngle) {
+    public void setTargetAngle(double targetAngle)
+    {
         this.targetAngle = targetAngle;
     }
 
-    public void update() {
+    public void update()
+    {
         YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
 //        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
         double currentYaw = JellyTele.getHeading();
@@ -36,7 +40,9 @@ public class AutoAlignment {
         double correction = pidController.calculate(0, angleDifference);
         MotorPowers(correction);
     }
-    private void MotorPowers(double correction) {
+
+    private void MotorPowers(double correction)
+    {
         double rightPower = correction;
         double leftPower = -correction;
 
@@ -45,11 +51,16 @@ public class AutoAlignment {
         motors[2].setPower(leftPower);
         motors[3].setPower(leftPower);
     }
-    private double normalizeAngle(double angle) {
+
+    private double normalizeAngle(double angle)
+    {
         angle = angle % 360;
-        if (angle <= -180) {
+        if (angle <= -180)
+        {
             angle += 360;
-        } else if (angle > 180) {
+        }
+        else if (angle > 180)
+        {
             angle -= 360;
         }
         return angle;

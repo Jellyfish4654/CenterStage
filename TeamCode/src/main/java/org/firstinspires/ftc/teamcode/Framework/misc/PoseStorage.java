@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.Pose2d;
  * This allows different classes/opmodes to set and read from a central source of truth.
  * A static field allows data to persist between opmodes.
  */
-public class PoseStorage {
-    public static Pose2d currentPose = new Pose2d(0,0,0);
+public class PoseStorage
+{
+    public static Pose2d currentPose = new Pose2d(0, 0, 0);
 }

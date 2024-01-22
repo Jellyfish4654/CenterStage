@@ -10,7 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @Config
 @TeleOp
-public class SlidesTuner extends LinearOpMode {
+public class SlidesTuner extends LinearOpMode
+{
     private PIDController controller;
 
     public static double p = 0.06, i = 0.0061, d = 0.0002;
@@ -18,7 +19,8 @@ public class SlidesTuner extends LinearOpMode {
     private DcMotorEx slideMotorLeft;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         controller = new PIDController(p, i, d);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
@@ -27,13 +29,17 @@ public class SlidesTuner extends LinearOpMode {
         slideMotorLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
 
-        while (opModeIsActive()) {
+        while (opModeIsActive())
+        {
             controller.setPID(p, i, d);
             int position = slideMotorLeft.getCurrentPosition();
-            if (position != target) {
+            if (position != target)
+            {
                 double power = controller.calculate(position, target);
                 slideMotorLeft.setPower(power);
-            } else {
+            }
+            else
+            {
                 slideMotorLeft.setPower(0);
             }
             telemetry.addData("pos ", position);
