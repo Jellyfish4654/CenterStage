@@ -141,7 +141,6 @@ public class JellyTele extends BaseOpMode
     static final int SLIDES_HANGING_HEIGHT = 2000;
     static final int SLIDES_FIRST_PIXEL_HEIGHT = 1775;
     static final int RESET_SLIDES_HEIGHT = 0;
-
     private void controlSlideMotors()
     {
         if (applyDeadband(gamepad2.right_stick_y) != 0)
