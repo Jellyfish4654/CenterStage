@@ -31,16 +31,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class TuningOpModes {
+public final class TuningOpModes
+{
     // TODO: change this to TankDrive.class if you're using tank
     public static final Class<?> DRIVE_CLASS = MecanumDrive.class;
 
     public static final String GROUP = "quickstart";
     public static final boolean DISABLED = false;
 
-    private TuningOpModes() {}
+    private TuningOpModes()
+    {
+    }
 
-    private static OpModeMeta metaForClass(Class<? extends OpMode> cls) {
+    private static OpModeMeta metaForClass(Class<? extends OpMode> cls)
+    {
         return new OpModeMeta.Builder()
                 .setName(cls.getSimpleName())
                 .setGroup(GROUP)
@@ -49,37 +53,50 @@ public final class TuningOpModes {
     }
 
     @OpModeRegistrar
-    public static void register(OpModeManager manager) {
-        if (DISABLED) return;
+    public static void register(OpModeManager manager)
+    {
+        if (DISABLED)
+        {
+            return;
+        }
 
         DriveViewFactory dvf;
-        if (DRIVE_CLASS.equals(MecanumDrive.class)) {
-            dvf = hardwareMap -> {
+        if (DRIVE_CLASS.equals(MecanumDrive.class))
+        {
+            dvf = hardwareMap ->
+            {
                 MecanumDrive md = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                if (md.localizer instanceof MecanumDrive.DriveLocalizer) {
+                if (md.localizer instanceof MecanumDrive.DriveLocalizer)
+                {
                     MecanumDrive.DriveLocalizer dl = (MecanumDrive.DriveLocalizer) md.localizer;
                     leftEncs.add(dl.leftFront);
                     leftEncs.add(dl.leftBack);
                     rightEncs.add(dl.rightFront);
                     rightEncs.add(dl.rightBack);
-                } else if (md.localizer instanceof ThreeDeadWheelLocalizer) {
+                }
+                else if (md.localizer instanceof ThreeDeadWheelLocalizer)
+                {
                     ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) md.localizer;
                     parEncs.add(dl.par0);
                     parEncs.add(dl.par1);
                     perpEncs.add(dl.perp);
-                } else if (md.localizer instanceof TwoDeadWheelLocalizer) {
+                }
+                else if (md.localizer instanceof TwoDeadWheelLocalizer)
+                {
                     TwoDeadWheelLocalizer dl = (TwoDeadWheelLocalizer) md.localizer;
                     parEncs.add(dl.par);
                     perpEncs.add(dl.perp);
-                } else {
+                }
+                else
+                {
                     throw new RuntimeException("unknown localizer: " + md.localizer.getClass().getName());
                 }
 
                 return new DriveView(
-                    DriveType.MECANUM,
+                        DriveType.MECANUM,
                         MecanumDrive.PARAMS.inPerTick,
                         MecanumDrive.PARAMS.maxWheelVel,
                         MecanumDrive.PARAMS.minProfileAccel,
@@ -104,31 +121,41 @@ public final class TuningOpModes {
                                 MecanumDrive.PARAMS.kA / MecanumDrive.PARAMS.inPerTick)
                 );
             };
-        } else if (DRIVE_CLASS.equals(TankDrive.class)) {
-            dvf = hardwareMap -> {
+        }
+        else if (DRIVE_CLASS.equals(TankDrive.class))
+        {
+            dvf = hardwareMap ->
+            {
                 TankDrive td = new TankDrive(hardwareMap, new Pose2d(0, 0, 0));
 
                 List<Encoder> leftEncs = new ArrayList<>(), rightEncs = new ArrayList<>();
                 List<Encoder> parEncs = new ArrayList<>(), perpEncs = new ArrayList<>();
-                if (td.localizer instanceof TankDrive.DriveLocalizer) {
+                if (td.localizer instanceof TankDrive.DriveLocalizer)
+                {
                     TankDrive.DriveLocalizer dl = (TankDrive.DriveLocalizer) td.localizer;
                     leftEncs.addAll(dl.leftEncs);
                     rightEncs.addAll(dl.rightEncs);
-                } else if (td.localizer instanceof ThreeDeadWheelLocalizer) {
+                }
+                else if (td.localizer instanceof ThreeDeadWheelLocalizer)
+                {
                     ThreeDeadWheelLocalizer dl = (ThreeDeadWheelLocalizer) td.localizer;
                     parEncs.add(dl.par0);
                     parEncs.add(dl.par1);
                     perpEncs.add(dl.perp);
-                } else if (td.localizer instanceof TwoDeadWheelLocalizer) {
+                }
+                else if (td.localizer instanceof TwoDeadWheelLocalizer)
+                {
                     TwoDeadWheelLocalizer dl = (TwoDeadWheelLocalizer) td.localizer;
                     parEncs.add(dl.par);
                     perpEncs.add(dl.perp);
-                } else {
+                }
+                else
+                {
                     throw new RuntimeException("unknown localizer: " + td.localizer.getClass().getName());
                 }
 
                 return new DriveView(
-                    DriveType.TANK,
+                        DriveType.TANK,
                         TankDrive.PARAMS.inPerTick,
                         TankDrive.PARAMS.maxWheelVel,
                         TankDrive.PARAMS.minProfileAccel,
@@ -147,7 +174,9 @@ public final class TuningOpModes {
                                 TankDrive.PARAMS.kA / TankDrive.PARAMS.inPerTick)
                 );
             };
-        } else {
+        }
+        else
+        {
             throw new RuntimeException();
         }
 
@@ -164,7 +193,8 @@ public final class TuningOpModes {
         manager.register(metaForClass(SplineTest.class), SplineTest.class);
         manager.register(metaForClass(LocalizationTest.class), LocalizationTest.class);
 
-        FtcDashboard.getInstance().withConfigRoot(configRoot -> {
+        FtcDashboard.getInstance().withConfigRoot(configRoot ->
+        {
             for (Class<?> c : Arrays.asList(
                     AngularRampLogger.class,
                     ForwardRampLogger.class,
@@ -172,7 +202,8 @@ public final class TuningOpModes {
                     ManualFeedforwardTuner.class,
                     MecanumMotorDirectionDebugger.class,
                     ManualFeedbackTuner.class
-            )) {
+            ))
+            {
                 configRoot.putVariable(c.getSimpleName(), ReflectionConfig.createVariableFromClass(c));
             }
         });

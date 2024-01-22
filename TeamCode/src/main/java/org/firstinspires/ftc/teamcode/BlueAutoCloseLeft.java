@@ -10,21 +10,23 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
+import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 
 @Autonomous(name = "BlueAutoCloseLeft", group = "Auto")
-public class BlueAutoCloseLeft extends BaseOpMode {
+public class BlueAutoCloseLeft extends BaseOpMode
+{
     OpenCvCamera webcam;
     BluePipeline detectionPipeline;
     Sides.Position detectedPosition;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
         Sides.setColor(Sides.Color.BLUE);
         // Initialize hardware and pipeline
@@ -33,7 +35,8 @@ public class BlueAutoCloseLeft extends BaseOpMode {
         initCamera();
 
         // Wait for the start button to be pressed, updating telemetry
-        while (!isStarted() && !isStopRequested()) {
+        while (!isStarted() && !isStopRequested())
+        {
             telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.addData("Left Pixels", BluePipeline.getLeft());
             telemetry.addData("Center Pixels", BluePipeline.getCenter());
@@ -47,7 +50,8 @@ public class BlueAutoCloseLeft extends BaseOpMode {
         webcam.stopStreaming();
 
         // Run the autonomous path based on the detected position
-        switch (detectedPosition) {
+        switch (detectedPosition)
+        {
             case LEFT:
 
                 break;
@@ -74,13 +78,15 @@ public class BlueAutoCloseLeft extends BaseOpMode {
         }
         PoseStorage.currentPose = drive.pose;
     }
-    
 
-    private void initHardware(HardwareMap hwMap) {
+
+    private void initHardware(HardwareMap hwMap)
+    {
         // Initialize your robot's hardware here
     }
 
-    private void initCamera() {
+    private void initCamera()
+    {
         // Initialize camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -88,29 +94,35 @@ public class BlueAutoCloseLeft extends BaseOpMode {
         detectionPipeline = new BluePipeline(telemetry);
         webcam.setPipeline(detectionPipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
             @Override
-            public void onOpened() {
+            public void onOpened()
+            {
                 webcam.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode) {
+            public void onError(int errorCode)
+            {
                 // Error handling
             }
         });
     }
 
-    private void runAutonomousPathA() {
+    private void runAutonomousPathA()
+    {
         // Define the autonomous path A
     }
 
-    private void runAutonomousPathB() {
+    private void runAutonomousPathB()
+    {
         // Define the autonomous path B
         // Define the autonomous path B
     }
 
-    private void runAutonomousPathC() {
+    private void runAutonomousPathC()
+    {
         // Define the autonomous path C
     }
 }

@@ -9,7 +9,8 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class MaskedRedPipeline extends OpenCvPipeline {
+public class MaskedRedPipeline extends OpenCvPipeline
+{
     Telemetry telemetry;
     // HSV thresholds for red color detection
     Scalar redLow1 = new Scalar(0, 100, 20);
@@ -29,7 +30,8 @@ public class MaskedRedPipeline extends OpenCvPipeline {
     private static final int CAMERA_WIDTH = 1920;
     private static final int CAMERA_HEIGHT = 1080;
 
-    public MaskedRedPipeline(Telemetry telemetry) {
+    public MaskedRedPipeline(Telemetry telemetry)
+    {
         this.telemetry = telemetry;
 
         // Divide camera view into rectangles
@@ -42,7 +44,8 @@ public class MaskedRedPipeline extends OpenCvPipeline {
     }
 
     @Override
-    public Mat processFrame(Mat input) {
+    public Mat processFrame(Mat input)
+    {
         // Convert image from RGB to HSV color space
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
 
@@ -65,7 +68,8 @@ public class MaskedRedPipeline extends OpenCvPipeline {
         return maskedInput;
     }
 
-    public void cleanup() {
+    public void cleanup()
+    {
         mat.release();
         maskRed.release();
         maskedInput.release();

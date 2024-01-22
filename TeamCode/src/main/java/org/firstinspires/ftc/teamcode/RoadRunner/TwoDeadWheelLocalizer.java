@@ -18,8 +18,10 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @Config
-public final class TwoDeadWheelLocalizer implements Localizer {
-    public static class Params {
+public final class TwoDeadWheelLocalizer implements Localizer
+{
+    public static class Params
+    {
         public double parYTicks = 0.0; // y position of the parallel encoder (in tick units)
         public double perpXTicks = 0.0; // x position of the perpendicular encoder (in tick units)
     }
@@ -36,7 +38,8 @@ public final class TwoDeadWheelLocalizer implements Localizer {
 
     private double lastRawHeadingVel, headingVelOffset;
 
-    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick) {
+    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick)
+    {
         // TODO: make sure your config has **motors** with these names (or change them)
         //   the encoders should be plugged into the slot matching the named motor
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
@@ -58,16 +61,19 @@ public final class TwoDeadWheelLocalizer implements Localizer {
     }
 
     // see https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/617
-    private double getHeadingVelocity() {
+    private double getHeadingVelocity()
+    {
         double rawHeadingVel = imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-        if (Math.abs(rawHeadingVel - lastRawHeadingVel) > Math.PI) {
+        if (Math.abs(rawHeadingVel - lastRawHeadingVel) > Math.PI)
+        {
             headingVelOffset -= Math.signum(rawHeadingVel) * 2 * Math.PI;
         }
         lastRawHeadingVel = rawHeadingVel;
         return headingVelOffset + rawHeadingVel;
     }
 
-    public Twist2dDual<Time> update() {
+    public Twist2dDual<Time> update()
+    {
         PositionVelocityPair parPosVel = par.getPositionAndVelocity();
         PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
         Rotation2d heading = Rotation2d.exp(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
@@ -80,16 +86,16 @@ public final class TwoDeadWheelLocalizer implements Localizer {
 
         Twist2dDual<Time> twist = new Twist2dDual<>(
                 new Vector2dDual<>(
-                        new DualNum<Time>(new double[] {
+                        new DualNum<Time>(new double[]{
                                 parPosDelta - PARAMS.parYTicks * headingDelta,
                                 parPosVel.velocity - PARAMS.parYTicks * headingVel,
                         }).times(inPerTick),
-                        new DualNum<Time>(new double[] {
+                        new DualNum<Time>(new double[]{
                                 perpPosDelta - PARAMS.perpXTicks * headingDelta,
                                 perpPosVel.velocity - PARAMS.perpXTicks * headingVel,
                         }).times(inPerTick)
                 ),
-                new DualNum<>(new double[] {
+                new DualNum<>(new double[]{
                         headingDelta,
                         headingVel,
                 })
