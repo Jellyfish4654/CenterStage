@@ -29,15 +29,14 @@ public class JellyTele extends BaseOpMode {
     private GamepadEx gamepadEx2;
     protected enum DriveMode {
         MECANUM,
-        FIELDCENTRIC,
-        FIELDCENTRICDW
+        FIELDCENTRIC
         }
     private enum Outtake {
         IDLE,
         DEPOSIT,
         INTAKE
     }
-    protected DriveMode driveMode = DriveMode.FIELDCENTRICDW;
+    protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
     private static MecanumDrive drive;
     private Outtake currentState = Outtake.IDLE;
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
@@ -219,9 +218,6 @@ public class JellyTele extends BaseOpMode {
             case FIELDCENTRIC:
                 motorSpeeds = FieldCentricDrive();
                 break;
-            case FIELDCENTRICDW:
-                motorSpeeds = FieldCentricDriveWithDeadwheel();
-                break;
             default:
                 motorSpeeds = new double[4];
         }
@@ -253,25 +249,7 @@ public class JellyTele extends BaseOpMode {
                 rotY - rotX + rotation
         };
     }
-    private double[] FieldCentricDriveWithDeadwheel() {
-        drive.updatePoseEstimate();
-        double botHeading = Math.toDegrees(drive.pose.heading.toDouble());
 
-        double y = -applyDeadband(gamepad1.left_stick_y);
-        double x = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
-        double rotation = applyDeadband(gamepad1.right_stick_x);
-        double theta = Math.atan2(y, x) - botHeading;
-        double power = Math.hypot(x, y);
-        double sinTheta = Math.sin(theta);
-        double cosTheta = Math.cos(theta);
-
-        return new double[]{
-                power * cosTheta - rotation,
-                power * sinTheta - rotation,
-                power * sinTheta + rotation,
-                power * cosTheta + rotation
-        };
-    }
     protected void setMotorSpeeds(double multiplier, double[] powers) {
         applyPrecisionAndScale(multiplier, powers);
         int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
@@ -319,10 +297,8 @@ public class JellyTele extends BaseOpMode {
             driveMode = DriveMode.FIELDCENTRIC;
             resetIMU();
         } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.Y)) {
-            driveMode = DriveMode.FIELDCENTRICDW;
-        } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.BACK)) {
             driveMode = DriveMode.MECANUM;
-        }
+        } 
         resetIMU();
     }
     public void DroneControl() {
