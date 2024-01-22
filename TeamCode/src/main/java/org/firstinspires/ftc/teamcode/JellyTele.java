@@ -37,7 +37,7 @@ public class JellyTele extends BaseOpMode {
         DEPOSIT,
         INTAKE
     }
-    protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
+    protected DriveMode driveMode = DriveMode.FIELDCENTRICDW;
     private static MecanumDrive drive;
     private Outtake currentState = Outtake.IDLE;
     private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
