@@ -12,9 +12,9 @@ public class Intake {
 
     private int targetPosition;
 
-    private double P = 0.0085;
+    private double P = 0.0015;
     private double I = 0;
-    private double D = 0.00009;
+    private double D = 0.00002;
     private double PIDOutput;
 
 

@@ -90,6 +90,9 @@ public class JellyTele extends BaseOpMode {
                 autoAlignment.setTargetAngle(90);
                 autoAlignment.update();
             }
+            if (gamepadEx2.wasJustReleased(GamepadKeys.Button.START)){
+                intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition()+5000);
+            }
         }
     }
     private void controlIntakeMotor() {
@@ -298,7 +301,7 @@ public class JellyTele extends BaseOpMode {
             resetIMU();
         } else if (gamepadEx1.wasJustReleased(GamepadKeys.Button.Y)) {
             driveMode = DriveMode.MECANUM;
-        } 
+        }
         resetIMU();
     }
     public void DroneControl() {
