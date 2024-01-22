@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
-import org.firstinspires.ftc.teamcode.drive.advanced.PoseStorage;
+import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode {
@@ -150,9 +150,6 @@ public class JellyTele extends BaseOpMode {
         outakeServos.setOutput();
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER)) {
             outakeServos.closeOuttake();
-//            if(outakeServos.check()){
-//                slides.setTargetPosition(0);
-//            }
         }
         if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER)) {
             outakeServos.openOuttake();
@@ -259,17 +256,20 @@ public class JellyTele extends BaseOpMode {
     private double[] FieldCentricDriveWithDeadwheel() {
         drive.updatePoseEstimate();
         double botHeading = Math.toDegrees(drive.pose.heading.toDouble());
-        double forward = -applyDeadband(gamepad1.left_stick_y);
-        double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
-        double rotation = applyDeadband(gamepad1.right_stick_x);
 
-        double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
-        double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
+        double y = -applyDeadband(gamepad1.left_stick_y);
+        double x = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
+        double rotation = applyDeadband(gamepad1.right_stick_x);
+        double theta = Math.atan2(y, x) - botHeading;
+        double power = Math.hypot(x, y);
+        double sinTheta = Math.sin(theta);
+        double cosTheta = Math.cos(theta);
+
         return new double[]{
-                rotY - rotX - rotation,
-                rotY + rotX - rotation,
-                rotY + rotX + rotation,
-                rotY - rotX + rotation
+                power * cosTheta - rotation,
+                power * sinTheta - rotation,
+                power * sinTheta + rotation,
+                power * cosTheta + rotation
         };
     }
     protected void setMotorSpeeds(double multiplier, double[] powers) {
