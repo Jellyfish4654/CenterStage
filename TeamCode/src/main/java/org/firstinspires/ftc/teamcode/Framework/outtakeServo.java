@@ -18,18 +18,24 @@ public class outtakeServo
     {
         this.outakeLeftServo = servo1;
         this.outakeRightServo = servo2;
+        outakeLeftServo.setPosition(positionL);
+        outakeRightServo.setPosition(positionR);
     }
 
     public void openOuttake()
     {
         positionL = OUTTAKE_INTAKE;
         positionR = OUTTAKE_INTAKE;
+        outakeLeftServo.setPosition(positionL);
+        outakeRightServo.setPosition(positionR);
     }
 
     public void closeOuttake()
     {
         positionL = OUTTAKE_DEPOSIT;
         positionR = OUTTAKE_DEPOSIT;
+        outakeLeftServo.setPosition(positionL);
+        outakeRightServo.setPosition(positionR);
     }
 
     public void setOutput()
@@ -37,19 +43,6 @@ public class outtakeServo
         outakeLeftServo.setPosition(positionL);
         outakeRightServo.setPosition(positionR);
     }
-
-    public boolean check()
-    {
-        if (getCurrentPositionLeftServo() == OUTTAKE_INTAKE)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
     public double getCurrentPositionLeftServo()
     {
         return outakeLeftServo.getPosition();

@@ -68,7 +68,8 @@ public class RedAutoCloseRight extends BaseOpMode
                                     slides.setTargetPosition(1750);
                                     slides.update();
                                     return slides.slideCheck();
-                                }
+                                },
+                                (telemetryPacket) -> CRServoAction.run()
 
                         )
                 );
