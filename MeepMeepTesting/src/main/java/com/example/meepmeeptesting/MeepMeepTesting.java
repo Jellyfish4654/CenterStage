@@ -20,6 +20,10 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeRedDark())
                 .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
                 .build();
+        RoadRunnerBotEntity BLUE_RIGHT_PURPLE = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
+                .build();
 
         RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                 .splineTo(new Vector2d(15, -50), Math.toRadians(90))
@@ -37,6 +41,13 @@ public class MeepMeepTesting {
                 .splineToSplineHeading(new Pose2d(-48, -12 , Math.toRadians(0)), Math.toRadians(180))
                 .build());
 
+       BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
+                .splineTo(new Vector2d(15, 50), Math.toRadians(270))
+                .splineTo(new Vector2d(7, 36), Math.toRadians(225))
+                .splineToConstantHeading(new Vector2d(7+(4*Math.cos(Math.toRadians(45))), 36+(4*Math.sin(Math.toRadians(45))) ), Math.toRadians(45))
+                .splineToSplineHeading(new Pose2d(40, 36, Math.toRadians(0)), Math.toRadians(0))
+                .build());
+
 
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
@@ -44,6 +55,7 @@ public class MeepMeepTesting {
                 .setBackgroundAlpha(0.95f)
                 .addEntity(RED_RIGHT_PURPLE)
                 .addEntity(RED_LEFT_PURPLE)
+                .addEntity(BLUE_RIGHT_PURPLE)
                 .start();
     }
 }
