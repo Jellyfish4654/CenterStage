@@ -247,6 +247,7 @@ public class JellyTele extends BaseOpMode
         telemetry.addData("intakeTargetPosition", intakeSystem.getTargetPosition());
         telemetry.addData("intake precision", PRECISION_MULTIPLIER_INTAKE);
         telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        telemetry.addData("DWyaw", Math.toDegrees(drive.pose.heading.toDouble()));
         telemetry.addData("imupitch", imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
         telemetry.addData("imuroll", imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
         telemetry.addData("intakeOutput", intakeSystem.getPIDOutput());
