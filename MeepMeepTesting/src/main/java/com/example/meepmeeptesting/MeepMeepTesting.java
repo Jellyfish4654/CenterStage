@@ -24,6 +24,10 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
                 .build();
+        RoadRunnerBotEntity BLUE_LEFT_PURPLE = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60,60, Math.toRadians(90), Math.toRadians(90),18)
+                .build();
 
         RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                 .splineTo(new Vector2d(15, -50), Math.toRadians(90))
@@ -41,12 +45,28 @@ public class MeepMeepTesting {
                 .splineToSplineHeading(new Pose2d(-48, -12 , Math.toRadians(0)), Math.toRadians(180))
                 .build());
 
-       BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
-                .splineTo(new Vector2d(15, 50), Math.toRadians(270))
-                .splineTo(new Vector2d(7, 36), Math.toRadians(225))
-                .splineToConstantHeading(new Vector2d(7+(4*Math.cos(Math.toRadians(45))), 36+(4*Math.sin(Math.toRadians(45))) ), Math.toRadians(45))
+//       BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
+//                .splineTo(new Vector2d(15, 50), Math.toRadians(270))
+//                .splineTo(new Vector2d(7, 36), Math.toRadians(225))
+//                .splineToConstantHeading(new Vector2d(7+(4*Math.cos(Math.toRadians(45))), 36+(4*Math.sin(Math.toRadians(45))) ), Math.toRadians(45))
+//                .splineToSplineHeading(new Pose2d(40, 36, Math.toRadians(0)), Math.toRadians(0))
+//                .build());
+
+       BLUE_LEFT_PURPLE.runAction(BLUE_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39,60,Math.toRadians(270)))
+               .splineTo(new Vector2d(-39, 47), Math.toRadians(270))
+               .splineTo(new Vector2d(-32, 36), Math.toRadians(315))
+               .splineToConstantHeading(new Vector2d(-32+(4*Math.cos(Math.toRadians(135))), 36+(4*Math.sin(Math.toRadians(135))) ), Math.toRadians(135))
+               .splineToConstantHeading(new Vector2d(-32+(4*Math.cos(Math.toRadians(135)))+(6*Math.cos(Math.toRadians(315))), 36+(4*Math.sin(Math.toRadians(135)))+(6*Math.sin(Math.toRadians(315))) ), Math.toRadians(115.82+180))
+               .splineToConstantHeading(new Vector2d(-41, 17.5 ), Math.toRadians(115.82+180))
+               .splineToSplineHeading(new Pose2d(-48, 12 , Math.toRadians(0)), Math.toRadians(180))
+               .build());
+
+        BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
+                .splineTo(new Vector2d(15, 33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(15, 36), Math.toRadians(270))
                 .splineToSplineHeading(new Pose2d(40, 36, Math.toRadians(0)), Math.toRadians(0))
                 .build());
+
 
 
 
@@ -56,6 +76,7 @@ public class MeepMeepTesting {
                 .addEntity(RED_RIGHT_PURPLE)
                 .addEntity(RED_LEFT_PURPLE)
                 .addEntity(BLUE_RIGHT_PURPLE)
+                .addEntity(BLUE_LEFT_PURPLE)
                 .start();
     }
 }

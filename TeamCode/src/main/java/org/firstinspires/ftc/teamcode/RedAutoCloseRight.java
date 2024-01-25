@@ -18,6 +18,8 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 @Autonomous(name = "RedAutoCloseRight", group = "Auto")
 public class RedAutoCloseRight extends BaseOpMode
@@ -25,6 +27,8 @@ public class RedAutoCloseRight extends BaseOpMode
     OpenCvCamera webcam;
     RedPipeline detectionPipeline;
     Sides.Position detectedPosition;
+
+    double distance;
 
     @Override
     public void runOpMode()
@@ -43,10 +47,13 @@ public class RedAutoCloseRight extends BaseOpMode
             telemetry.addData("Left Pixels", RedPipeline.getLeft());
             telemetry.addData("Center Pixels", RedPipeline.getCenter());
             telemetry.addData("Right Pixels", RedPipeline.getRight());
+            telemetry.addData("Right Distance", distanceRight.getDistance(DistanceUnit.INCH));
             telemetry.update();
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
+            distance = distanceRight.getDistance(DistanceUnit.INCH);
         }
+        drive.pose = new Pose2d(distance, -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
         // Run the autonomous path based on the detected position

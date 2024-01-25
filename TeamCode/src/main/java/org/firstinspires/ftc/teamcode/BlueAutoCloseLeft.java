@@ -16,6 +16,9 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+
 
 @Autonomous(name = "BlueAutoCloseLeft", group = "Auto")
 public class BlueAutoCloseLeft extends BaseOpMode
@@ -23,6 +26,8 @@ public class BlueAutoCloseLeft extends BaseOpMode
     OpenCvCamera webcam;
     BluePipeline detectionPipeline;
     Sides.Position detectedPosition;
+
+    double distance;
 
     @Override
     public void runOpMode()
@@ -41,11 +46,13 @@ public class BlueAutoCloseLeft extends BaseOpMode
             telemetry.addData("Left Pixels", BluePipeline.getLeft());
             telemetry.addData("Center Pixels", BluePipeline.getCenter());
             telemetry.addData("Right Pixels", BluePipeline.getRight());
+            telemetry.addData("Left Distance", distanceLeft.getDistance(DistanceUnit.INCH));
             telemetry.update();
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
+            distance = distanceLeft.getDistance(DistanceUnit.INCH);
         }
-
+        drive.pose = new Pose2d(distance, -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
 

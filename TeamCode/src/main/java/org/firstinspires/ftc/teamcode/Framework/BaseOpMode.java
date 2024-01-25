@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 public abstract class BaseOpMode extends LinearOpMode
 {
@@ -25,6 +26,10 @@ public abstract class BaseOpMode extends LinearOpMode
     protected IMU imuSensor;
     protected AntiTipping antiTipping;
     protected AutoAlignment autoAlignment;
+
+    protected DistanceSensor distanceLeft;
+
+    protected DistanceSensor distanceRight;
 
     protected void initHardware()
     {
@@ -74,6 +79,9 @@ public abstract class BaseOpMode extends LinearOpMode
         imuSensor = initializeIMUSensor();
         antiTipping = new AntiTipping(driveMotors, imuSensor);
         autoAlignment = new AutoAlignment(driveMotors, imuSensor);
+        distanceLeft = hardwareMap.get(DistanceSensor.class, "distanceLeft");
+        distanceRight = hardwareMap.get(DistanceSensor.class, "distanceRight");
+
     }
 
     private IMU initializeIMUSensor()
