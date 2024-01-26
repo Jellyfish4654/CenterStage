@@ -30,9 +30,12 @@ public class MeepMeepTesting {
                 .build();
 
         RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                .splineTo(new Vector2d(15, -50), Math.toRadians(90))
-                .splineTo(new Vector2d(5, -36), Math.toRadians(135))
-                .splineToConstantHeading(new Vector2d(5+(4*Math.cos(Math.toRadians(315))), -36+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
+//                .splineTo(new Vector2d(15, -50), Math.toRadians(90))
+//                .splineTo(new Vector2d(5, -36), Math.toRadians(135))
+//                .splineToConstantHeading(new Vector2d(5+(4*Math.cos(Math.toRadians(315))), -36+(4*Math.sin(Math.toRadians(315))) ), Math.toRadians(315))
+//                .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
+                .splineTo(new Vector2d(15, -33), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(15, -36), Math.toRadians(270))
                 .splineToSplineHeading(new Pose2d(40, -36, Math.toRadians(0)), Math.toRadians(0))
                 .build());
 
@@ -62,8 +65,8 @@ public class MeepMeepTesting {
                .build());
 
         BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
-                .splineTo(new Vector2d(15, 33), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(15, 36), Math.toRadians(270))
+                .splineTo(new Vector2d(15, 33), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(15, 45), Math.toRadians(270))
                 .splineToSplineHeading(new Pose2d(40, 36, Math.toRadians(0)), Math.toRadians(0))
                 .build());
 
