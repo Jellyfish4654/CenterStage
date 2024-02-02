@@ -64,7 +64,9 @@ public abstract class BaseOpMode extends LinearOpMode
         Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
         outakeServosLeftServo.setDirection(Servo.Direction.REVERSE);
         Servo outakeServosRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
-        outakeServos = new outtakeServo(outakeServosLeftServo, outakeServosRightServo);
+        Servo armLeftServo = hardwareMap.get(Servo.class, "armLeftServo");
+        Servo armRightServo = hardwareMap.get(Servo.class, "armRightServo");
+        outakeServos = new outtakeServo(outakeServosLeftServo, outakeServosRightServo, armLeftServo, armRightServo);
 
         slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
         slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");

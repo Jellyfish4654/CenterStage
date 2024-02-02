@@ -9,15 +9,18 @@ public class outtakeServo
 
     private final Servo outakeLeftServo;
     private final Servo outakeRightServo;
-
+    private final Servo armLeftServo;
+    private final Servo armRightServo;
 
     double positionL = 0.615;
     double positionR = 0.615;
 
-    public outtakeServo(Servo servo1, Servo servo2)
+    public outtakeServo(Servo servo1, Servo servo2, Servo leftArm, Servo rightArm)
     {
         this.outakeLeftServo = servo1;
         this.outakeRightServo = servo2;
+        this.armLeftServo = leftArm;
+        this.armRightServo = rightArm;
         outakeLeftServo.setPosition(positionL);
         outakeRightServo.setPosition(positionR);
     }
