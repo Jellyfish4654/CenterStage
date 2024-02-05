@@ -23,28 +23,34 @@ public class DoubleServoTuner extends LinearOpMode
     @Override
     public void runOpMode() throws InterruptedException
     {
+        final Servo armLeftServo;
+        final Servo armRightServo;
         final Servo outtakeLeftServo;
         final Servo outtakeRightServo;
         final CRServo outtakeCRServo;
 
+        armLeftServo = hardwareMap.get(Servo.class, "armLeftServo");
+        armRightServo = hardwareMap.get(Servo.class, "armRightServo");
         outtakeLeftServo = hardwareMap.get(Servo.class, "armLeftServo");
         outtakeRightServo = hardwareMap.get(Servo.class, "armRightServo");
         outtakeLeftServo.setDirection(Servo.Direction.REVERSE);
+        armLeftServo.setDirection(Servo.Direction.REVERSE);
 
         outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
         outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
-        double position = 0.2;
-
+        double position = 0;
+        double position1 = 0;
         waitForStart();
         runtime.reset();
 
         while (opModeIsActive())
         {
             telemetry.addData("ServoR", position);
+            telemetry.addData("ServoE", position1);
             telemetry.update();
 
-            outtakeLeftServo.setPosition(position);
-            outtakeRightServo.setPosition(position);
+            armLeftServo.setPosition(position);
+            armRightServo.setPosition(position);
 
             if (gamepad1.dpad_left)
             {
@@ -57,11 +63,29 @@ public class DoubleServoTuner extends LinearOpMode
 
             if (gamepad1.a)
             {
-                position = 0.59;
+                position = 1;
             }
             else if (gamepad1.b)
             {
-                position = 0.2;
+                position = 0;
+            }
+
+            if (gamepad1.dpad_up)
+            {
+                position1 -= 0.0001;
+            }
+            if (gamepad1.dpad_down)
+            {
+                position1 += 0.0001;
+            }
+
+            if (gamepad1.x)
+            {
+                position1 = 1;
+            }
+            else if (gamepad1.y)
+            {
+                position1 = 0;
             }
             // State Machine b/c CRServo need to change power to turn off
             switch (currentState)
