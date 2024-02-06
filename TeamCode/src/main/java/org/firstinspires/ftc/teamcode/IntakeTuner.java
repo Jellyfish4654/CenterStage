@@ -16,7 +16,7 @@ public class IntakeTuner extends BaseOpMode
         waitForStart();
         while (opModeIsActive())
         {
-            intakeMotor.setPower(0.7);
+            intakeMotor.setPower(1);
         }
     }
 }

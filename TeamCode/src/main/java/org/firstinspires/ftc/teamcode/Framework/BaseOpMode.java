@@ -31,7 +31,6 @@ public abstract class BaseOpMode extends LinearOpMode
 
 	protected DistanceSensor distanceRight;
 
-	protected AprilTagPipeline aprilTagPipeline;
 
 	protected void initHardware()
 	{
@@ -86,7 +85,6 @@ public abstract class BaseOpMode extends LinearOpMode
 		distanceLeft = hardwareMap.get(DistanceSensor.class, "distanceLeft");
 		distanceRight = hardwareMap.get(DistanceSensor.class, "distanceRight");
 
-        runAprilTagPipeline();
 	}
 
 	private IMU initializeIMUSensor()
@@ -109,15 +107,4 @@ public abstract class BaseOpMode extends LinearOpMode
 		}
 	}
 
-	private void runAprilTagPipeline()
-	{
-		if (opModeIsActive())
-		{
-			while (opModeIsActive())
-            {
-                aprilTagPipeline.update();
-                sleep(20);
-			}
-		}
-	}
 }

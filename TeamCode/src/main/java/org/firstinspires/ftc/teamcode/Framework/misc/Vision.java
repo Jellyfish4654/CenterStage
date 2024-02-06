@@ -140,7 +140,7 @@ public class Vision implements Subsystem {
         stopPropDetection();
     }
 
-    @Override
+
     public void update() {
 
     }

@@ -31,8 +31,8 @@ public class DoubleServoTuner extends LinearOpMode
 
         armLeftServo = hardwareMap.get(Servo.class, "armLeftServo");
         armRightServo = hardwareMap.get(Servo.class, "armRightServo");
-        outtakeLeftServo = hardwareMap.get(Servo.class, "armLeftServo");
-        outtakeRightServo = hardwareMap.get(Servo.class, "armRightServo");
+        outtakeLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
+        outtakeRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
         outtakeLeftServo.setDirection(Servo.Direction.REVERSE);
         armLeftServo.setDirection(Servo.Direction.REVERSE);
 
@@ -51,7 +51,8 @@ public class DoubleServoTuner extends LinearOpMode
 
             armLeftServo.setPosition(position);
             armRightServo.setPosition(position);
-
+            outtakeLeftServo.setPosition(position1);
+            outtakeRightServo.setPosition(position1);
             if (gamepad1.dpad_left)
             {
                 position -= 0.0001;
