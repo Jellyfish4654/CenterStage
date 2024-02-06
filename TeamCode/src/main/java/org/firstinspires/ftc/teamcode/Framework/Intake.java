@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -96,5 +100,26 @@ public class Intake
     public boolean checkIntake()
     {
         return PIDOutput > 0;
+    }
+
+    public class IntakeServo implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            servoIntakeOut();
+            servoIntakeDrone();
+            return false;
+        }
+    }
+    public class IntakeMotor implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            moveForward();
+            if(checkIntake()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 }
