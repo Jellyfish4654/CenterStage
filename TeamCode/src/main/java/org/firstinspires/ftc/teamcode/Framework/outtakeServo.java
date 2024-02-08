@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class outtakeServo {
@@ -64,5 +68,14 @@ public class outtakeServo {
         outakeRightServo.setPosition(positionR);
         armLeftServo.setPosition(armPositionL);
         armRightServo.setPosition(armPositionR);
+    }
+    public class autoOuttake implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+
+                return false;
+
+        }
     }
 }
