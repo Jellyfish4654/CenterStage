@@ -62,12 +62,6 @@ public class RedAutoCloseRight extends BaseOpMode
                 Actions.runBlocking(new SequentialAction(
                         leftPurple,
                         // Red Right Park
-                        drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(135)))
-                                .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
-                                .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
-                                .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
-                                .build(),
-                        slides.new SlidesUp1()
                         )
                 );
                 break;

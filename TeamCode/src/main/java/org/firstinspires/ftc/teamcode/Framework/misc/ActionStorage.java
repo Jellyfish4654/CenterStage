@@ -152,4 +152,28 @@ public class ActionStorage
                 .splineToConstantHeading(new Vector2d(48, -41), Math.toRadians(0))
                 .build();
     }
+    public Action getBlueFarYellowLeft(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueFarYellowCenter(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 35), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueFarYellowRight(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 29), Math.toRadians(0))
+                .build();
+    }
 }

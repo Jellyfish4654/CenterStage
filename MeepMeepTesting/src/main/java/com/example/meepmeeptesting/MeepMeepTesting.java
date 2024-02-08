@@ -36,55 +36,73 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
                 .build();
+        RoadRunnerBotEntity BLUE_LEFT_YELLOW = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60,60, Math.toRadians(90), Math.toRadians(90),18)
+                .build();
+        RoadRunnerBotEntity BLUE_TRAJ = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
+                .build();
+        RoadRunnerBotEntity BLUE_FAR1 = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
+                .build();
 
-        RED_FAR1.runAction(RED_FAR1.getDrive().actionBuilder(new Pose2d(15, -10, Math.toRadians(0)))
-                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(48, -35), Math.toRadians(0))
+        BLUE_LEFT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(-39, 60, Math.toRadians(90)))
+                .splineTo(new Vector2d(-39, 50), Math.toRadians(270))
+                .splineTo(new Vector2d(-30, 36), Math.toRadians(315))
+                .splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(135))), 36 + (4 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
+                .splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(135))) + (6 * Math.cos(Math.toRadians(225))), 36 + (4 * Math.sin(Math.toRadians(135))) + (6 * Math.sin(Math.toRadians(225)))), Math.toRadians(244.18)) // Adjusting angle to 244.18 degrees
+                .splineToConstantHeading(new Vector2d(-41, 17.5), Math.toRadians(244.18))
+                .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
                 .build());
-        RED_TRAJ.runAction(RED_TRAJ.getDrive().actionBuilder(new Pose2d(-48, -12, Math.toRadians(0)))
-                .splineToConstantHeading(new Vector2d(-12, -10), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(15, -10), Math.toRadians(0))
+        BLUE_FAR1.runAction(BLUE_FAR1.getDrive().actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 35), Math.toRadians(0))
                 .build());
+        BLUE_TRAJ.runAction(BLUE_TRAJ.getDrive().actionBuilder(new Pose2d(-48, 12, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(-12, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(15, 10), Math.toRadians(0))
+                .build());
+//
 
-        RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                .splineTo(new Vector2d(15, -48), Math.toRadians(90))
-                .splineTo(new Vector2d(18, -38), Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(18 + (4 * Math.cos(Math.toRadians(225))), -38 + (4 * Math.sin(Math.toRadians(225)))), Math.toRadians(225))
-                .splineToSplineHeading(new Pose2d(28, -44.17 + (4 * Math.sin(Math.toRadians(225))), Math.toRadians(0)), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(40, -36), Math.toRadians(0))
-                .build());
+//
+//        BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
+//                .splineTo(new Vector2d(15, 48), Math.toRadians(270))
+//                .splineTo(new Vector2d(18, 38), Math.toRadians(315))
+//                .splineToConstantHeading(new Vector2d(18 + (4 * Math.cos(Math.toRadians(135))), 38 + (4 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
+//                .splineToSplineHeading(new Pose2d(28, 44.17 + (4 * Math.sin(Math.toRadians(135))), Math.toRadians(0)), Math.toRadians(0))
+//                .splineToConstantHeading(new Vector2d(40, 36), Math.toRadians(0))
+//                .build());
+//
+//        RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39, -60, Math.toRadians(90)))
+//                .splineTo(new Vector2d(-34.5, -31), Math.toRadians(60))
+//                .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))), -31 + (4 * Math.sin(Math.toRadians(240)))), Math.toRadians(240))
+//                .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))) + (6 * Math.cos(Math.toRadians(150))), -31 + (4 * Math.sin(Math.toRadians(240))) + (6 * Math.sin(Math.toRadians(150)))), Math.toRadians(125))
+//                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
+//                .build());
+//
+//       BLUE_LEFT_PURPLE.runAction(BLUE_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39,60,Math.toRadians(270)))
+//               .splineTo(new Vector2d(-34.5, 31), Math.toRadians(300))
+//               .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))), 31 + (4 * Math.sin(Math.toRadians(120)))), Math.toRadians(120))
+//               .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))) + (6 * Math.cos(Math.toRadians(210))), 31 + (4 * Math.sin(Math.toRadians(120))) + (6 * Math.sin(Math.toRadians(210)))), Math.toRadians(235))
+//               .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
+//               .build());
 
-        BLUE_RIGHT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, 60, Math.toRadians(270)))
-                .splineTo(new Vector2d(15, 48), Math.toRadians(270))
-                .splineTo(new Vector2d(18, 38), Math.toRadians(315))
-                .splineToConstantHeading(new Vector2d(18 + (4 * Math.cos(Math.toRadians(135))), 38 + (4 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
-                .splineToSplineHeading(new Pose2d(28, 44.17 + (4 * Math.sin(Math.toRadians(135))), Math.toRadians(0)), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(40, 36), Math.toRadians(0))
-                .build());
-
-        RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39, -60, Math.toRadians(90)))
-                .splineTo(new Vector2d(-34.5, -31), Math.toRadians(60))
-                .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))), -31 + (4 * Math.sin(Math.toRadians(240)))), Math.toRadians(240))
-                .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))) + (6 * Math.cos(Math.toRadians(150))), -31 + (4 * Math.sin(Math.toRadians(240))) + (6 * Math.sin(Math.toRadians(150)))), Math.toRadians(125))
-                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
-                .build());
-
-       BLUE_LEFT_PURPLE.runAction(BLUE_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39,60,Math.toRadians(270)))
-               .splineTo(new Vector2d(-34.5, 31), Math.toRadians(300))
-               .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))), 31 + (4 * Math.sin(Math.toRadians(120)))), Math.toRadians(120))
-               .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))) + (6 * Math.cos(Math.toRadians(210))), 31 + (4 * Math.sin(Math.toRadians(120))) + (6 * Math.sin(Math.toRadians(210)))), Math.toRadians(235))
-               .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
-               .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
 //                .addEntity(RED_RIGHT_PURPLE)
-                .addEntity(RED_LEFT_PURPLE)
-                .addEntity(RED_TRAJ)
-                .addEntity(RED_FAR1)
+//                .addEntity(RED_LEFT_PURPLE)
+//                .addEntity(RED_TRAJ)
+//                .addEntity(RED_FAR1)
+                .addEntity(BLUE_LEFT_PURPLE)
+                .addEntity(BLUE_TRAJ)
+                .addEntity(BLUE_FAR1)
 //                .addEntity(BLUE_RIGHT_PURPLE)
 //                .addEntity(BLUE_LEFT_PURPLE)
                 .start();
