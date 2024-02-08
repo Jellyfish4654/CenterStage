@@ -1,23 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
-import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 
-@Disabled
 @Autonomous(name = "BlueAutoFarRight", group = "Auto")
 public class BlueAutoFarRight extends BaseOpMode
 {
@@ -57,71 +56,29 @@ public class BlueAutoFarRight extends BaseOpMode
         switch (detectedPosition)
         {
             case LEFT:
-//
-//                Actions.runBlocking(new SequentialAction(
-//                        // Red Right Purple Left
-//                        drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-//
-//                                .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(90))
-//                                .splineTo(new Vector2d(5, -34), Math.toRadians(135))
-//                                .build()),
-//                        //park
-//                        new SequentialAction(
-//                        drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(9135)))
-//
-//                                .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
-//                                .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
-//                                .build())
-//                );
+
                 break;
             case CENTER:
             case UNKNOWN:
-//
-//                Actions.runBlocking(new SequentialAction(
-//                        // Red Right Purple Middle
-//                        // Red Right Purple Middle
-//                        drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-//                                .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-//                                .build()),
-////                        (telemetryPacket) -> {
-////                            sleep(9000);
-////                            return false; // Returning true causes the action to run again, returning false causes it to cease
-////                        },
-//
-//                new SequentialAction(
-//                        //park
-//                        drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
-//                                .lineToY(-40)
-//                                .splineToConstantHeading(new Vector2d(15, -58), Math.toRadians(90))
-//                                .splineToSplineHeading(new Pose2d(22, -58, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
-//                                .build())
-//                );
+
+                Actions.runBlocking(new SequentialAction(
+                        // Red Right Purple Middle
+                        drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
+                                .splineTo(new Vector2d(13, -32), Math.toRadians(90))
+                                .build())
+                );
                 break;
             case RIGHT:
-//                Actions.runBlocking(new SequentialAction(
-//                        // Red Right Purple Right
-//                        drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-//                                .splineTo(new Vector2d(15, -46), Math.toRadians(90))
-//                                .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-//                                .build()),
-//                        //park
-////                        (telemetryPacket) -> {
-////                            sleep(9000);
-////                            return false; // Returning true causes the action to run again, returning false causes it to cease
-////                        },
-//                        new SequentialAction(
-//                        drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
-//                                .strafeTo(new Vector2d(12,-54))
-//                                .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToSplineHeading(new Pose2d(12, -58, Math.toRadians(90)), Math.toRadians(0))
-//                                .splineToConstantHeading(new Vector2d(-82, -58), Math.toRadians(0))
-//                                .build())
-//                );
-//                break;
+                Actions.runBlocking(new SequentialAction(
+                                // Red Right Purple Right
+                                drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
+                                        .splineTo(new Vector2d(13, -46), Math.toRadians(90))
+                                        .splineTo(new Vector2d(18, -38), Math.toRadians(60))
+                                        .build()
+                        )
+                );
+                break;
         }
-        PoseStorage.currentPose = drive.pose;
     }
 
 

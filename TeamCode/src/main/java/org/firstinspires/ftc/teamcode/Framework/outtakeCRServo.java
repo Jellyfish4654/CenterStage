@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import androidx.annotation.NonNull;
 
 public class outtakeCRServo
 {
@@ -69,5 +73,25 @@ public class outtakeCRServo
     {
         wheelServo.setPower(0);
         currentState = ServoState.STOPPED;
+    }
+
+    public class CRMoveForwardFor1Second implements Action {
+        private boolean initialized = false;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            if (!initialized) {
+                wheelServo.setPower(1);
+                timer.reset();
+                initialized = true;
+            }
+
+            if (timer.seconds() > 1) {
+                stopServo();
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 }

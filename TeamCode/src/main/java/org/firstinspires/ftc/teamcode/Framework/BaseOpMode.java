@@ -22,7 +22,6 @@ public abstract class BaseOpMode extends LinearOpMode
 	protected Slides slides;
 	protected CRServo outtakeCRServo;
 	protected outtakeCRServo wheelServo;
-	protected outtakeCRServoAction CRServoAction;
 	protected IMU imuSensor;
 	protected AntiTipping antiTipping;
 	protected AutoAlignment autoAlignment;
@@ -52,7 +51,6 @@ public abstract class BaseOpMode extends LinearOpMode
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
 		wheelServo = new outtakeCRServo(outtakeCRServo);
-		CRServoAction = new outtakeCRServoAction(outtakeCRServo);
 		intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
 		intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 		intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);

@@ -31,28 +31,28 @@ public class outtakeServo {
         armRightServo.setPosition(armPositionR);
     }
 
-    public void openOuttake() {
+    public void boxOuttakeIntake() {
         positionL = OUTTAKE_INTAKE;
         positionR = OUTTAKE_INTAKE;
         outakeLeftServo.setPosition(positionL);
         outakeRightServo.setPosition(positionR);
     }
 
-    public void closeOuttake() {
+    public void boxOuttakeDeposit() {
         positionL = OUTTAKE_DEPOSIT;
         positionR = OUTTAKE_DEPOSIT;
         outakeLeftServo.setPosition(positionL);
         outakeRightServo.setPosition(positionR);
     }
 
-    public void openArmOuttake() {
+    public void armOuttakeIntake() {
         armPositionL = ARM_DEPOSIT_POSITION;
         armPositionR = ARM_DEPOSIT_POSITION;
         armLeftServo.setPosition(armPositionL);
         armRightServo.setPosition(armPositionR);
     }
 
-    public void closeArmOuttake() {
+    public void armOuttakeDeposit() {
         armPositionL = ARM_INTAKE_POSITION;
         armPositionR = ARM_INTAKE_POSITION;
         armLeftServo.setPosition(armPositionL);

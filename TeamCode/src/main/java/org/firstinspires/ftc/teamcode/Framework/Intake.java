@@ -82,7 +82,7 @@ public class Intake
         intakeServo.setPosition(0.253);
     }
 
-    public void servoIntakeOut()
+    public void servoIntakeRelease()
     {
         intakeServo.setPosition(0.12);
     }
@@ -102,10 +102,16 @@ public class Intake
         return PIDOutput > 0;
     }
 
-    public class IntakeServo implements Action {
+    public class IntakeServoRelease implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            servoIntakeOut();
+            servoIntakeRelease();
+            return false;
+        }
+    }
+    public class IntakeServoDrone implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             servoIntakeDrone();
             return false;
         }
@@ -114,12 +120,7 @@ public class Intake
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             moveForward();
-            if(checkIntake()){
-                return true;
-            }
-            else{
-                return false;
-            }
+            return checkIntake();
         }
     }
 }

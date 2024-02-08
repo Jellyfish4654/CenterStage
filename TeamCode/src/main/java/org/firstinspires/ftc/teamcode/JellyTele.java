@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.misc.PoseStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
@@ -74,8 +73,8 @@ public class JellyTele extends BaseOpMode
         gamepadEx1 = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
         antiTipping.initImuError();
-        intakeSystem.servoIntakeOut();
-        drive = new MecanumDrive(hardwareMap, PoseStorage.currentPose);
+        intakeSystem.servoIntakeRelease();
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
         waitForStart();
         ElapsedTime timer = new ElapsedTime();
         intakeSystem.servoIntakeDrone();
@@ -123,14 +122,14 @@ public class JellyTele extends BaseOpMode
             outtakeBox=!outtakeBox;
         }
         if(outtakeArm){
-            outakeServos.closeArmOuttake();
+            outakeServos.armOuttakeDeposit();
         } else {
-            outakeServos.openArmOuttake();
+            outakeServos.armOuttakeIntake();
         }
         if(outtakeBox){
-            outakeServos.closeOuttake();
+            outakeServos.boxOuttakeDeposit();
         } else {
-            outakeServos.openOuttake();
+            outakeServos.boxOuttakeIntake();
         }
         switch (currentState)
         {
