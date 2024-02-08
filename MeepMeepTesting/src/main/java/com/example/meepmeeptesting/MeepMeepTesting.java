@@ -28,6 +28,25 @@ public class MeepMeepTesting {
                 .setColorScheme(new ColorSchemeBlueDark())
                 .setConstraints(60,60, Math.toRadians(90), Math.toRadians(90),18)
                 .build();
+        RoadRunnerBotEntity RED_TRAJ = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
+                .build();
+        RoadRunnerBotEntity RED_FAR1 = new DefaultBotBuilder(meepMeep)
+                .setColorScheme(new ColorSchemeBlueDark())
+                .setConstraints(60, 60, Math.toRadians(90), Math.toRadians(90), 18)
+                .build();
+
+        RED_FAR1.runAction(RED_FAR1.getDrive().actionBuilder(new Pose2d(15, -10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, -35), Math.toRadians(0))
+                .build());
+        RED_TRAJ.runAction(RED_TRAJ.getDrive().actionBuilder(new Pose2d(-48, -12, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(-12, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(15, -10), Math.toRadians(0))
+                .build());
 
         RED_RIGHT_PURPLE.runAction(RED_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
                 .splineTo(new Vector2d(15, -48), Math.toRadians(90))
@@ -62,10 +81,12 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(RED_RIGHT_PURPLE)
+//                .addEntity(RED_RIGHT_PURPLE)
                 .addEntity(RED_LEFT_PURPLE)
-                .addEntity(BLUE_RIGHT_PURPLE)
-                .addEntity(BLUE_LEFT_PURPLE)
+                .addEntity(RED_TRAJ)
+                .addEntity(RED_FAR1)
+//                .addEntity(BLUE_RIGHT_PURPLE)
+//                .addEntity(BLUE_LEFT_PURPLE)
                 .start();
     }
 }

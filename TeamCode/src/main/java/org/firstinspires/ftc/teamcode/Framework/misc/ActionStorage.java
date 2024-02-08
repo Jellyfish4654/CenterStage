@@ -128,4 +128,28 @@ public class ActionStorage
                 .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
                 .build();
     }
+    public Action getRedFarYellow1(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
+                .build();
+    }
+    public Action getRedFarYellow2(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, -35), Math.toRadians(0))
+                .build();
+    }
+    public Action getRedFarYellow3(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, -41), Math.toRadians(0))
+                .build();
+    }
 }
