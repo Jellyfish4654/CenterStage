@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
+import android.drm.DrmStore;
+
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.trajectory.TrapezoidProfile;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -140,5 +146,54 @@ public class Slides
     public int getTargetPositionRight()
     {
         return targetPositionRight;
+    }
+
+    public class SlidesUp1 implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            setTargetPosition(1000);
+            if(slideCheck()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    public class SlidesUp2 implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            setTargetPosition(2000);
+            if(slideCheck()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    public class SlidesUp3 implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            setTargetPosition(3000);
+            if(slideCheck()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+    public class SlidesDown0 implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            setTargetPosition(0);
+            if(slideCheck()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
     }
 }
