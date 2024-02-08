@@ -28,6 +28,8 @@ public class JellyTele extends BaseOpMode
     private ElapsedTime joystickReleaseTimer = new ElapsedTime();
     private GamepadEx gamepadEx1;
     private GamepadEx gamepadEx2;
+    private Boolean outtakeArm = false;
+    private Boolean outtakeBox = false;
 
     protected enum DriveMode
     {
@@ -109,6 +111,65 @@ public class JellyTele extends BaseOpMode
         }
     }
 
+    private void OutakeControl()
+    {
+        outakeServos.setOutput();
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))
+        {
+            outtakeArm=!outtakeArm;
+        }
+        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER))
+        {
+            outtakeBox=!outtakeBox;
+        }
+        if(outtakeArm){
+            outakeServos.closeArmOuttake();
+        } else {
+            outakeServos.openArmOuttake();
+        }
+        if(outtakeBox){
+            outakeServos.closeOuttake();
+        } else {
+            outakeServos.openOuttake();
+        }
+        switch (currentState)
+        {
+            case IDLE:
+                if (gamepad2.left_stick_y < 0)
+                {
+                    currentState = Outtake.INTAKE;
+                }
+                else if (gamepad2.x)
+                {
+                    currentState = Outtake.DEPOSIT;
+                }
+                outtakeCRServo.setPower(0);
+                break;
+            case INTAKE:
+                if (gamepad2.x)
+                {
+                    currentState = Outtake.DEPOSIT;
+                }
+                else if (!(gamepad2.left_stick_y < 0))
+                {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(gamepad2.left_stick_y);
+                break;
+            case DEPOSIT:
+                if (gamepad2.left_stick_y < 0)
+                {
+                    currentState = Outtake.INTAKE;
+                }
+                else if (!gamepad2.x)
+                {
+                    currentState = Outtake.IDLE;
+                }
+                outtakeCRServo.setPower(0.75);
+                break;
+        }
+    }
+
     private void controlIntakeMotor()
     {
         double alpha = 0.5;
@@ -179,55 +240,6 @@ public class JellyTele extends BaseOpMode
                 int averageTarget = (slideMotorLeft.getCurrentPosition() + slideMotorRight.getCurrentPosition()) / 2;
                 slides.setTargetPosition(averageTarget - 300);
             }
-        }
-    }
-
-    private void OutakeControl()
-    {
-        outakeServos.setOutput();
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER))
-        {
-            outakeServos.closeOuttake();
-        }
-        if (gamepadEx2.wasJustReleased(GamepadKeys.Button.RIGHT_BUMPER))
-        {
-            outakeServos.openOuttake();
-        }
-        switch (currentState)
-        {
-            case IDLE:
-                if (gamepad2.left_stick_y < 0)
-                {
-                    currentState = Outtake.INTAKE;
-                }
-                else if (gamepad2.x)
-                {
-                    currentState = Outtake.DEPOSIT;
-                }
-                outtakeCRServo.setPower(0);
-                break;
-            case INTAKE:
-                if (gamepad2.x)
-                {
-                    currentState = Outtake.DEPOSIT;
-                }
-                else if (!(gamepad2.left_stick_y < 0))
-                {
-                    currentState = Outtake.IDLE;
-                }
-                outtakeCRServo.setPower(gamepad2.left_stick_y);
-                break;
-            case DEPOSIT:
-                if (gamepad2.left_stick_y < 0)
-                {
-                    currentState = Outtake.INTAKE;
-                }
-                else if (!gamepad2.x)
-                {
-                    currentState = Outtake.IDLE;
-                }
-                outtakeCRServo.setPower(0.75);
-                break;
         }
     }
 
