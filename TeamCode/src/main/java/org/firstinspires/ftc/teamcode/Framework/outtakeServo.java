@@ -69,13 +69,44 @@ public class outtakeServo {
         armLeftServo.setPosition(armPositionL);
         armRightServo.setPosition(armPositionR);
     }
-    public class autoOuttake implements Action {
+    public class boxOuttakeDeposit implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
-
-                return false;
-
+            positionL = OUTTAKE_DEPOSIT;
+            positionR = OUTTAKE_DEPOSIT;
+            outakeLeftServo.setPosition(positionL);
+            outakeRightServo.setPosition(positionR);
+            return false;
+        }
+    }
+    public class boxOuttakeIntake implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            positionL = OUTTAKE_INTAKE;
+            positionR = OUTTAKE_INTAKE;
+            outakeLeftServo.setPosition(positionL);
+            outakeRightServo.setPosition(positionR);
+            return false;
+        }
+    }
+    public class armOuttakeDeposit implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            armPositionL = ARM_INTAKE_POSITION;
+            armPositionR = ARM_INTAKE_POSITION;
+            armLeftServo.setPosition(armPositionL);
+            armRightServo.setPosition(armPositionR);
+            return false;
+        }
+    }
+    public class armOuttakeIntake implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            armPositionL = ARM_DEPOSIT_POSITION;
+            armPositionR = ARM_DEPOSIT_POSITION;
+            armLeftServo.setPosition(armPositionL);
+            armRightServo.setPosition(armPositionR);
+            return false;
         }
     }
 }
