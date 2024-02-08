@@ -98,7 +98,6 @@ public class RedAutoFarLeft extends BaseOpMode
 //                                            .build()
                 break;
             case CENTER:
-            case UNKNOWN:
 //                Actions.runBlocking(new SequentialAction(
                 // Red Right Purple Middle
                 drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
@@ -119,6 +118,7 @@ public class RedAutoFarLeft extends BaseOpMode
                         .build();
                 break;
             case RIGHT:
+            case UNKNOWN:
 //                Actions.runBlocking(new SequentialAction(
                 // Red Right Purple Right
                 drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))

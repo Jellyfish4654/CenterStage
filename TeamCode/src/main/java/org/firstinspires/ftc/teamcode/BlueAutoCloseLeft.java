@@ -61,7 +61,6 @@ public class BlueAutoCloseLeft extends BaseOpMode
 
                 break;
             case CENTER:
-            case UNKNOWN:
 
                 Actions.runBlocking(new SequentialAction(
                         // Red Right Purple Middle
@@ -71,6 +70,7 @@ public class BlueAutoCloseLeft extends BaseOpMode
                 );
                 break;
             case RIGHT:
+            case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
                                 // Red Right Purple Right
                                 drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
