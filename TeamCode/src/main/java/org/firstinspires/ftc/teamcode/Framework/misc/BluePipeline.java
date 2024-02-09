@@ -35,9 +35,9 @@ public class BluePipeline extends OpenCvPipeline
 		int rectWidth = CAMERA_WIDTH / 3;
 		int rectHeight = CAMERA_HEIGHT;
 
-		leftRect = new Rect(200, 0, 500, 750);
-		centerRect = new Rect(910, 0, 400, 750);
-		rightRect = new Rect(1420, 0, 500, 750);
+		leftRect = new Rect(0, 0, 640, 1080);
+		centerRect = new Rect(640, 0, 640, 1080);
+		rightRect = new Rect(1280, 0, 640, 1080);
 	}
 
 	static int leftCount;

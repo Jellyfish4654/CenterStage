@@ -9,7 +9,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class RedPipeline extends OpenCvPipeline
+public class LeftRedPipeline extends OpenCvPipeline
 {
 	Telemetry telemetry;
 	// HSV thresholds for red color detection
@@ -31,7 +31,7 @@ public class RedPipeline extends OpenCvPipeline
 	private static final int CAMERA_WIDTH = 1920;
 	private static final int CAMERA_HEIGHT = 1080;
 
-	public RedPipeline(Telemetry telemetry)
+	public LeftRedPipeline(Telemetry telemetry)
 	{
 		this.telemetry = telemetry;
 
@@ -39,9 +39,9 @@ public class RedPipeline extends OpenCvPipeline
 		int rectWidth = CAMERA_WIDTH / 3;
 		int rectHeight = CAMERA_HEIGHT;
 
-		leftRect = new Rect(0, 0, 640, 1080);
-		centerRect = new Rect(640, 0, 640, 1080);
-		rightRect = new Rect(1280, 0, 640, 1080);
+		leftRect = new Rect(500, 0, 640, 1080);
+		centerRect = new Rect(1140, 0, 640, 1080);
+		rightRect = new Rect(0, 0, 0, 0);
 	}
 
 	static int leftCount;

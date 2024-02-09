@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
-import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
+import org.firstinspires.ftc.teamcode.Framework.misc.LeftRedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -24,7 +24,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class RedAutoFarLeft extends BaseOpMode
 {
 	OpenCvCamera webcam;
-	RedPipeline detectionPipeline;
+	LeftRedPipeline detectionPipeline;
 	Sides.Position detectedPosition;
 
 	double distanceFilter = 0.9;
@@ -45,9 +45,9 @@ public class RedAutoFarLeft extends BaseOpMode
 		while (!isStarted() && !isStopRequested())
 		{
 			telemetry.addData("Position", Sides.getPosition().toString());
-			telemetry.addData("Left Pixels", RedPipeline.getLeft());
-			telemetry.addData("Center Pixels", RedPipeline.getCenter());
-			telemetry.addData("Right Pixels", RedPipeline.getRight());
+			telemetry.addData("Left Pixels", LeftRedPipeline.getLeft());
+			telemetry.addData("Center Pixels", LeftRedPipeline.getCenter());
+			telemetry.addData("Right Pixels", LeftRedPipeline.getRight());
 			telemetry.addData("Left Distance", distanceLeft.getDistance(DistanceUnit.INCH));
 			telemetry.update();
 
@@ -99,7 +99,7 @@ public class RedAutoFarLeft extends BaseOpMode
 		int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 		webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-		detectionPipeline = new RedPipeline(telemetry);
+		detectionPipeline = new LeftRedPipeline(telemetry);
 		webcam.setPipeline(detectionPipeline);
 
 		webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
