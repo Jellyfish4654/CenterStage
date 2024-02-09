@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 public class ActionStorage
@@ -271,5 +272,42 @@ public class ActionStorage
 					.splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))
 					.splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
 					.build();
+	}
+
+	public Action getRedCloseYellowLeft()
+	{
+		return drive.actionBuilder(drive.pose)
+				.splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
+				.build();
+	}
+	public Action getRedCloseYellowCenter()
+	{
+		return  drive.actionBuilder(drive.pose)
+				.splineToConstantHeading(new Vector2d(48, -35), Math.toRadians(0))
+				.build();
+	}
+	public Action getRedCloseYellowRight()
+	{
+		return drive.actionBuilder(drive.pose)
+				.splineToConstantHeading(new Vector2d(48, -41), Math.toRadians(0))
+				.build();
+	}
+	public Action getBlueCloseYellowLeft()
+	{
+		return drive.actionBuilder(drive.pose)
+				.splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
+				.build();
+	}
+	public Action getBlueCloseYellowCenter()
+	{
+		return  drive.actionBuilder(drive.pose)
+				.splineToConstantHeading(new Vector2d(48, 35), Math.toRadians(0))
+				.build();
+	}
+	public Action getBlueCloseYellowRight()
+	{
+		return  drive.actionBuilder(drive.pose)
+				.splineToConstantHeading(new Vector2d(48, 29), Math.toRadians(0))
+				.build();
 	}
 }
