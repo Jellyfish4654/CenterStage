@@ -14,64 +14,73 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
 
-public class Vision {
+public class Vision
+{
 
-    private VisionPortal visionPortal;
-    private AprilTagProcessor tagProcessor;
-    private static final String cameraname = "Webcam 1";
+	private VisionPortal visionPortal;
+	private AprilTagProcessor tagProcessor;
+	private static final String cameraname = "Webcam 1";
 
-    public Vision(HardwareMap hardwareMap) {
-        tagProcessor = new AprilTagProcessor.Builder()
-                .setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
-                .build();
+	public Vision(HardwareMap hardwareMap)
+	{
+		tagProcessor = new AprilTagProcessor.Builder()
+				.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+				.setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
+				.build();
 
-        visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, cameraname), tagProcessor);
-    }
+		visionPortal = VisionPortal.easyCreateWithDefaults(
+				hardwareMap.get(WebcamName.class, cameraname), tagProcessor);
+	}
 
-    public void startAprilTagDetection() {
-        visionPortal.setProcessorEnabled(tagProcessor,true);
-        if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY) {
-            visionPortal.resumeStreaming();
-        }
-    }
+	public void startAprilTagDetection()
+	{
+		visionPortal.setProcessorEnabled(tagProcessor, true);
+		if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY)
+		{
+			visionPortal.resumeStreaming();
+		}
+	}
 
-    public void stopAprilTagDetection() {
-        visionPortal.stopStreaming();
-    }
+	public void stopAprilTagDetection()
+	{
+		visionPortal.stopStreaming();
+	}
 
-    public ArrayList<Pose2d> getAprilTagPoses() {
-        ArrayList<AprilTagDetection> tags = tagProcessor.getDetections();
-        ArrayList<Pose2d> poses = new ArrayList<>();
+	public ArrayList<Pose2d> getAprilTagPoses()
+	{
+		ArrayList<AprilTagDetection> tags = tagProcessor.getDetections();
+		ArrayList<Pose2d> poses = new ArrayList<>();
 
-        for (AprilTagDetection tag : tags) {
-            if (tag.metadata != null) {
-                Transform3d tagPose = new Transform3d(
-                        tag.metadata.fieldPosition,
-                        tag.metadata.fieldOrientation
-                );
+		for (AprilTagDetection tag : tags)
+		{
+			if (tag.metadata != null)
+			{
+				Transform3d tagPose = new Transform3d(
+						tag.metadata.fieldPosition,
+						tag.metadata.fieldOrientation
+				);
 
-                Transform3d cameraToTagTransform = new Transform3d(
-                        new VectorF(
-                                (float) tag.rawPose.x,
-                                (float) tag.rawPose.y,
-                                (float) tag.rawPose.z
-                        ),
-                        Transform3d.MatrixToQuaternion(tag.rawPose.R)
-                );
+				Transform3d cameraToTagTransform = new Transform3d(
+						new VectorF(
+								(float) tag.rawPose.x,
+								(float) tag.rawPose.y,
+								(float) tag.rawPose.z
+						),
+						Transform3d.MatrixToQuaternion(tag.rawPose.R)
+				);
 
-                Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
-                Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
-                poses.add(cameraPose.toPose2d());
-            }
-        }
+				Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
+				Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
+				poses.add(cameraPose.toPose2d());
+			}
+		}
 
-        return poses;
-    }
+		return poses;
+	}
 
-    public void closeAll() {
-        visionPortal.close();
-        stopAprilTagDetection();
-    }
+	public void closeAll()
+	{
+		visionPortal.close();
+		stopAprilTagDetection();
+	}
 }

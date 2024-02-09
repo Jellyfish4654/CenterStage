@@ -5,16 +5,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class DroneLauncher
 {
 
-    private final Servo droneLauncher;
+	private final Servo droneLauncher;
 
-    public DroneLauncher(Servo servo)
-    {
-        this.droneLauncher = servo;
-    }
+	public DroneLauncher(Servo servo)
+	{
+		this.droneLauncher = servo;
+	}
 
 
-    public void launchDrone()
-    {
-        droneLauncher.setPosition(1);
-    }
+	public void launchDrone()
+	{
+		droneLauncher.setPosition(1);
+	}
 }
