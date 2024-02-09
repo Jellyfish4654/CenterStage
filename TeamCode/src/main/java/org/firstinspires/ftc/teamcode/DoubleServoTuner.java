@@ -40,6 +40,7 @@ public class DoubleServoTuner extends LinearOpMode
         outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
         double position = 0.8812;
         double position1 = 0.2495;
+        double mult = 1;
         waitForStart();
         runtime.reset();
 
@@ -55,11 +56,11 @@ public class DoubleServoTuner extends LinearOpMode
             outtakeRightServo.setPosition(position1);
             if (gamepad1.dpad_left)
             {
-                position -= 0.0001;
+                position -= 0.0001*mult;
             }
             if (gamepad1.dpad_right)
             {
-                position += 0.0001;
+                position += 0.0001*mult;
             }
 
             if (gamepad1.a)
@@ -70,14 +71,21 @@ public class DoubleServoTuner extends LinearOpMode
             {
                 position = 0.8812;
             }
-
+            if (gamepad1.left_bumper)
+            {
+                mult = 50;
+            }
+            else if (gamepad1.right_bumper)
+            {
+                mult = 1;
+            }
             if (gamepad1.dpad_up)
             {
-                position1 -= 0.0001;
+                position1 -= 0.0001* mult;
             }
             if (gamepad1.dpad_down)
             {
-                position1 += 0.0001;
+                position1 += 0.0001*mult;
             }
 
             if (gamepad1.x)

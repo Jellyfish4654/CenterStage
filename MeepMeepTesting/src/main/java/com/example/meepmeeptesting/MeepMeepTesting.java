@@ -67,6 +67,11 @@ public class MeepMeepTesting {
                 .splineToConstantHeading(new Vector2d(-12, 10), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(15, 10), Math.toRadians(0))
                 .build());
+
+        RED_TRAJ.runAction(RED_TRAJ.getDrive().actionBuilder(new Pose2d(-48, -12, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(-12, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(15, -10), Math.toRadians(0))
+                .build());
 //
 
 //
@@ -77,7 +82,7 @@ public class MeepMeepTesting {
 //                .splineToSplineHeading(new Pose2d(28, 44.17 + (4 * Math.sin(Math.toRadians(135))), Math.toRadians(0)), Math.toRadians(0))
 //                .splineToConstantHeading(new Vector2d(40, 36), Math.toRadians(0))
 //                .build());
-//
+
 //        RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39, -60, Math.toRadians(90)))
 //                .splineTo(new Vector2d(-34.5, -31), Math.toRadians(60))
 //                .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))), -31 + (4 * Math.sin(Math.toRadians(240)))), Math.toRadians(240))
@@ -91,18 +96,24 @@ public class MeepMeepTesting {
 //               .splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))) + (6 * Math.cos(Math.toRadians(210))), 31 + (4 * Math.sin(Math.toRadians(120))) + (6 * Math.sin(Math.toRadians(210)))), Math.toRadians(235))
 //               .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
 //               .build());
+        RED_FAR1.runAction(RED_FAR1.getDrive().actionBuilder(new Pose2d(15, -10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
 
+               .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
 //                .addEntity(RED_RIGHT_PURPLE)
-//                .addEntity(RED_LEFT_PURPLE)
+                .addEntity(RED_LEFT_PURPLE)
 //                .addEntity(RED_TRAJ)
 //                .addEntity(RED_FAR1)
-                .addEntity(BLUE_LEFT_PURPLE)
-                .addEntity(BLUE_TRAJ)
-                .addEntity(BLUE_FAR1)
+//                .addEntity(BLUE_LEFT_PURPLE)
+//                .addEntity(BLUE_TRAJ)
+//                .addEntity(BLUE_FAR1)
 //                .addEntity(BLUE_RIGHT_PURPLE)
 //                .addEntity(BLUE_LEFT_PURPLE)
                 .start();

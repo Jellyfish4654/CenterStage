@@ -128,6 +128,19 @@ public class ActionStorage
                 .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
                 .build();
     }
+
+    public Action getRedTraj(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(-12, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(15, -10), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueTraj(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(-12, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(15, 10), Math.toRadians(0))
+                .build();
+    }
     public Action getRedFarYellowLeft(){
         return drive.actionBuilder(drive.pose)
                 .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
@@ -174,6 +187,50 @@ public class ActionStorage
                 .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(48, 29), Math.toRadians(0))
+                .build();
+    }
+
+
+    public Action getRedYellowParkLeft(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(46, -29), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -10), Math.toRadians(0))
+                .build();
+    }
+    public Action getRedYellowParkCenter(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(46, -35), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -10), Math.toRadians(0))
+                .build();
+    }
+    public Action getRedYellowParkRight(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(46, -41), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -10), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueYellowParkLeft(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(46, 41), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueYellowParkCenter(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(46, 35), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueYellowParkRight(){
+        return drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(46, 29), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
                 .build();
     }
 }

@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -55,7 +56,7 @@ public class RedAutoFarLeft extends BaseOpMode
             distance = distanceLeft.getDistance(DistanceUnit.INCH);
             distance = filter.estimate(distance);
         }
-        drive.pose = new Pose2d(distance-5.5, -60, Math.toRadians(90));
+        drive.pose = new Pose2d(-72+(distance+5.5), -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
         ActionStorage actionStorage = new ActionStorage(drive);

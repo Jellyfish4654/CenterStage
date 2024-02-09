@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -24,7 +25,8 @@ public class BlueAutoCloseLeft extends BaseOpMode
     OpenCvCamera webcam;
     BluePipeline detectionPipeline;
     Sides.Position detectedPosition;
-
+    double distanceFilter = 0.9;
+    LowPassFilter filter = new LowPassFilter(distanceFilter);
     double distance;
 
     @Override
@@ -49,8 +51,9 @@ public class BlueAutoCloseLeft extends BaseOpMode
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
             distance = distanceLeft.getDistance(DistanceUnit.INCH);
+            distance = filter.estimate(distance);
         }
-        drive.pose = new Pose2d(distance, -60, Math.toRadians(90));
+        drive.pose = new Pose2d(72-(distance+5.5), -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
 
