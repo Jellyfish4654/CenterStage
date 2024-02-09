@@ -40,7 +40,7 @@ public class RedPipeline extends OpenCvPipeline
 		int rectHeight = CAMERA_HEIGHT;
 
 		leftRect = new Rect(0, 330, 500, 750);
-		centerRect = new Rect(360, 100, 600, 750);
+		centerRect = new Rect(560, 100, 600, 750);
 		rightRect = new Rect(1370, 330, 500, 750);
 	}
 
