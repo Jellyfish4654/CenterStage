@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -22,6 +23,8 @@ public class RedAutoFarLeft extends BaseOpMode
     RedPipeline detectionPipeline;
     Sides.Position detectedPosition;
 
+    double distanceFilter = 0.9;
+    LowPassFilter filter = new LowPassFilter(distanceFilter);
     double distance;
 
     @Override
@@ -42,11 +45,13 @@ public class RedAutoFarLeft extends BaseOpMode
             telemetry.addData("Right Pixels", RedPipeline.getRight());
             telemetry.addData("Left Distance", distanceLeft.getDistance(DistanceUnit.INCH));
             telemetry.update();
+
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
             distance = distanceLeft.getDistance(DistanceUnit.INCH);
+            distance = filter.estimate(distance);
         }
-        drive.pose = new Pose2d(distance, -60, Math.toRadians(90));
+        drive.pose = new Pose2d(distance-5.5, -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
 
