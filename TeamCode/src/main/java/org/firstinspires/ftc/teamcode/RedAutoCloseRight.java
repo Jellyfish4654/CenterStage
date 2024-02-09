@@ -32,7 +32,6 @@ public class RedAutoCloseRight extends BaseOpMode
     public void runOpMode()
     {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
-        ActionStorage actionStorage = new ActionStorage(drive);
         Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
@@ -54,62 +53,29 @@ public class RedAutoCloseRight extends BaseOpMode
         drive.pose = new Pose2d(distance, -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
+        ActionStorage actionStorage = new ActionStorage(drive);
         // Run the autonomous path based on the detected position
         Action leftPurple = actionStorage.getRedCloseRight_LeftPurpleAction();
-        Action getSlidesUp1;
+        Action centerPurple = actionStorage.getRedCloseRight_CenterPurpleAction();
+        Action rightPurple = actionStorage.getRedCloseRight_RightPurpleAction();
         switch (detectedPosition)
         {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
-                                leftPurple,
-//                                    // Red Right Park
-                                drive.actionBuilder(new Pose2d(5, -34, Math.toRadians(135)))
-
-                                        .splineToConstantHeading(new Vector2d(15, -48), Math.toRadians(270))
-                                        .splineToSplineHeading(new Pose2d(15, -58, Math.toRadians(90)), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
-                                        .build(),
-                                (telemetryPacket) ->
-                                {
-                                    slides.setTargetPosition(1750);
-                                    slides.update();
-                                    return slides.slideCheck();
-                                }
-
+                                leftPurple
                         )
                 );
                 break;
             case CENTER:
-            case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
-                                // Red Right Purple Middle
-                                drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                        .splineTo(new Vector2d(15, -32), Math.toRadians(90))
-                                        .build(),
-//                                    // Red Right Park
-                                drive.actionBuilder(new Pose2d(15, -32, Math.toRadians(90)))
-                                        .lineToY(-40)
-                                        .splineToConstantHeading(new Vector2d(15, -58), Math.toRadians(90))
-                                        .splineToSplineHeading(new Pose2d(22, -58, Math.toRadians(90)), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
-                                        .build()
+                                centerPurple
                         )
                 );
                 break;
             case RIGHT:
+            case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
-                                // Red Right Purple Right
-                                drive.actionBuilder(new Pose2d(15, -60, Math.toRadians(90)))
-                                        .splineTo(new Vector2d(15, -46), Math.toRadians(90))
-                                        .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-                                        .build(),
-//                                    // Red Right Park
-                                drive.actionBuilder(new Pose2d(18, -38, Math.toRadians(60)))
-                                        .strafeTo(new Vector2d(12, -54))
-                                        .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(90)), Math.toRadians(0))
-                                        .splineToSplineHeading(new Pose2d(12, -58, Math.toRadians(90)), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(60, -58), Math.toRadians(0))
-                                        .build()
+                                rightPurple
                         )
                 );
                 break;

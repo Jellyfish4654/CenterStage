@@ -21,7 +21,7 @@ public class outtakeServo {
     double positionL = OUTTAKE_INTAKE;
     double positionR = OUTTAKE_INTAKE;
     double armPositionL = ARM_INTAKE_POSITION;
-    double armPositionR = ARM_DEPOSIT_POSITION;
+    double armPositionR = ARM_INTAKE_POSITION;
 
     public outtakeServo(Servo servo1, Servo servo2, Servo leftArm, Servo rightArm)
     {
@@ -50,15 +50,15 @@ public class outtakeServo {
     }
 
     public void armOuttakeIntake() {
-        armPositionL = ARM_DEPOSIT_POSITION;
-        armPositionR = ARM_DEPOSIT_POSITION;
+        armPositionL = ARM_INTAKE_POSITION;
+        armPositionR = ARM_INTAKE_POSITION;
         armLeftServo.setPosition(armPositionL);
         armRightServo.setPosition(armPositionR);
     }
 
     public void armOuttakeDeposit() {
-        armPositionL = ARM_INTAKE_POSITION;
-        armPositionR = ARM_INTAKE_POSITION;
+        armPositionL = ARM_DEPOSIT_POSITION;
+        armPositionR = ARM_DEPOSIT_POSITION;
         armLeftServo.setPosition(armPositionL);
         armRightServo.setPosition(armPositionR);
     }
