@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
@@ -76,7 +77,15 @@ public class BlueAutoFarRight_2iykyk extends BaseOpMode{
         {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
+                        new ParallelAction(
                                 leftPurple,
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        intakeSystem.new IntakeServoRelease(),
+                                        new SleepAction(0.3),
+                                        intakeSystem.new IntakeServoDrone()
+                                )
+                        ),
                                 traj1,
                                 leftYellow,
                                 slides.new SlidesUp1(),
@@ -95,7 +104,15 @@ public class BlueAutoFarRight_2iykyk extends BaseOpMode{
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
+                        new ParallelAction(
                                 centerPurple,
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        intakeSystem.new IntakeServoRelease(),
+                                        new SleepAction(0.3),
+                                        intakeSystem.new IntakeServoDrone()
+                                )
+                        ),
                                 traj1,
                                 centerYellow,
                                 slides.new SlidesUp1(),
@@ -115,7 +132,15 @@ public class BlueAutoFarRight_2iykyk extends BaseOpMode{
             case RIGHT:
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
+                        new ParallelAction(
                                 rightPurple,
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        intakeSystem.new IntakeServoRelease(),
+                                        new SleepAction(0.3),
+                                        intakeSystem.new IntakeServoDrone()
+                                )
+                        ),
                                 traj1,
                                 rightYellow,
                                 slides.new SlidesUp1(),
