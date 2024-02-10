@@ -62,10 +62,13 @@ public class RedAutoFarLeft extends BaseOpMode {
         Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
         Action rightPurple = actionStorage.getRedFarRight_RightPurpleAction();
         Action traj1 = actionStorage.getRedTraj();
+        Action leftYellow = actionStorage.getRedFarYellowLeft();
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
-                                leftPurple
+                                leftPurple,
+                                traj1,
+                                leftYellow
                         )
                 );
                 break;
@@ -79,7 +82,8 @@ public class RedAutoFarLeft extends BaseOpMode {
             case RIGHT:
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
-                                rightPurple
+                                rightPurple,
+                                traj1
                         )
                 );
                 break;
