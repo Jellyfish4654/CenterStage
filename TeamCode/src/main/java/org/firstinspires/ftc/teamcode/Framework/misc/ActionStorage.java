@@ -157,6 +157,14 @@ public class ActionStorage {
                 .splineToConstantHeading(new Vector2d(40.75, -43), Math.toRadians(0))
                 .build();
     }
+    public Action getRedFarYellowLeft_2iykyk() {
+        return drive.actionBuilder(new Pose2d(15, -10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -27), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(36, -41), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40.75, -47), Math.toRadians(0))
+                .build();
+    }
 
     public Action getRedFarYellowCenter() {
         return drive.actionBuilder(new Pose2d(15, -10, Math.toRadians(0)))
@@ -177,6 +185,14 @@ public class ActionStorage {
     }
 
     public Action getBlueFarYellowLeft() {
+        return drive.actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueFarYellowLeft_2iykyk() {
         return drive.actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
                 .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))

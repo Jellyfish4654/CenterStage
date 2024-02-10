@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
+import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
@@ -31,7 +35,7 @@ public class BlueAutoFarRight extends BaseOpMode
 	@Override
 	public void runOpMode()
 	{
-		MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
+		MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(270)));
 		Sides.setColor(Sides.Color.BLUE);
 		// Initialize hardware and pipeline
 		initHardware(hardwareMap);
@@ -52,7 +56,19 @@ public class BlueAutoFarRight extends BaseOpMode
 			distance = distanceRight.getDistance(DistanceUnit.INCH);
 //			distance = filter.estimate(distance);
 		}
-		drive.pose = new Pose2d(-72 + (distance + 5.5), -60, Math.toRadians(90));
+		drive.pose = new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90));
+		// After starting, stop the camera stream
+		webcam.stopStreaming();
+		ActionStorage actionStorage = new ActionStorage(drive);
+		// Run the autonomous path based on the detected position
+		Action leftPurple = actionStorage.getBlueFarRight_LeftPurpleAction();
+		Action centerPurple = actionStorage.getBlueFarRight_CenterPurpleAction();
+		Action rightPurple = actionStorage.getBlueFarRight_RightPurpleAction();
+		Action traj1 = actionStorage.getBlueTraj();
+		Action leftYellow = actionStorage.getBlueFarYellowLeft();
+		Action centerYellow = actionStorage.getBlueFarYellowCenter();
+		Action rightYellow = actionStorage.getBlueFarYellowRight();
+		drive.pose = new Pose2d(-72 + (distance + 5.5), 60, Math.toRadians(90));
 		// After starting, stop the camera stream
 		webcam.stopStreaming();
 
@@ -60,27 +76,61 @@ public class BlueAutoFarRight extends BaseOpMode
 		switch (detectedPosition)
 		{
 			case LEFT:
+				Actions.runBlocking(new SequentialAction(
+								leftPurple,
+								traj1,
+								leftYellow,
+								slides.new SlidesUp1(),
+								outakeServos.new armOuttakeDeposit(),
+								new SleepAction(0.75),
+								outakeServos.new boxOuttakeDeposit(),
+								new SleepAction(0.75),
+								wheelServo.new CRMoveForward(),
+								outakeServos.new boxOuttakeIntake(),
+								new SleepAction(0.75),
+								outakeServos.new armOuttakeIntake(),
+								new SleepAction(0.75)
 
+						)
+				);
 				break;
 			case CENTER:
-
 				Actions.runBlocking(new SequentialAction(
-											// Red Right Purple Middle
-											drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
-												 .splineTo(new Vector2d(13, -32), Math.toRadians(90))
-												 .build())
-								   );
+								centerPurple,
+								traj1,
+								centerYellow,
+								slides.new SlidesUp1(),
+								outakeServos.new armOuttakeDeposit(),
+								new SleepAction(0.75),
+								outakeServos.new boxOuttakeDeposit(),
+								new SleepAction(0.75),
+								wheelServo.new CRMoveForward(),
+								outakeServos.new boxOuttakeIntake(),
+								new SleepAction(0.75),
+								outakeServos.new armOuttakeIntake(),
+								new SleepAction(0.75)
+
+						)
+				);
 				break;
 			case RIGHT:
 			case UNKNOWN:
 				Actions.runBlocking(new SequentialAction(
-											// Red Right Purple Right
-											drive.actionBuilder(new Pose2d(13, -60, Math.toRadians(90)))
-												 .splineTo(new Vector2d(13, -46), Math.toRadians(90))
-												 .splineTo(new Vector2d(18, -38), Math.toRadians(60))
-												 .build()
-									)
-								   );
+								rightPurple,
+								traj1,
+								rightYellow,
+								slides.new SlidesUp1(),
+								outakeServos.new armOuttakeDeposit(),
+								new SleepAction(0.75),
+								outakeServos.new boxOuttakeDeposit(),
+								new SleepAction(0.75),
+								wheelServo.new CRMoveForward(),
+								outakeServos.new boxOuttakeIntake(),
+								new SleepAction(0.75),
+								outakeServos.new armOuttakeIntake(),
+								new SleepAction(0.75)
+						)
+				);
 				break;
 		}
 	}
