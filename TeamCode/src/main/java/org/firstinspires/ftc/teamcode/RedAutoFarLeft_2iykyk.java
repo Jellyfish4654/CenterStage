@@ -64,13 +64,23 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
         Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
         Action rightPurple = actionStorage.getRedFarRight_RightPurpleAction();
         Action traj1 = actionStorage.getRedTraj();
-        Action leftYellow = actionStorage.getRedFarYellowLeft();
-        Action centerYellow = actionStorage.getRedFarYellowCenter();
-        Action rightYellow = actionStorage.getRedFarYellowRight();
+        Action leftYellow = actionStorage.getRedFarYellowLeft_2iykyk();
+        Action centerYellow = actionStorage.getRedFarYellowCenter_2iykyk();
+        Action rightYellow = actionStorage.getRedFarYellowRight_2iykyk();
+        Action leftPark = actionStorage.getRedYellowParkLeft_2iykyk();
+        Action centerPark = actionStorage.getRedYellowParkCenter_2iykyk();
+        Action rightPark = actionStorage.getRedYellowParkRight_2iykyk();
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
                                 leftPurple,
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        intakeSystem.new IntakeServoRelease(),
+                                        new SleepAction(0.3),
+                                        intakeSystem.new IntakeServoDrone()
+                                )
+                        ,
                                 traj1,
                                 leftYellow,
                                 slides.new SlidesUp1(),
@@ -82,7 +92,8 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
                                 outakeServos.new boxOuttakeIntake(),
                                 new SleepAction(0.75),
                                 outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75)
+                                new SleepAction(0.75),
+                        leftPark
 
                         )
                 );
@@ -101,7 +112,8 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
                                 outakeServos.new boxOuttakeIntake(),
                                 new SleepAction(0.75),
                                 outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75)
+                                new SleepAction(0.75),
+                        centerPark
 
                         )
                 );
@@ -121,7 +133,8 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
                                 outakeServos.new boxOuttakeIntake(),
                                 new SleepAction(0.75),
                                 outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75)
+                                new SleepAction(0.75),
+                        rightPark
                         )
                 );
                 break;

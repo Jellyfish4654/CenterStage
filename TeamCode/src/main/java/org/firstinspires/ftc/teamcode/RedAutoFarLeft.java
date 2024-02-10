@@ -67,6 +67,8 @@ public class RedAutoFarLeft extends BaseOpMode {
         Action leftYellow = actionStorage.getRedFarYellowLeft();
         Action centerYellow = actionStorage.getRedFarYellowCenter();
         Action rightYellow = actionStorage.getRedFarYellowRight();
+
+
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
