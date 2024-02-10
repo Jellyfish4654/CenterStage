@@ -82,20 +82,20 @@ public class BlueAutoFarRight extends BaseOpMode
 				Actions.runBlocking(new SequentialAction(
 						intakeSystem.new IntakeServoRelease(),
 						leftPurple,
-						intakeSystem.new IntakeServoDrone(),
-								traj1,
-								leftYellow,
-								slides.new SlidesUp1(),
-								outakeServos.new armOuttakeDeposit(),
-								new SleepAction(0.75),
-								outakeServos.new boxOuttakeDeposit(),
-								new SleepAction(0.75),
-								wheelServo.new CRMoveForward(),
-								outakeServos.new boxOuttakeIntake(),
-								new SleepAction(0.75),
-								outakeServos.new armOuttakeIntake(),
-								new SleepAction(0.75),
-						leftPark
+						intakeSystem.new IntakeServoDrone()
+//								traj1,
+//								leftYellow,
+//								slides.new SlidesUp1(),
+//								outakeServos.new armOuttakeDeposit(),
+//								new SleepAction(0.75),
+//								outakeServos.new boxOuttakeDeposit(),
+//								new SleepAction(0.75),
+//								wheelServo.new CRMoveForward(),
+//								outakeServos.new boxOuttakeIntake(),
+//								new SleepAction(0.75),
+//								outakeServos.new armOuttakeIntake(),
+//								new SleepAction(0.75),
+//						leftPark
 
 						)
 				);
@@ -104,20 +104,20 @@ public class BlueAutoFarRight extends BaseOpMode
 				Actions.runBlocking(new SequentialAction(
 						intakeSystem.new IntakeServoRelease(),
 						centerPurple,
-						intakeSystem.new IntakeServoDrone(),
-								traj1,
-								centerYellow,
-								slides.new SlidesUp1(),
-								outakeServos.new armOuttakeDeposit(),
-								new SleepAction(0.75),
-								outakeServos.new boxOuttakeDeposit(),
-								new SleepAction(0.75),
-								wheelServo.new CRMoveForward(),
-								outakeServos.new boxOuttakeIntake(),
-								new SleepAction(0.75),
-								outakeServos.new armOuttakeIntake(),
-								new SleepAction(0.75),
-						centerPark
+						intakeSystem.new IntakeServoDrone()
+//								traj1,
+//								centerYellow,
+//								slides.new SlidesUp1(),
+//								outakeServos.new armOuttakeDeposit(),
+//								new SleepAction(0.75),
+//								outakeServos.new boxOuttakeDeposit(),
+//								new SleepAction(0.75),
+//								wheelServo.new CRMoveForward(),
+//								outakeServos.new boxOuttakeIntake(),
+//								new SleepAction(0.75),
+//								outakeServos.new armOuttakeIntake(),
+//								new SleepAction(0.75),
+//						centerPark
 
 						)
 				);
@@ -127,20 +127,20 @@ public class BlueAutoFarRight extends BaseOpMode
 				Actions.runBlocking(new SequentialAction(
 						intakeSystem.new IntakeServoRelease(),
 						rightPurple,
-						intakeSystem.new IntakeServoDrone(),
-								traj1,
-								rightYellow,
-								slides.new SlidesUp1(),
-								outakeServos.new armOuttakeDeposit(),
-								new SleepAction(0.75),
-								outakeServos.new boxOuttakeDeposit(),
-								new SleepAction(0.75),
-								wheelServo.new CRMoveForward(),
-								outakeServos.new boxOuttakeIntake(),
-								new SleepAction(0.75),
-								outakeServos.new armOuttakeIntake(),
-								new SleepAction(0.75),
-						rightPark
+						intakeSystem.new IntakeServoDrone()
+//								traj1,
+//								rightYellow,
+//								slides.new SlidesUp1(),
+//								outakeServos.new armOuttakeDeposit(),
+//								new SleepAction(0.75),
+//								outakeServos.new boxOuttakeDeposit(),
+//								new SleepAction(0.75),
+//								wheelServo.new CRMoveForward(),
+//								outakeServos.new boxOuttakeIntake(),
+//								new SleepAction(0.75),
+//								outakeServos.new armOuttakeIntake(),
+//								new SleepAction(0.75),
+//						rightPark
 						)
 				);
 				break;
