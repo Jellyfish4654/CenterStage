@@ -97,8 +97,8 @@ public class MeepMeepTesting {
         RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-70.5 + (5.5+24), -70.5+10.375, Math.toRadians(90)))
                 .splineTo(new Vector2d(-36.5, -34.5), Math.toRadians(60))
                 .splineToConstantHeading(new Vector2d(-36.5 + (4 * Math.cos(Math.toRadians(240))), -34.5 + (4 * Math.sin(Math.toRadians(240)))), Math.toRadians(240))
-                .splineToConstantHeading(new Vector2d(-36.5 + (4 * Math.cos(Math.toRadians(240))) + (12 * Math.cos(Math.toRadians(150))), -34.5 + (4 * Math.sin(Math.toRadians(240))) + (12 * Math.sin(Math.toRadians(150)))), Math.toRadians(125))
-//					.splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-36.5 + (4 * Math.cos(Math.toRadians(240))) + (28 * Math.cos(Math.toRadians(150))), -34.5 + (4 * Math.sin(Math.toRadians(240))) + (28 * Math.sin(Math.toRadians(150)))), Math.toRadians(125))
+                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
                 .build());
 //
 //       BLUE_LEFT_PURPLE.runAction(BLUE_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-39,60,Math.toRadians(270)))
