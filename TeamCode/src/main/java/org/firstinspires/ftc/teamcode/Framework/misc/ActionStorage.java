@@ -145,7 +145,7 @@ public class ActionStorage
 
 	public Action getRedTraj()
 	{
-		return drive.actionBuilder(drive.pose)
+		return drive.actionBuilder(new Pose2d(-48, -12, Math.toRadians(0)))
 					.splineToConstantHeading(new Vector2d(-12, -10), Math.toRadians(0))
 					.splineToConstantHeading(new Vector2d(15, -10), Math.toRadians(0))
 					.build();
