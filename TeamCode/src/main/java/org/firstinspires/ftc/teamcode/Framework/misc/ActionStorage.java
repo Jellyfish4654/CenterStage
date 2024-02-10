@@ -50,9 +50,10 @@ public class ActionStorage
 	{
 		return drive.actionBuilder(drive.pose)
 					.splineTo(new Vector2d(-39, -48), Math.toRadians(90))
-					.splineTo(new Vector2d(-43, -38), Math.toRadians(135))
-					.splineToConstantHeading(new Vector2d(-43 + (4 * Math.cos(Math.toRadians(315))), -38 + (4 * Math.sin(Math.toRadians(315)))), Math.toRadians(315))
-					.splineToConstantHeading(new Vector2d(-32, -32), Math.toRadians(135))
+					.splineTo(new Vector2d(-40, -40), Math.toRadians(135))
+					.splineToConstantHeading(new Vector2d(-40 + (8 * Math.cos(Math.toRadians(315))), -40 + (8 * Math.sin(Math.toRadians(315)))), Math.toRadians(315))
+				.splineToConstantHeading(new Vector2d(-40 + (8 * Math.cos(Math.toRadians(315))), -30 + (8 * Math.sin(Math.toRadians(315)))), Math.toRadians(90))
+				.splineToConstantHeading(new Vector2d(-32, -24), Math.toRadians(135))
 					.splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
 					.build();
 	}
@@ -164,8 +165,8 @@ public class ActionStorage
 		return drive.actionBuilder(new Pose2d(15, -10, Math.toRadians(0)))
 					.splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
 					.splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
-					.splineToConstantHeading(new Vector2d(38, -36), Math.toRadians(0))
-					.splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
+					.splineToConstantHeading(new Vector2d(36, -36), Math.toRadians(0))
+					.splineToConstantHeading(new Vector2d(43, -32.5), Math.toRadians(0))
 					.build();
 	}
 
