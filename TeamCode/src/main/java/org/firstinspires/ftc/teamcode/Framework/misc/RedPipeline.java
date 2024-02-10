@@ -42,7 +42,6 @@ public class RedPipeline extends OpenCvPipeline
 		leftRect = new Rect(0, 0, 640, 1080);
 		centerRect = new Rect(640, 0, 640, 1080);
 		rightRect = new Rect(1280, 0, 640, 1080);
-
 	}
 
 	static int leftCount;

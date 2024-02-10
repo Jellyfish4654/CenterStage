@@ -104,10 +104,6 @@ public class JellyTele extends BaseOpMode
 				autoAlignment.setTargetAngle(90);
 				autoAlignment.update();
 			}
-			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.START))
-			{
-				intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition() + 5000);
-			}
 		}
 	}
 
@@ -271,6 +267,7 @@ public class JellyTele extends BaseOpMode
 		telemetry.addData("imuroll", imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
 		telemetry.addData("intakeOutput", intakeSystem.getPIDOutput());
 		telemetry.update();
+		drive.updatePoseEstimate();
 	}
 
 	private void readGamepadInputs()
