@@ -23,7 +23,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "RedAutoFarLeft_2iykyk", group = "Auto")
-public class RedAutoFarLeft_2iykyk extends BaseOpMode {
+public class RedAutoFarLeft_2RY extends BaseOpMode {
     OpenCvCamera webcam;
     LeftRedPipeline detectionPipeline;
     Sides.Position detectedPosition;
@@ -73,6 +73,7 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
+                        new ParallelAction(
                                 leftPurple,
                                 new SequentialAction(
                                         new SleepAction(0.2),
@@ -80,6 +81,7 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
                                         new SleepAction(0.3),
                                         intakeSystem.new IntakeServoDrone()
                                 )
+                        )
                         ,
                                 traj1,
                                 leftYellow,
@@ -100,7 +102,15 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
+                        new ParallelAction(
                                 centerPurple,
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        intakeSystem.new IntakeServoRelease(),
+                                        new SleepAction(0.3),
+                                        intakeSystem.new IntakeServoDrone()
+                                )
+                        ),
                                 traj1,
                                 centerYellow,
                                 slides.new SlidesUp1(),
@@ -121,7 +131,15 @@ public class RedAutoFarLeft_2iykyk extends BaseOpMode {
             case RIGHT:
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
+                        new ParallelAction(
                                 rightPurple,
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        intakeSystem.new IntakeServoRelease(),
+                                        new SleepAction(0.3),
+                                        intakeSystem.new IntakeServoDrone()
+                                )
+                        ),
                                 traj1,
                                 rightYellow,
                                 slides.new SlidesUp1(),

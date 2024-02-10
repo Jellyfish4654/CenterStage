@@ -205,15 +205,15 @@ public class ActionStorage {
                 .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 29), Math.toRadians(0))
                 .build();
     }
     public Action getBlueFarYellowLeft_2iykyk() {
         return drive.actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
                 .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 27), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 39), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 32), Math.toRadians(0))
                 .build();
     }
 
@@ -225,13 +225,29 @@ public class ActionStorage {
                 .splineToConstantHeading(new Vector2d(48, 35), Math.toRadians(0))
                 .build();
     }
+    public Action getBlueFarYellowCenter_2iykyk() {
+        return drive.actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 27), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 39), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 38), Math.toRadians(0))
+                .build();
+    }
 
     public Action getBlueFarYellowRight() {
         return drive.actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
                 .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(48, 29), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueFarYellowRight_2iykyk() {
+        return drive.actionBuilder(new Pose2d(15, 10, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(32, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, 24), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(38, 36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(48, 41), Math.toRadians(0))
                 .build();
     }
 
@@ -287,8 +303,22 @@ public class ActionStorage {
                 .splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
                 .build();
     }
+    public Action getBlueYellowParkLeft_2iykyk() {
+        return drive.actionBuilder(new Pose2d(48, 41, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(46, 41), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
+                .build();
+    }
 
     public Action getBlueYellowParkCenter() {
+        return drive.actionBuilder(new Pose2d(48, 35, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(46, 35), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, 10), Math.toRadians(0))
+                .build();
+    }
+    public Action getBlueYellowParkCenter_2iykyk() {
         return drive.actionBuilder(new Pose2d(48, 35, Math.toRadians(0)))
                 .splineToConstantHeading(new Vector2d(46, 35), Math.toRadians(180))
                 .splineToConstantHeading(new Vector2d(46, 10), Math.toRadians(0))

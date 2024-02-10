@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -23,7 +22,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name = "BlueAutoFarRight_2iykyk", group = "Auto")
-public class BlueAutoFarRight_2iykyk extends BaseOpMode{
+public class BlueAutoFarRight_2RY extends BaseOpMode{
     OpenCvCamera webcam;
     BluePipeline detectionPipeline;
     Sides.Position detectedPosition;

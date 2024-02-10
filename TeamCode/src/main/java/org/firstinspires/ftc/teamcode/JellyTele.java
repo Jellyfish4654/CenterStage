@@ -73,7 +73,7 @@ public class JellyTele extends BaseOpMode
 		gamepadEx1 = new GamepadEx(gamepad1);
 		gamepadEx2 = new GamepadEx(gamepad2);
 		antiTipping.initImuError();
-		intakeSystem.servoIntakeRelease();
+//		intakeSystem.servoIntakeRelease();
 		drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
 		waitForStart();
 		ElapsedTime timer = new ElapsedTime();
