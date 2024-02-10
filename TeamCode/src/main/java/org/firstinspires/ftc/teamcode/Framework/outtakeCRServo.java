@@ -75,7 +75,7 @@ public class outtakeCRServo
 		currentState = ServoState.STOPPED;
 	}
 
-	public class CRMoveForwardFor1Second implements Action
+	public class CRMoveForward implements Action
 	{
 		private boolean initialized = false;
 
@@ -89,7 +89,7 @@ public class outtakeCRServo
 				initialized = true;
 			}
 
-			if (timer.seconds() > 1)
+			if (timer.seconds() > 2)
 			{
 				stopServo();
 				return false;

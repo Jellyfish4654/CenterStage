@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class outtakeServo
 {
 	private static final double OUTTAKE_INTAKE = 0;
-	private static final double OUTTAKE_DEPOSIT = 0.3665 ;
+	private static final double OUTTAKE_DEPOSIT = 0.3427 ;
 
 	private static final double ARM_INTAKE_POSITION = 0.1145;
 	private static final double ARM_DEPOSIT_POSITION = 0.765;
@@ -81,10 +81,7 @@ public class outtakeServo
 		@Override
 		public boolean run(@NonNull TelemetryPacket telemetryPacket)
 		{
-			positionL = OUTTAKE_DEPOSIT;
-			positionR = OUTTAKE_DEPOSIT;
-			outakeLeftServo.setPosition(positionL);
-			outakeRightServo.setPosition(positionR);
+			boxOuttakeDeposit();
 			return false;
 		}
 	}
@@ -94,10 +91,7 @@ public class outtakeServo
 		@Override
 		public boolean run(@NonNull TelemetryPacket telemetryPacket)
 		{
-			positionL = OUTTAKE_INTAKE;
-			positionR = OUTTAKE_INTAKE;
-			outakeLeftServo.setPosition(positionL);
-			outakeRightServo.setPosition(positionR);
+			boxOuttakeIntake();
 			return false;
 		}
 	}
@@ -107,10 +101,7 @@ public class outtakeServo
 		@Override
 		public boolean run(@NonNull TelemetryPacket telemetryPacket)
 		{
-			armPositionL = ARM_INTAKE_POSITION;
-			armPositionR = ARM_INTAKE_POSITION;
-			armLeftServo.setPosition(armPositionL);
-			armRightServo.setPosition(armPositionR);
+			armOuttakeDeposit();
 			return false;
 		}
 	}
@@ -120,10 +111,7 @@ public class outtakeServo
 		@Override
 		public boolean run(@NonNull TelemetryPacket telemetryPacket)
 		{
-			armPositionL = ARM_DEPOSIT_POSITION;
-			armPositionR = ARM_DEPOSIT_POSITION;
-			armLeftServo.setPosition(armPositionL);
-			armRightServo.setPosition(armPositionR);
+			armOuttakeIntake();
 			return false;
 		}
 	}

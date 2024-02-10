@@ -114,7 +114,7 @@ public class JellyTele extends BaseOpMode
 		{
 			outtakeArm = !outtakeArm;
 		}
-		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER))
+		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER) && outtakeArm)
 		{
 			outtakeBox = !outtakeBox;
 		}

@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -63,19 +65,44 @@ public class RedAutoFarLeft extends BaseOpMode {
         Action rightPurple = actionStorage.getRedFarRight_RightPurpleAction();
         Action traj1 = actionStorage.getRedTraj();
         Action leftYellow = actionStorage.getRedFarYellowLeft();
+        Action centerYellow = actionStorage.getRedFarYellowCenter();
+        Action rightYellow = actionStorage.getRedFarYellowRight();
         switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
                                 leftPurple,
                                 traj1,
-                                leftYellow
+                                leftYellow,
+                                slides.new SlidesUp1(),
+                                outakeServos.new armOuttakeDeposit(),
+                                new SleepAction(0.75),
+                                outakeServos.new boxOuttakeDeposit(),
+                                new SleepAction(0.75),
+                                wheelServo.new CRMoveForward(),
+                                outakeServos.new boxOuttakeIntake(),
+                                new SleepAction(0.75),
+                                outakeServos.new armOuttakeIntake(),
+                                new SleepAction(0.75)
+
                         )
                 );
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
                                 centerPurple,
-                                traj1
+                                traj1,
+                                centerYellow,
+                                slides.new SlidesUp1(),
+                                outakeServos.new armOuttakeDeposit(),
+                                new SleepAction(0.75),
+                                outakeServos.new boxOuttakeDeposit(),
+                                new SleepAction(0.75),
+                                wheelServo.new CRMoveForward(),
+                                outakeServos.new boxOuttakeIntake(),
+                                new SleepAction(0.75),
+                                outakeServos.new armOuttakeIntake(),
+                                new SleepAction(0.75)
+
                         )
                 );
                 break;
@@ -83,7 +110,18 @@ public class RedAutoFarLeft extends BaseOpMode {
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
                                 rightPurple,
-                                traj1
+                                traj1,
+                                rightYellow,
+                                slides.new SlidesUp1(),
+                                outakeServos.new armOuttakeDeposit(),
+                                new SleepAction(0.75),
+                                outakeServos.new boxOuttakeDeposit(),
+                                new SleepAction(0.75),
+                                wheelServo.new CRMoveForward(),
+                                outakeServos.new boxOuttakeIntake(),
+                                new SleepAction(0.75),
+                                outakeServos.new armOuttakeIntake(),
+                                new SleepAction(0.75)
                         )
                 );
                 break;

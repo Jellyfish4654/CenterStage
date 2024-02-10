@@ -145,21 +145,25 @@ public class Slides
 	{
 		return targetPositionRight;
 	}
-
 	public class SlidesUp1 implements Action
 	{
+		private boolean initialized = false;
 		@Override
 		public boolean run(@NonNull TelemetryPacket telemetryPacket)
+
 		{
-			setTargetPosition(1000);
-			if (slideCheck())
-			{
-				return true;
+			if (!initialized) {
+				setTargetPosition(275);
+				initialized = true;
 			}
-			else
-			{
-				return false;
-			}
+			update();
+			int currentPositionLeft = slideMotorLeft.getCurrentPosition();
+			int currentPositionRight = slideMotorRight.getCurrentPosition();
+			int errorMargin = 25;
+
+			boolean leftInPosition = Math.abs(currentPositionLeft - targetPositionLeft) >= errorMargin;
+			boolean rightInPosition = Math.abs(currentPositionRight - targetPositionRight) >= errorMargin;
+			return leftInPosition && rightInPosition;
 		}
 	}
 
