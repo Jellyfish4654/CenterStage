@@ -114,8 +114,8 @@ public class ActionStorage
 		return drive.actionBuilder(drive.pose)
 					.splineTo(new Vector2d(-39, 50), Math.toRadians(270))
 					.splineTo(new Vector2d(-30, 36), Math.toRadians(315))
-					.splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(135))), 36 + (4 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
-					.splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(135))) + (6 * Math.cos(Math.toRadians(225))), 36 + (4 * Math.sin(Math.toRadians(135))) + (6 * Math.sin(Math.toRadians(225)))), Math.toRadians(244.18)) // Adjusting angle to 244.18 degrees
+					.splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(135))), 36 + (2 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
+					.splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(135))) + (6 * Math.cos(Math.toRadians(225))), 36 + (2 * Math.sin(Math.toRadians(135))) + (6 * Math.sin(Math.toRadians(225)))), Math.toRadians(244.18)) // Adjusting angle to 244.18 degrees
 					.splineToConstantHeading(new Vector2d(-41, 17.5), Math.toRadians(244.18))
 					.splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
 					.build();
@@ -124,9 +124,9 @@ public class ActionStorage
 	public Action getBlueFarRight_CenterPurpleAction()
 	{
 		return drive.actionBuilder(drive.pose)
-					.splineTo(new Vector2d(-34.5, 31), Math.toRadians(300))
-					.splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))), 31 + (4 * Math.sin(Math.toRadians(120)))), Math.toRadians(120))
-					.splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(120))) + (6 * Math.cos(Math.toRadians(210))), 31 + (4 * Math.sin(Math.toRadians(120))) + (6 * Math.sin(Math.toRadians(210)))), Math.toRadians(235))
+					.splineTo(new Vector2d(-36.5, 34.5), Math.toRadians(300))
+					.splineToConstantHeading(new Vector2d(-36.5 + (6 * Math.cos(Math.toRadians(120))), 34.5 + (6 * Math.sin(Math.toRadians(120)))), Math.toRadians(120))
+					.splineToConstantHeading(new Vector2d(-36.5 + (4 * Math.cos(Math.toRadians(120))) + (20 * Math.cos(Math.toRadians(210))), 34.5 + (4 * Math.sin(Math.toRadians(120))) + (20 * Math.sin(Math.toRadians(210)))), Math.toRadians(235))
 					.splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
 					.build();
 	}
@@ -136,8 +136,8 @@ public class ActionStorage
 		return drive.actionBuilder(drive.pose)
 					.splineTo(new Vector2d(-39, 50), Math.toRadians(270))
 					.splineTo(new Vector2d(-30, 36), Math.toRadians(315))
-					.splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(135))), 36 + (4 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
-					.splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(135))) + (6 * Math.cos(Math.toRadians(225))), 36 + (4 * Math.sin(Math.toRadians(135))) + (6 * Math.sin(Math.toRadians(225)))), Math.toRadians(244.18)) // Adjusting angle to 244.18 degrees
+					.splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(135))), 36 + (2 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
+					.splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(135))) + (6 * Math.cos(Math.toRadians(225))), 36 + (2 * Math.sin(Math.toRadians(135))) + (6 * Math.sin(Math.toRadians(225)))), Math.toRadians(244.18)) // Adjusting angle to 244.18 degrees
 					.splineToConstantHeading(new Vector2d(-41, 17.5), Math.toRadians(244.18))
 					.splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
 					.build();
