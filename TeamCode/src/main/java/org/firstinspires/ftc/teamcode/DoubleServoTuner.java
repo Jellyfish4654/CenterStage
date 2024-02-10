@@ -94,7 +94,7 @@ public class DoubleServoTuner extends LinearOpMode
 			}
 			else if (gamepad1.y)
 			{
-				position1 = 0.3665;
+				position1 = 0.175;
 			}
 			// State Machine b/c CRServo need to change power to turn off
 			switch (currentState)
@@ -130,7 +130,7 @@ public class DoubleServoTuner extends LinearOpMode
 					{
 						currentState = State.IDLE;
 					}
-					outtakeCRServo.setPower(0.1);
+					outtakeCRServo.setPower(1);
 					break;
 			}
 //            switch (currentState) {

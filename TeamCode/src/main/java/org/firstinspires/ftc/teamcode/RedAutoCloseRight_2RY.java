@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -15,39 +14,40 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
-import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
+import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "BlueAutoFarRight_2iykyk", group = "Auto")
-public class BlueAutoFarRight_2RY extends BaseOpMode{
+@Autonomous(name = "RedAutoCloseRight_2RY", group = "Auto")
+public class RedAutoCloseRight_2RY extends BaseOpMode
+{
     OpenCvCamera webcam;
-    BluePipeline detectionPipeline;
+    RedPipeline detectionPipeline;
     Sides.Position detectedPosition;
     double distanceFilter = 0.9;
     LowPassFilter filter = new LowPassFilter(distanceFilter);
+
     double distance;
 
     @Override
     public void runOpMode()
     {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(270)));
-        Sides.setColor(Sides.Color.BLUE);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
+        Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
         initHardware();
         initCamera();
-
         // Wait for the start button to be pressed, updating telemetry
         while (!isStarted() && !isStopRequested())
         {
             telemetry.addData("Position", Sides.getPosition().toString());
-            telemetry.addData("Left Pixels", BluePipeline.getLeft());
-            telemetry.addData("Center Pixels", BluePipeline.getCenter());
-            telemetry.addData("Right Pixels", BluePipeline.getRight());
+            telemetry.addData("Left Pixels", RedPipeline.getLeft());
+            telemetry.addData("Center Pixels", RedPipeline.getCenter());
+            telemetry.addData("Right Pixels", RedPipeline.getRight());
             telemetry.addData("Right Distance", distanceRight.getDistance(DistanceUnit.INCH));
             telemetry.update();
             detectedPosition = Sides.getPosition();
@@ -55,33 +55,33 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
             distance = distanceRight.getDistance(DistanceUnit.INCH);
 //			distance = filter.estimate(distance);
         }
-        drive.pose = new Pose2d(-70.5 + (5.5 + 24), 70.5 - 10.375, Math.toRadians(270));
+        drive.pose = new Pose2d(72 - (23.75 + 5.5), -60, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
         ActionStorage actionStorage = new ActionStorage(drive);
         // Run the autonomous path based on the detected position
-        Action leftPurple = actionStorage.getBlueFarRight_LeftPurpleAction();
-        Action centerPurple = actionStorage.getBlueFarRight_CenterPurpleAction();
-        Action rightPurple = actionStorage.getBlueFarRight_RightPurpleAction();
-        Action traj1 = actionStorage.getBlueTraj();
-        Action leftYellow = actionStorage.getBlueFarYellowLeft_2iykyk();
-        Action centerYellow = actionStorage.getBlueFarYellowCenter_2iykyk();
-        Action rightYellow = actionStorage.getBlueFarYellowRight_2iykyk();
-        Action leftPark = actionStorage.getBlueYellowParkLeft_2iykyk();
-        Action centerPark = actionStorage.getBlueYellowParkCenter_2iykyk();
-        Action rightPark = actionStorage.getBlueYellowParkRight_2iykyk();
-        // After starting, stop the camera stream
-        webcam.stopStreaming();
+        Action leftPurple = actionStorage.getRedCloseRight_LeftPurpleAction();
+        Action centerPurple = actionStorage.getRedCloseRight_CenterPurpleAction();
+        Action rightPurple = actionStorage.getRedCloseRight_RightPurpleAction();
+        Action leftYellow = actionStorage.getRedCloseYellowLeft();
+        Action centerYellow = actionStorage.getRedCloseYellowCenter();
+        Action rightYellow = actionStorage.getRedCloseYellowRight();
 
-        // Run the autonomous path based on the detected position
+
         switch (detectedPosition)
         {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        leftPurple,
-                        intakeSystem.new IntakeServoDrone(),
-                                traj1,
+                                new ParallelAction(
+                                        leftPurple,
+                                        new SequentialAction(
+                                                new SleepAction(0.2),
+                                                intakeSystem.new IntakeServoRelease(),
+                                                new SleepAction(0.3),
+                                                intakeSystem.new IntakeServoDrone()
+                                        )
+                                ),
+
                                 leftYellow,
                                 slides.new SlidesUp1(),
                                 outakeServos.new armOuttakeDeposit(),
@@ -92,18 +92,23 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
                                 outakeServos.new boxOuttakeIntake(),
                                 new SleepAction(0.75),
                                 outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75),
-                        leftPark
+                                new SleepAction(0.75)
 
                         )
                 );
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        centerPurple,
-                        intakeSystem.new IntakeServoDrone(),
-                                traj1,
+                                new ParallelAction(
+                                        centerPurple,
+                                        new SequentialAction(
+                                                new SleepAction(0.2),
+                                                intakeSystem.new IntakeServoRelease(),
+                                                new SleepAction(0.3),
+                                                intakeSystem.new IntakeServoDrone()
+                                        )
+                                ),
+
                                 centerYellow,
                                 slides.new SlidesUp1(),
                                 outakeServos.new armOuttakeDeposit(),
@@ -114,8 +119,7 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
                                 outakeServos.new boxOuttakeIntake(),
                                 new SleepAction(0.75),
                                 outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75),
-                        centerPark
+                                new SleepAction(0.75)
 
                         )
                 );
@@ -123,10 +127,16 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
             case RIGHT:
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        rightPurple,
-                        intakeSystem.new IntakeServoDrone(),
-                                traj1,
+                                new ParallelAction(
+                                        rightPurple,
+                                        new SequentialAction(
+                                                new SleepAction(0.2),
+                                                intakeSystem.new IntakeServoRelease(),
+                                                new SleepAction(0.3),
+                                                intakeSystem.new IntakeServoDrone()
+                                        )
+                                ),
+
                                 rightYellow,
                                 slides.new SlidesUp1(),
                                 outakeServos.new armOuttakeDeposit(),
@@ -137,14 +147,12 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
                                 outakeServos.new boxOuttakeIntake(),
                                 new SleepAction(0.75),
                                 outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75),
-                        rightPark
+                                new SleepAction(0.75)
                         )
                 );
                 break;
         }
     }
-
 
     private void initHardware(HardwareMap hwMap)
     {
@@ -157,7 +165,7 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        detectionPipeline = new BluePipeline(telemetry);
+        detectionPipeline = new RedPipeline(telemetry);
         webcam.setPipeline(detectionPipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -176,19 +184,4 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
         });
     }
 
-    private void runAutonomousPathA()
-    {
-        // Define the autonomous path A
-    }
-
-    private void runAutonomousPathB()
-    {
-        // Define the autonomous path B
-        // Define the autonomous path B
-    }
-
-    private void runAutonomousPathC()
-    {
-        // Define the autonomous path C
-    }
 }

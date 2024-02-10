@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -61,26 +63,93 @@ public class RedAutoCloseRight extends BaseOpMode
 		Action leftPurple = actionStorage.getRedCloseRight_LeftPurpleAction();
 		Action centerPurple = actionStorage.getRedCloseRight_CenterPurpleAction();
 		Action rightPurple = actionStorage.getRedCloseRight_RightPurpleAction();
+		Action leftYellow = actionStorage.getRedCloseYellowLeft();
+		Action centerYellow = actionStorage.getRedCloseYellowCenter();
+		Action rightYellow = actionStorage.getRedCloseYellowRight();
+
+
 		switch (detectedPosition)
 		{
 			case LEFT:
 				Actions.runBlocking(new SequentialAction(
-											leftPurple
-									)
-								   );
+								new ParallelAction(
+										leftPurple,
+										new SequentialAction(
+												new SleepAction(0.2),
+												intakeSystem.new IntakeServoRelease(),
+												new SleepAction(0.3),
+												intakeSystem.new IntakeServoDrone()
+										)
+								),
+
+								leftYellow,
+								slides.new SlidesUp1(),
+								outakeServos.new armOuttakeDeposit(),
+								new SleepAction(0.75),
+								outakeServos.new boxOuttakeDeposit(),
+								new SleepAction(0.75),
+								wheelServo.new CRMoveForward(),
+								outakeServos.new boxOuttakeIntake(),
+								new SleepAction(0.75),
+								outakeServos.new armOuttakeIntake(),
+								new SleepAction(0.75)
+
+						)
+				);
 				break;
 			case CENTER:
 				Actions.runBlocking(new SequentialAction(
-											centerPurple
-									)
-								   );
+								new ParallelAction(
+										centerPurple,
+										new SequentialAction(
+												new SleepAction(0.2),
+												intakeSystem.new IntakeServoRelease(),
+												new SleepAction(0.3),
+												intakeSystem.new IntakeServoDrone()
+										)
+								),
+
+								centerYellow,
+								slides.new SlidesUp1(),
+								outakeServos.new armOuttakeDeposit(),
+								new SleepAction(0.75),
+								outakeServos.new boxOuttakeDeposit(),
+								new SleepAction(0.75),
+								wheelServo.new CRMoveForward(),
+								outakeServos.new boxOuttakeIntake(),
+								new SleepAction(0.75),
+								outakeServos.new armOuttakeIntake(),
+								new SleepAction(0.75)
+
+						)
+				);
 				break;
 			case RIGHT:
 			case UNKNOWN:
 				Actions.runBlocking(new SequentialAction(
-											rightPurple
-									)
-								   );
+								new ParallelAction(
+										rightPurple,
+										new SequentialAction(
+												new SleepAction(0.2),
+												intakeSystem.new IntakeServoRelease(),
+												new SleepAction(0.3),
+												intakeSystem.new IntakeServoDrone()
+										)
+								),
+
+								rightYellow,
+								slides.new SlidesUp1(),
+								outakeServos.new armOuttakeDeposit(),
+								new SleepAction(0.75),
+								outakeServos.new boxOuttakeDeposit(),
+								new SleepAction(0.75),
+								wheelServo.new CRMoveForward(),
+								outakeServos.new boxOuttakeIntake(),
+								new SleepAction(0.75),
+								outakeServos.new armOuttakeIntake(),
+								new SleepAction(0.75)
+						)
+				);
 				break;
 		}
 	}

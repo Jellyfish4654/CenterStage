@@ -167,33 +167,16 @@ public class JellyTele extends BaseOpMode
 				{
 					currentState = Outtake.IDLE;
 				}
-				outtakeCRServo.setPower(0.75);
+				outtakeCRServo.setPower(1);
 				break;
 		}
 	}
 
 	private void controlIntakeMotor()
 	{
-		double alpha = 0.5;
 		double joystickValue = applyDeadband(-gamepad2.left_stick_y);
-		double smoothedValue = alpha * joystickValue + (1 - alpha) * lastSmoothedValue;
-		lastSmoothedValue = smoothedValue;
+			intakeMotor.setPower(joystickValue);
 
-		if (Math.abs(smoothedValue) > DEADBAND_VALUE)
-		{
-			intakeMotor.setPower(smoothedValue * PRECISION_MULTIPLIER_INTAKE);
-			intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition());
-			joystickReleaseTimer.reset();
-		}
-		else
-		{
-			if (joystickReleaseTimer.seconds() <= 0.5)
-			{
-				intakeSystem.setTargetPosition(intakeMotor.getCurrentPosition());
-			}
-
-			intakeSystem.update();
-		}
 		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON))
 		{
 			intakeSystem.eject();

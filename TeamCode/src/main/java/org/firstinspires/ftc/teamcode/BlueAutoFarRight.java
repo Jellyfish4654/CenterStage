@@ -57,7 +57,7 @@ public class BlueAutoFarRight extends BaseOpMode
 			distance = distanceRight.getDistance(DistanceUnit.INCH);
 //			distance = filter.estimate(distance);
 		}
-		drive.pose = new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90));
+		drive.pose = new Pose2d(-70.5 + (5.5 + 24), 70.5 - 10.375, Math.toRadians(270));
 		// After starting, stop the camera stream
 		webcam.stopStreaming();
 		ActionStorage actionStorage = new ActionStorage(drive);
@@ -69,7 +69,9 @@ public class BlueAutoFarRight extends BaseOpMode
 		Action leftYellow = actionStorage.getBlueFarYellowLeft();
 		Action centerYellow = actionStorage.getBlueFarYellowCenter();
 		Action rightYellow = actionStorage.getBlueFarYellowRight();
-		drive.pose = new Pose2d(-72 + (distance + 5.5), 60, Math.toRadians(90));
+		Action leftPark = actionStorage.getBlueYellowParkLeft();
+		Action centerPark = actionStorage.getBlueYellowParkCenter();
+		Action rightPark = actionStorage.getBlueYellowParkRight();
 		// After starting, stop the camera stream
 		webcam.stopStreaming();
 
@@ -78,15 +80,9 @@ public class BlueAutoFarRight extends BaseOpMode
 		{
 			case LEFT:
 				Actions.runBlocking(new SequentialAction(
-						new ParallelAction(
-								leftPurple,
-								new SequentialAction(
-										new SleepAction(0.2),
-										intakeSystem.new IntakeServoRelease(),
-										new SleepAction(0.3),
-										intakeSystem.new IntakeServoDrone()
-								)
-						),
+						intakeSystem.new IntakeServoRelease(),
+						leftPurple,
+						intakeSystem.new IntakeServoDrone(),
 								traj1,
 								leftYellow,
 								slides.new SlidesUp1(),
@@ -98,22 +94,17 @@ public class BlueAutoFarRight extends BaseOpMode
 								outakeServos.new boxOuttakeIntake(),
 								new SleepAction(0.75),
 								outakeServos.new armOuttakeIntake(),
-								new SleepAction(0.75)
+								new SleepAction(0.75),
+						leftPark
 
 						)
 				);
 				break;
 			case CENTER:
 				Actions.runBlocking(new SequentialAction(
-						new ParallelAction(
-								centerPurple,
-								new SequentialAction(
-										new SleepAction(0.2),
-										intakeSystem.new IntakeServoRelease(),
-										new SleepAction(0.3),
-										intakeSystem.new IntakeServoDrone()
-								)
-						),
+						intakeSystem.new IntakeServoRelease(),
+						centerPurple,
+						intakeSystem.new IntakeServoDrone(),
 								traj1,
 								centerYellow,
 								slides.new SlidesUp1(),
@@ -125,7 +116,8 @@ public class BlueAutoFarRight extends BaseOpMode
 								outakeServos.new boxOuttakeIntake(),
 								new SleepAction(0.75),
 								outakeServos.new armOuttakeIntake(),
-								new SleepAction(0.75)
+								new SleepAction(0.75),
+						centerPark
 
 						)
 				);
@@ -133,15 +125,9 @@ public class BlueAutoFarRight extends BaseOpMode
 			case RIGHT:
 			case UNKNOWN:
 				Actions.runBlocking(new SequentialAction(
-						new ParallelAction(
-								rightPurple,
-								new SequentialAction(
-										new SleepAction(0.2),
-										intakeSystem.new IntakeServoRelease(),
-										new SleepAction(0.3),
-										intakeSystem.new IntakeServoDrone()
-								)
-						),
+						intakeSystem.new IntakeServoRelease(),
+						rightPurple,
+						intakeSystem.new IntakeServoDrone(),
 								traj1,
 								rightYellow,
 								slides.new SlidesUp1(),
@@ -153,7 +139,8 @@ public class BlueAutoFarRight extends BaseOpMode
 								outakeServos.new boxOuttakeIntake(),
 								new SleepAction(0.75),
 								outakeServos.new armOuttakeIntake(),
-								new SleepAction(0.75)
+								new SleepAction(0.75),
+						rightPark
 						)
 				);
 				break;
