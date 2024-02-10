@@ -79,17 +79,17 @@ public class Intake
 
 	public void servoIntakeInit()
 	{
-		intakeServo.setPosition(0.253);
+		intakeServo.setPosition(0.165);
 	}
 
 	public void servoIntakeRelease()
 	{
-		intakeServo.setPosition(0.12);
+		intakeServo.setPosition(0);
 	}
 
 	public void servoIntakeDrone()
 	{
-		intakeServo.setPosition(0.935);
+		intakeServo.setPosition(0.825);
 	}
 
 	public double getPIDOutput()

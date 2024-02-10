@@ -51,9 +51,9 @@ public class RedAutoCloseRight extends BaseOpMode
 			detectedPosition = Sides.getPosition();
 			intakeSystem.servoIntakeInit();
 			distance = distanceRight.getDistance(DistanceUnit.INCH);
-			distance = filter.estimate(distance);
+//			distance = filter.estimate(distance);
 		}
-		drive.pose = new Pose2d(72 - (distance + 5.5), -60, Math.toRadians(90));
+		drive.pose = new Pose2d(72 - (23.75 + 5.5), -60, Math.toRadians(90));
 		// After starting, stop the camera stream
 		webcam.stopStreaming();
 		ActionStorage actionStorage = new ActionStorage(drive);

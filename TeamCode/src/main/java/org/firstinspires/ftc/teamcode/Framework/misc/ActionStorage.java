@@ -60,9 +60,9 @@ public class ActionStorage
 	public Action getRedFarRight_CenterPurpleAction()
 	{
 		return drive.actionBuilder(drive.pose)
-					.splineTo(new Vector2d(-34.5, -31), Math.toRadians(60))
-					.splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))), -31 + (4 * Math.sin(Math.toRadians(240)))), Math.toRadians(240))
-					.splineToConstantHeading(new Vector2d(-34.5 + (4 * Math.cos(Math.toRadians(240))) + (6 * Math.cos(Math.toRadians(150))), -31 + (4 * Math.sin(Math.toRadians(240))) + (6 * Math.sin(Math.toRadians(150)))), Math.toRadians(125))
+				.splineTo(new Vector2d(-36.5, -34.5), Math.toRadians(60))
+				.splineToConstantHeading(new Vector2d(-36.5 + (4 * Math.cos(Math.toRadians(240))), -34.5 + (4 * Math.sin(Math.toRadians(240)))), Math.toRadians(240))
+				.splineToConstantHeading(new Vector2d(-36.5 + (4 * Math.cos(Math.toRadians(240))) + (12 * Math.cos(Math.toRadians(150))), -34.5 + (4 * Math.sin(Math.toRadians(240))) + (12 * Math.sin(Math.toRadians(150)))), Math.toRadians(125))
 					.splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
 					.build();
 	}

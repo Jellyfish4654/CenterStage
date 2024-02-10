@@ -51,7 +51,7 @@ public class BlueAutoCloseLeft extends BaseOpMode
 			detectedPosition = Sides.getPosition();
 			intakeSystem.servoIntakeInit();
 			distance = distanceLeft.getDistance(DistanceUnit.INCH);
-			distance = filter.estimate(distance);
+//			distance = filter.estimate(distance);
 		}
 		drive.pose = new Pose2d(72 - (distance + 5.5), -60, Math.toRadians(90));
 		// After starting, stop the camera stream

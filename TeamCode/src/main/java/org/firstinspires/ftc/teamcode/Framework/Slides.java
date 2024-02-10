@@ -73,7 +73,7 @@ public class Slides
 		{
 			this.leftPIDOutput = 0;
 		}
-		if (Math.abs(this.leftPIDOutput) < 10)
+		if (Math.abs(this.leftPIDOutput) < 18)
 		{
 			this.leftPIDOutput = 0;
 		}
@@ -94,7 +94,7 @@ public class Slides
 		{
 			this.rightPIDOutput = 0;
 		}
-		if (Math.abs(this.rightPIDOutput) < 10)
+		if (Math.abs(this.rightPIDOutput) < 18)
 		{
 			this.rightPIDOutput = 0;
 		}
