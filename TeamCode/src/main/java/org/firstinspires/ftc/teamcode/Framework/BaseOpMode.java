@@ -47,7 +47,8 @@ public abstract class BaseOpMode extends LinearOpMode
 				DcMotorSimple.Direction.FORWARD  // motorBL
 		});
 		// expansion hub
-		droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"));
+		// Assuming you want to reverse the servo direction
+		droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"), Servo.Direction.REVERSE);
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
 		wheelServo = new outtakeCRServo(outtakeCRServo);

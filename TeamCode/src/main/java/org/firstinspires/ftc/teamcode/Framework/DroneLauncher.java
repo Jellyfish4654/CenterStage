@@ -5,16 +5,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class DroneLauncher
 {
 
-	private final Servo droneLauncher;
+	private Servo droneServo;
 
-	public DroneLauncher(Servo servo)
-	{
-		this.droneLauncher = servo;
+	// Constructor with direction setting as a parameter
+	public DroneLauncher(Servo servo, Servo.Direction direction) {
+		this.droneServo = servo;
+		this.droneServo.setDirection(direction); // Set the servo direction during initialization
 	}
 
 
 	public void launchDrone()
 	{
-		droneLauncher.setPosition(1);
+		droneServo.setPosition(1);
 	}
 }
