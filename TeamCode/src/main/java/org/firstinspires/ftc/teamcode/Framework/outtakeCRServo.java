@@ -84,7 +84,7 @@ public class outtakeCRServo
 		{
 			if (!initialized)
 			{
-				wheelServo.setPower(1);
+				wheelServo.setPower(-1);
 				timer.reset();
 				initialized = true;
 			}
