@@ -89,6 +89,7 @@ public class JellyTele extends BaseOpMode
 
 		waitForStart();
 		ElapsedTime timer = new ElapsedTime();
+		PoseStorage.currentPose = drive.pose;
 		intakeSystem.servoIntakeDrone();
 		while (opModeIsActive())
 		{
