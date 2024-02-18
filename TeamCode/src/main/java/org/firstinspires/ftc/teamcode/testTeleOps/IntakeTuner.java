@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testTeleOps;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 
-@TeleOp(name = "Intake Test")
+@TeleOp(name = "Intake Test", group = "Test")
 public class IntakeTuner extends BaseOpMode
 {
 	protected DcMotorEx intakeMotor;

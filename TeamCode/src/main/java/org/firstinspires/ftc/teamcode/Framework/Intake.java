@@ -16,9 +16,9 @@ public class Intake
 
 	private int targetPosition;
 
-	private double P = 0.0015;
-	private double I = 0;
-	private double D = 0.00002;
+	public static double P = 0.0015;
+	public static double I = 0;
+	public static double D = 0.00002;
 	private double PIDOutput;
 
 
@@ -67,9 +67,14 @@ public class Intake
 		setTargetPosition(intakeMotor.getCurrentPosition() - 70);
 	}
 
-	public void setGain(double p)
+	public void setPGain(double p)
 	{
 		this.P = p;
+	}
+
+	public void setDGain(double d)
+	{
+		this.D = d;
 	}
 
 	public int getTargetPosition()

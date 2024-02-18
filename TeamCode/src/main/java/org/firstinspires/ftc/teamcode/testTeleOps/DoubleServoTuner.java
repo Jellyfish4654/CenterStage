@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.testTeleOps;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name = "Double Servo Test")
+@TeleOp(name = "Double Servo Test", group = "Test")
 public class DoubleServoTuner extends LinearOpMode
 {
 
@@ -39,7 +39,7 @@ public class DoubleServoTuner extends LinearOpMode
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
 		double position = 0.1145;
-		double position1 = 0;
+		double position1 = 0.5307;
 		double mult = 1;
 		waitForStart();
 		runtime.reset();
@@ -90,11 +90,11 @@ public class DoubleServoTuner extends LinearOpMode
 
 			if (gamepad1.x)
 			{
-				position1 = 0;
+				position1 = 0.5307;
 			}
 			else if (gamepad1.y)
 			{
-				position1 = 0.175;
+				position1 = 0.1811;
 			}
 			// State Machine b/c CRServo need to change power to turn off
 			switch (currentState)

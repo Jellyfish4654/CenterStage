@@ -1,30 +1,42 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.PoseStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
+@Config
 @TeleOp(name = "CenterStage JellyTele")
 public class JellyTele extends BaseOpMode
 {
 	private final double PRECISION_MULTIPLIER_LOW = 0.35;
 	private final double PRECISION_MULTIPLIER_HIGH = 0.7;
-	private double PRECISION_MULTIPLIER_INTAKE = 1;
 	private final double DEADBAND_VALUE = 0.02;
 	private final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
 	private final double MAX_SCALE = 1.0;
 	private final double ENDGAME_ALERT_TIME = 110.0;
-	private double lastSmoothedValue = 0;
+	private final int SLIDES_HANGING_HEIGHT = 2000;
+	private final int SLIDES_FIRST_PIXEL_HEIGHT = 1775;
+	private final int RESET_SLIDES_HEIGHT = 0;
+	public static double p = 0.0015;
+	public static double d = 0.00002;
+	public static double lp = 0.0015;
+	public static double ld = 0.00002;
+	public static double rp = 0.0015;
+	public static double rd = 0.00002;
+	MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 	private double resetHeading = 0;
-	private ElapsedTime joystickReleaseTimer = new ElapsedTime();
 	private GamepadEx gamepadEx1;
 	private GamepadEx gamepadEx2;
 	private Boolean outtakeArm = false;
@@ -33,7 +45,8 @@ public class JellyTele extends BaseOpMode
 	protected enum DriveMode
 	{
 		MECANUM,
-		FIELDCENTRIC
+		FIELDCENTRIC,
+		DWFIELDCENTRIC
 	}
 
 	private enum Outtake
@@ -44,7 +57,6 @@ public class JellyTele extends BaseOpMode
 	}
 
 	protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
-	private static MecanumDrive drive;
 	private Outtake currentState = Outtake.IDLE;
 	private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
 	private Gamepad.RumbleEffect effect = new Gamepad.RumbleEffect.Builder()
@@ -74,13 +86,15 @@ public class JellyTele extends BaseOpMode
 		gamepadEx2 = new GamepadEx(gamepad2);
 		antiTipping.initImuError();
 //		intakeSystem.servoIntakeRelease();
-		drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
+
 		waitForStart();
 		ElapsedTime timer = new ElapsedTime();
 		intakeSystem.servoIntakeDrone();
 		while (opModeIsActive())
 		{
-			readGamepadInputs();
+			for (LynxModule hub : allHubs) {
+				hub.clearBulkCache();
+			}
 			if (timer.milliseconds() % 500 < 100)
 			{
 				displayTelemetry(calculatePrecisionMultiplier());
@@ -89,50 +103,46 @@ public class JellyTele extends BaseOpMode
 			{
 				alertEndGame(timer);
 			}
+			PoseStorage.currentPose = drive.pose;
+			readGamepadInputs();
+			antiTipping.update();
 			controlDroneAndOutake();
 			controlSlideMotors();
 			controlIntakeMotor();
-			antiTipping.update();
 			updateDriveMode(calculatePrecisionMultiplier());
-			if (gamepad1.left_trigger > 0.5f)
-			{
-				autoAlignment.setTargetAngle(-90);
-				autoAlignment.update();
-			}
-			else if (gamepad1.right_trigger > 0.5f)
-			{
-				autoAlignment.setTargetAngle(90);
-				autoAlignment.update();
-			}
+			alignmentControl();
+			intakeSystem.setPGain(p);
+			intakeSystem.setDGain(d);
+			slides.setlPGain(lp);
+			slides.setlDGain(ld);
+			slides.setrPGain(rp);
+			slides.setrDGain(rd);
 		}
 	}
 
 	private void OutakeControl()
 	{
 		outakeServos.setOutput();
-		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER))
-		{
-			outtakeArm = !outtakeArm;
-		}
-		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER) && outtakeArm)
-		{
-			outtakeBox = !outtakeBox;
-		}
-		if (outtakeArm)
-		{
-			outakeServos.armOuttakeDeposit();
-		}
-		else
-		{
-			outakeServos.armOuttakeIntake();
-		}
-		if (outtakeBox)
-		{
-			outakeServos.boxOuttakeDeposit();
-		}
-		else
-		{
-			outakeServos.boxOuttakeIntake();
+		if (!outtakeArm && (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2 < 175) {
+			// Do nothing
+		} else {
+			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
+				outtakeArm = !outtakeArm;
+			}
+			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER) && outtakeArm) {
+				outtakeBox = !outtakeBox;
+			}
+
+			if (outtakeArm) {
+				outakeServos.armOuttakeDeposit();
+				if (outtakeBox) {
+					outakeServos.boxOuttakeDeposit();
+				} else {
+					outakeServos.boxOuttakeIntake();
+				}
+			} else {
+				outakeServos.armOuttakeIntake();
+			}
 		}
 		switch (currentState)
 		{
@@ -175,21 +185,8 @@ public class JellyTele extends BaseOpMode
 	private void controlIntakeMotor()
 	{
 		double joystickValue = applyDeadband(-gamepad2.left_stick_y);
-			intakeMotor.setPower(joystickValue);
-
-		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_STICK_BUTTON))
-		{
-			intakeSystem.eject();
-		}
-		if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_STICK_BUTTON))
-		{
-			intakeSystem.moveForward();
-		}
+		intakeMotor.setPower(joystickValue);
 	}
-
-	static final int SLIDES_HANGING_HEIGHT = 2000;
-	static final int SLIDES_FIRST_PIXEL_HEIGHT = 1775;
-	static final int RESET_SLIDES_HEIGHT = 0;
 
 	private void controlSlideMotors()
 	{
@@ -215,6 +212,11 @@ public class JellyTele extends BaseOpMode
 			{
 				slides.setTargetPosition(RESET_SLIDES_HEIGHT);
 			}
+			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.X))
+			{
+				slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+				slideMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+			}
 			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.DPAD_UP))
 			{
 				int averageTarget = (slideMotorLeft.getCurrentPosition() + slideMotorRight.getCurrentPosition()) / 2;
@@ -228,7 +230,18 @@ public class JellyTele extends BaseOpMode
 			}
 		}
 	}
-
+	private void alignmentControl(){
+		if (gamepad1.left_trigger > 0.5)
+		{
+			autoAlignment.setTargetAngle(-90);
+			autoAlignment.update();
+		}
+		else if (gamepad1.right_trigger > 0.5)
+		{
+			autoAlignment.setTargetAngle(90);
+			autoAlignment.update();
+		}
+	}
 	private void displayTelemetry(double precisionMultiplier)
 	{
 		telemetry.addData("drive mode", driveMode);
@@ -243,9 +256,8 @@ public class JellyTele extends BaseOpMode
 		telemetry.addData("RightSlideTarget", slides.getTargetPositionRight());
 		telemetry.addData("intakeCurrentPosition", intakeMotor.getCurrentPosition());
 		telemetry.addData("intakeTargetPosition", intakeSystem.getTargetPosition());
-		telemetry.addData("intake precision", PRECISION_MULTIPLIER_INTAKE);
-		telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-		telemetry.addData("DWyaw", Math.toDegrees(drive.pose.heading.toDouble()));
+		telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
+		telemetry.addData("dwyaw", drive.pose.heading.toDouble());
 		telemetry.addData("imupitch", imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
 		telemetry.addData("imuroll", imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
 		telemetry.addData("intakeOutput", intakeSystem.getPIDOutput());
@@ -277,8 +289,11 @@ public class JellyTele extends BaseOpMode
 			case FIELDCENTRIC:
 				motorSpeeds = FieldCentricDrive();
 				break;
+			case DWFIELDCENTRIC:
+				motorSpeeds = DWFieldCentricDrive();
+				break;
 			default:
-				motorSpeeds = new double[4];
+				motorSpeeds = FieldCentricDrive();
 		}
 		setMotorSpeeds(precisionMultiplier, motorSpeeds);
 	}
@@ -312,7 +327,22 @@ public class JellyTele extends BaseOpMode
 				rotY - rotX + rotation
 		};
 	}
+	private double[] DWFieldCentricDrive()
+	{
+		double forward = -applyDeadband(gamepad1.left_stick_y);
+		double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
+		double rotation = applyDeadband(gamepad1.right_stick_x);
+		double botHeading = drive.pose.heading.toDouble();
 
+		double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
+		double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
+		return new double[]{
+				rotY - rotX - rotation,
+				rotY + rotX - rotation,
+				rotY + rotX + rotation,
+				rotY - rotX + rotation
+		};
+	}
 	protected void setMotorSpeeds(double multiplier, double[] powers)
 	{
 		applyPrecisionAndScale(multiplier, powers);
@@ -378,6 +408,10 @@ public class JellyTele extends BaseOpMode
 			driveMode = DriveMode.FIELDCENTRIC;
 			resetIMU();
 		}
+		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.B))
+		{
+			driveMode = DriveMode.DWFIELDCENTRIC;
+		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.A))
 		{
 			driveMode = DriveMode.MECANUM;
@@ -421,14 +455,6 @@ public class JellyTele extends BaseOpMode
 		{
 			return PRECISION_MULTIPLIER_HIGH;
 		}
-		if (gamepad2.right_trigger > 0.5)
-		{
-			PRECISION_MULTIPLIER_INTAKE = 0.75;
-		}
-		else
-		{
-			PRECISION_MULTIPLIER_INTAKE = 1;
-		}
 		return MAX_SCALE;
 	}
 
@@ -444,14 +470,14 @@ public class JellyTele extends BaseOpMode
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
 		{
 			imuSensor.resetYaw();
-			resetHeading = -90;
+			resetHeading = Math.toRadians(-90);
 			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
 		{
 			imuSensor.resetYaw();
-			resetHeading = 90;
+			resetHeading = Math.toRadians(90);
 
 			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
@@ -459,15 +485,10 @@ public class JellyTele extends BaseOpMode
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
 		{
 			imuSensor.resetYaw();
-			resetHeading = -180;
+			resetHeading = Math.toRadians(180);
 
 			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
-	}
-
-	public static double getHeading()
-	{
-		return Math.toDegrees(drive.pose.heading.toDouble());
 	}
 }

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autons.Red;
 
 
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
@@ -15,72 +15,68 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
-import org.firstinspires.ftc.teamcode.Framework.misc.BluePipeline;
+import org.firstinspires.ftc.teamcode.Framework.misc.LeftRedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "BlueAutoFarRight_2iykyk", group = "Auto")
-public class BlueAutoFarRight_2RY extends BaseOpMode{
+@Autonomous(name = "RedAutoFarLeft_2iykyk", group = "Auto")
+public class RedAutoFarLeft_2RY extends BaseOpMode {
     OpenCvCamera webcam;
-    BluePipeline detectionPipeline;
+    LeftRedPipeline detectionPipeline;
     Sides.Position detectedPosition;
+
     double distanceFilter = 0.9;
     LowPassFilter filter = new LowPassFilter(distanceFilter);
     double distance;
 
     @Override
-    public void runOpMode()
-    {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(270)));
-        Sides.setColor(Sides.Color.BLUE);
+    public void runOpMode() {
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
+
+        Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
         initHardware();
         initCamera();
-
         // Wait for the start button to be pressed, updating telemetry
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
-            telemetry.addData("Left Pixels", BluePipeline.getLeft());
-            telemetry.addData("Center Pixels", BluePipeline.getCenter());
-            telemetry.addData("Right Pixels", BluePipeline.getRight());
-            telemetry.addData("Right Distance", distanceRight.getDistance(DistanceUnit.INCH));
+            telemetry.addData("Left Pixels", LeftRedPipeline.getLeft());
+            telemetry.addData("Center Pixels", LeftRedPipeline.getCenter());
+            telemetry.addData("Right Pixels", LeftRedPipeline.getRight());
+            telemetry.addData("Left Distance", distanceLeft.getDistance(DistanceUnit.INCH));
             telemetry.update();
+
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
-            distance = distanceRight.getDistance(DistanceUnit.INCH);
+            distance = distanceLeft.getDistance(DistanceUnit.INCH);
 //			distance = filter.estimate(distance);
         }
-        drive.pose = new Pose2d(-70.5 + (5.5 + 24), 70.5 - 10.375, Math.toRadians(270));
+        drive.pose = new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90));
         // After starting, stop the camera stream
         webcam.stopStreaming();
         ActionStorage actionStorage = new ActionStorage(drive);
         // Run the autonomous path based on the detected position
-        Action leftPurple = actionStorage.getBlueFarRight_LeftPurpleAction();
-        Action centerPurple = actionStorage.getBlueFarRight_CenterPurpleAction();
-        Action rightPurple = actionStorage.getBlueFarRight_RightPurpleAction();
-        Action traj1 = actionStorage.getBlueTraj();
-        Action leftYellow = actionStorage.getBlueFarYellowLeft_2iykyk();
-        Action centerYellow = actionStorage.getBlueFarYellowCenter_2iykyk();
-        Action rightYellow = actionStorage.getBlueFarYellowRight_2iykyk();
-        Action leftPark = actionStorage.getBlueYellowParkLeft_2iykyk();
-        Action centerPark = actionStorage.getBlueYellowParkCenter_2iykyk();
-        Action rightPark = actionStorage.getBlueYellowParkRight_2iykyk();
-        // After starting, stop the camera stream
-        webcam.stopStreaming();
-
-        // Run the autonomous path based on the detected position
-        switch (detectedPosition)
-        {
+        Action leftPurple = actionStorage.getRedFarRight_LeftPurpleAction();
+        Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
+        Action rightPurple = actionStorage.getRedFarRight_RightPurpleAction();
+        Action traj1 = actionStorage.getRedTraj();
+        Action leftYellow = actionStorage.getRedFarYellowLeft_2iykyk();
+        Action centerYellow = actionStorage.getRedFarYellowCenter_2iykyk();
+        Action rightYellow = actionStorage.getRedFarYellowRight_2iykyk();
+        Action leftPark = actionStorage.getRedYellowParkLeft_2iykyk();
+        Action centerPark = actionStorage.getRedYellowParkCenter_2iykyk();
+        Action rightPark = actionStorage.getRedYellowParkRight_2iykyk();
+        switch (detectedPosition) {
             case LEFT:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        leftPurple,
-                        intakeSystem.new IntakeServoDrone(),
+
+                                intakeSystem.new IntakeServoRelease(),
+                                leftPurple,
+                                intakeSystem.new IntakeServoDrone(),
                                 traj1,
                                 leftYellow,
                                 slides.new SlidesUp1(),
@@ -100,9 +96,9 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        centerPurple,
-                        intakeSystem.new IntakeServoDrone(),
+                                intakeSystem.new IntakeServoRelease(),
+                                centerPurple,
+                                intakeSystem.new IntakeServoDrone(),
                                 traj1,
                                 centerYellow,
                                 slides.new SlidesUp1(),
@@ -123,9 +119,9 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
             case RIGHT:
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        rightPurple,
-                        intakeSystem.new IntakeServoDrone(),
+                                intakeSystem.new IntakeServoRelease(),
+                                rightPurple,
+                                intakeSystem.new IntakeServoDrone(),
                                 traj1,
                                 rightYellow,
                                 slides.new SlidesUp1(),
@@ -145,50 +141,29 @@ public class BlueAutoFarRight_2RY extends BaseOpMode{
         }
     }
 
-
-    private void initHardware(HardwareMap hwMap)
-    {
+    private void initHardware(HardwareMap hwMap) {
         // Initialize your robot's hardware here
     }
 
-    private void initCamera()
-    {
+    private void initCamera() {
         // Initialize camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        detectionPipeline = new BluePipeline(telemetry);
+        detectionPipeline = new LeftRedPipeline(telemetry);
         webcam.setPipeline(detectionPipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
+            public void onOpened() {
                 webcam.startStreaming(1920, 1080, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
                 // Error handling
             }
         });
     }
 
-    private void runAutonomousPathA()
-    {
-        // Define the autonomous path A
-    }
-
-    private void runAutonomousPathB()
-    {
-        // Define the autonomous path B
-        // Define the autonomous path B
-    }
-
-    private void runAutonomousPathC()
-    {
-        // Define the autonomous path C
-    }
 }

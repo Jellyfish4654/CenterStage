@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autons.Red;
 
 
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
+import org.firstinspires.ftc.teamcode.Framework.PoseStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.LeftRedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
@@ -22,8 +23,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "RedAutoFarLeft_2iykyk", group = "Auto")
-public class RedAutoFarLeft_2RY extends BaseOpMode {
+@Autonomous(name = "RedAutoFarLeft", group = "Auto")
+public class RedAutoFarLeft extends BaseOpMode {
     OpenCvCamera webcam;
     LeftRedPipeline detectionPipeline;
     Sides.Position detectedPosition;
@@ -64,54 +65,46 @@ public class RedAutoFarLeft_2RY extends BaseOpMode {
         Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
         Action rightPurple = actionStorage.getRedFarRight_RightPurpleAction();
         Action traj1 = actionStorage.getRedTraj();
-        Action leftYellow = actionStorage.getRedFarYellowLeft_2iykyk();
-        Action centerYellow = actionStorage.getRedFarYellowCenter_2iykyk();
-        Action rightYellow = actionStorage.getRedFarYellowRight_2iykyk();
-        Action leftPark = actionStorage.getRedYellowParkLeft_2iykyk();
-        Action centerPark = actionStorage.getRedYellowParkCenter_2iykyk();
-        Action rightPark = actionStorage.getRedYellowParkRight_2iykyk();
+        Action leftYellow = actionStorage.getRedFarYellowLeft();
+        Action centerYellow = actionStorage.getRedFarYellowCenter();
+        Action rightYellow = actionStorage.getRedFarYellowRight();
+        Action leftPark = actionStorage.getBlueYellowParkLeft();
+        Action centerPark = actionStorage.getBlueYellowParkCenter();
+        Action rightPark = actionStorage.getBlueYellowParkRight();
+
         switch (detectedPosition) {
             case LEFT:
-                Actions.runBlocking(new SequentialAction(
-
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
                                 intakeSystem.new IntakeServoRelease(),
                                 leftPurple,
-                                intakeSystem.new IntakeServoDrone(),
-                                traj1,
-                                leftYellow,
-                                slides.new SlidesUp1(),
-                                outakeServos.new armOuttakeDeposit(),
-                                new SleepAction(0.75),
-                                outakeServos.new boxOuttakeDeposit(),
-                                new SleepAction(0.75),
-                                wheelServo.new CRMoveForward(),
-                                outakeServos.new boxOuttakeIntake(),
-                                new SleepAction(0.75),
-                                outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75),
-                        leftPark
-
-                        )
-                );
+                                intakeSystem.new IntakeServoDrone()
+                        ),
+                        (telemetryPacket) -> {
+                            PoseStorage.currentPose = drive.pose;
+                            slides.update();
+                            return true;
+                        }
+                ));
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
-                                intakeSystem.new IntakeServoRelease(),
-                                centerPurple,
-                                intakeSystem.new IntakeServoDrone(),
-                                traj1,
-                                centerYellow,
-                                slides.new SlidesUp1(),
-                                outakeServos.new armOuttakeDeposit(),
-                                new SleepAction(0.75),
-                                outakeServos.new boxOuttakeDeposit(),
-                                new SleepAction(0.75),
-                                wheelServo.new CRMoveForward(),
-                                outakeServos.new boxOuttakeIntake(),
-                                new SleepAction(0.75),
-                                outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75),
-                        centerPark
+                        intakeSystem.new IntakeServoRelease(),
+                        centerPurple,
+                        intakeSystem.new IntakeServoDrone()
+//                                traj1,
+//                                centerYellow,
+//                                slides.new SlidesUp1(),
+//                                outakeServos.new armOuttakeDeposit(),
+//                                new SleepAction(0.75),
+//                                outakeServos.new boxOuttakeDeposit(),
+//                                new SleepAction(0.75),
+//                                wheelServo.new CRMoveForward(),
+//                                outakeServos.new boxOuttakeIntake(),
+//                                new SleepAction(0.75),
+//                                outakeServos.new armOuttakeIntake(),
+//                                new SleepAction(0.75),
+//                        centerPark
 
                         )
                 );
@@ -119,22 +112,22 @@ public class RedAutoFarLeft_2RY extends BaseOpMode {
             case RIGHT:
             case UNKNOWN:
                 Actions.runBlocking(new SequentialAction(
-                                intakeSystem.new IntakeServoRelease(),
-                                rightPurple,
-                                intakeSystem.new IntakeServoDrone(),
-                                traj1,
-                                rightYellow,
-                                slides.new SlidesUp1(),
-                                outakeServos.new armOuttakeDeposit(),
-                                new SleepAction(0.75),
-                                outakeServos.new boxOuttakeDeposit(),
-                                new SleepAction(0.75),
-                                wheelServo.new CRMoveForward(),
-                                outakeServos.new boxOuttakeIntake(),
-                                new SleepAction(0.75),
-                                outakeServos.new armOuttakeIntake(),
-                                new SleepAction(0.75),
-                        rightPark
+                        intakeSystem.new IntakeServoRelease(),
+                        rightPurple,
+                        intakeSystem.new IntakeServoDrone()
+//                                traj1,
+//                                rightYellow,
+//                                slides.new SlidesUp1(),
+//                                outakeServos.new armOuttakeDeposit(),
+//                                new SleepAction(0.75),
+//                                outakeServos.new boxOuttakeDeposit(),
+//                                new SleepAction(0.75),
+//                                wheelServo.new CRMoveForward(),
+//                                outakeServos.new boxOuttakeIntake(),
+//                                new SleepAction(0.75),
+//                                outakeServos.new armOuttakeIntake(),
+//                                new SleepAction(0.75),
+//                        rightPark
                         )
                 );
                 break;

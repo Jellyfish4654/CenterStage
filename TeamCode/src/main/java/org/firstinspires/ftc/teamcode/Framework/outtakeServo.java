@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class outtakeServo
 {
-	private static final double OUTTAKE_INTAKE = 0;
-	private static final double OUTTAKE_DEPOSIT = 0.3427 ;
+	private static final double OUTTAKE_INTAKE = 0.5307;
+	private static final double OUTTAKE_DEPOSIT = 0.1811 ;
 
 	private static final double ARM_INTAKE_POSITION = 0.1145;
 	private static final double ARM_DEPOSIT_POSITION = 0.765;

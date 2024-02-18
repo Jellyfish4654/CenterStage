@@ -12,9 +12,9 @@ public class AntiTipping
 	private final DcMotor[] motors;
 	private final IMU imuSensor;
 	private final PIDController pitchController;
-	private static final double kP = 0.05;
+	public static double kP = 0.05;
 	private static final double kI = 0.0;
-	private static final double kD = 0.0005;
+	public static double kD = 0.0005;
 	private static final double THRESHOLD = 10;
 	private static double IMU_ERROR = -7.5; // Error in IMU pitch reading
 
@@ -71,5 +71,14 @@ public class AntiTipping
 	{
 		YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
 		IMU_ERROR = orientation.getPitch(AngleUnit.DEGREES);
+	}
+	public void setPGain(double p)
+	{
+		this.kP = p;
+	}
+
+	public void setDGain(double d)
+	{
+		this.kD = d;
 	}
 }

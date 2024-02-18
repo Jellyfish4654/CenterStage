@@ -13,9 +13,9 @@ public class AutoAlignment
 	private final IMU imuSensor;
 	private final PIDController pidController;
 	private double targetAngle = 0;
-	double kP = 0.017;
-	double kI = 0.0;
-	double kD = 0.00017;
+	public static double kP = 0.017;
+	public static double kI = 0.0;
+	public static double kD = 0.00017;
 
 	// Constructor
 	public AutoAlignment(DcMotor[] motors, IMU imuSensor)
@@ -34,7 +34,7 @@ public class AutoAlignment
 	{
 		YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
 //        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
-		double currentYaw = JellyTele.getHeading();
+		double currentYaw = -Math.toDegrees(PoseStorage.currentPose.heading.toDouble());
 		currentYaw = normalizeAngle(currentYaw);
 		double angleDifference = normalizeAngle(targetAngle - currentYaw);
 		double correction = pidController.calculate(0, angleDifference);
@@ -64,5 +64,14 @@ public class AutoAlignment
 			angle -= 360;
 		}
 		return angle;
+	}
+	public void setPGain(double p)
+	{
+		this.kP = p;
+	}
+
+	public void setDGain(double d)
+	{
+		this.kD = d;
 	}
 }
