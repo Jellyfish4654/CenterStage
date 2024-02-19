@@ -17,11 +17,11 @@ public class Slides {
 	private PIDFController leftController, rightController;
 	private MotionProfile leftProfile, rightProfile;
 	private ElapsedTime timer;
-	private double kPLeft = 0.015, kILeft = 0.00, kDLeft = 0.0001, kFLeft = 0.012;
-	private double kPRight = 0.015, kIRight = 0.00, kDRight = 0.0001, kFRight = 0.012;
+	private double kPLeft = 0.01, kILeft = 0, kDLeft = 0.0004, kFLeft = 0.015;
+	private double kPRight = 0.01, kIRight = 0, kDRight = 0.0004, kFRight = 0.015;
 
-	private double maxVelocity = 1800;
-	private double maxAcceleration = 23886;
+	private double maxVelocity = 2000; // True max is ~2200
+	private double maxAcceleration = 29000; // True max is ~ 30000
 	private double rightPIDOutput;
 	private double leftPIDOutput;
 	private int targetPosition;

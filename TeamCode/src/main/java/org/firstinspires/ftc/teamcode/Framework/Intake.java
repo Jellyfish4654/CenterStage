@@ -67,16 +67,6 @@ public class Intake
 		setTargetPosition(intakeMotor.getCurrentPosition() - 70);
 	}
 
-	public void setPGain(double p)
-	{
-		this.P = p;
-	}
-
-	public void setDGain(double d)
-	{
-		this.D = d;
-	}
-
 	public int getTargetPosition()
 	{
 		return targetPosition;

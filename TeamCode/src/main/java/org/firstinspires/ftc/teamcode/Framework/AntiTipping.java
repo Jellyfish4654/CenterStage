@@ -72,13 +72,4 @@ public class AntiTipping
 		YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
 		IMU_ERROR = orientation.getPitch(AngleUnit.DEGREES);
 	}
-	public void setPGain(double p)
-	{
-		this.kP = p;
-	}
-
-	public void setDGain(double d)
-	{
-		this.kD = d;
-	}
 }

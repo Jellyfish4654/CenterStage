@@ -12,9 +12,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.PoseStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.SlewRateLimiter;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
+
+import java.util.List;
 
 @Config
 @TeleOp(name = "CenterStage JellyTele")
@@ -29,17 +30,9 @@ public class JellyTele extends BaseOpMode
 	private final int SLIDES_HANGING_HEIGHT = 2000;
 	private final int SLIDES_FIRST_PIXEL_HEIGHT = 1775;
 	private final int RESET_SLIDES_HEIGHT = 0;
-	public static double p = 0.0015;
-	public static double d = 0.00002;
-	public static double lp = 0.0015;
-	public static double ld = 0.00002;
-	public static double rp = 0.0015;
-	public static double rd = 0.00002;
 	private double resetHeading = 0;
 	private GamepadEx gamepadEx1;
 	private GamepadEx gamepadEx2;
-	private Boolean outtakeArm = false;
-	private Boolean outtakeBox = false;
 	private MecanumDrive drive;
 
 	private enum DriveMode
@@ -60,7 +53,7 @@ public class JellyTele extends BaseOpMode
 		ARM_DEPLOYED_BOX_RETRACTED,
 		ARM_DEPLOYED_BOX_DEPLOYED
 	}
-	protected DriveMode driveMode = DriveMode.FIELDCENTRIC;
+	protected DriveMode driveMode = DriveMode.DWFIELDCENTRIC;
 	private Outtake currentState = Outtake.IDLE;
 	private outtakeArmState armState = outtakeArmState.ARM_RETRACTED;
 	private final SlewRateLimiter[] slewRateLimiters = new SlewRateLimiter[4];
@@ -92,11 +85,18 @@ public class JellyTele extends BaseOpMode
 		antiTipping.initImuError();
 //		intakeSystem.servoIntakeRelease();
 		drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+		List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+		for (LynxModule module : allHubs) {
+			module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+		}
 		waitForStart();
 		ElapsedTime timer = new ElapsedTime();
 		intakeSystem.servoIntakeDrone();
 		while (opModeIsActive())
 		{
+			for (LynxModule module : allHubs) {
+				module.clearBulkCache();
+			}
 			if (timer.milliseconds() % 500 < 100)
 			{
 				displayTelemetry(calculatePrecisionMultiplier());
@@ -113,12 +113,6 @@ public class JellyTele extends BaseOpMode
 			controlIntakeMotor();
 			updateDriveMode(calculatePrecisionMultiplier());
 			alignmentControl();
-			intakeSystem.setPGain(p);
-			intakeSystem.setDGain(d);
-//			slides.setlPGain(lp);
-//			slides.setlDGain(ld);
-//			slides.setrPGain(rp);
-//			slides.setrDGain(rd);
 		}
 	}
 
@@ -217,7 +211,7 @@ public class JellyTele extends BaseOpMode
 			{
 				slides.setTargetPosition(RESET_SLIDES_HEIGHT);
 			}
-			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.X))
+			if (gamepad2.right_trigger>0.5)
 			{
 				slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 				slideMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -293,10 +287,9 @@ public class JellyTele extends BaseOpMode
 				motorSpeeds = FieldCentricDrive();
 				break;
 			case DWFIELDCENTRIC:
+			default:
 				motorSpeeds = DWFieldCentricDrive();
 				break;
-			default:
-				motorSpeeds = FieldCentricDrive();
 		}
 		setMotorSpeeds(precisionMultiplier, motorSpeeds);
 	}
@@ -307,10 +300,10 @@ public class JellyTele extends BaseOpMode
 		double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
 		double forward = -applyDeadband(gamepad1.left_stick_y);
 		return new double[]{
-				forward - strafe - pivot,
-				forward + strafe - pivot,
 				forward + strafe + pivot,
-				forward - strafe + pivot
+				forward - strafe + pivot,
+				forward - strafe - pivot,
+				forward + strafe - pivot
 		};
 	}
 
@@ -324,10 +317,11 @@ public class JellyTele extends BaseOpMode
 		double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
 		double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
 		return new double[]{
-				rotY - rotX - rotation,
-				rotY + rotX - rotation,
 				rotY + rotX + rotation,
-				rotY - rotX + rotation
+				rotY - rotX + rotation,
+				rotY - rotX - rotation,
+				rotY + rotX - rotation
+
 		};
 	}
 	private double[] DWFieldCentricDrive()
@@ -340,10 +334,10 @@ public class JellyTele extends BaseOpMode
 		double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
 		double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
 		return new double[]{
-				rotY - rotX - rotation,
-				rotY + rotX - rotation,
 				rotY + rotX + rotation,
-				rotY - rotX + rotation
+				rotY - rotX + rotation,
+				rotY - rotX - rotation,
+				rotY + rotX - rotation
 		};
 	}
 	protected void setMotorSpeeds(double multiplier, double[] powers)
@@ -406,12 +400,11 @@ public class JellyTele extends BaseOpMode
 
 	private void updateDriveModeFromGamepad()
 	{
-		if (gamepadEx1.wasJustPressed(GamepadKeys.Button.Y))
+		if (gamepadEx1.wasJustPressed(GamepadKeys.Button.B))
 		{
 			driveMode = DriveMode.FIELDCENTRIC;
-			resetIMU();
 		}
-		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.B))
+		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.Y))
 		{
 			driveMode = DriveMode.DWFIELDCENTRIC;
 		}

@@ -34,16 +34,17 @@ public abstract class BaseOpMode extends LinearOpMode
 	{
 		driveMotors = new DcMotor[]{
 				//control hub
-				hardwareMap.dcMotor.get("motorFR"),
-				hardwareMap.dcMotor.get("motorBR"),
 				hardwareMap.dcMotor.get("motorFL"),
-				hardwareMap.dcMotor.get("motorBL")
+				hardwareMap.dcMotor.get("motorBL"),
+				hardwareMap.dcMotor.get("motorFR"),
+				hardwareMap.dcMotor.get("motorBR")
+
 		};
 		setMotorDirections(new DcMotorSimple.Direction[]{
-				DcMotorSimple.Direction.REVERSE, // motorFR
-				DcMotorSimple.Direction.REVERSE, // motorBR
 				DcMotorSimple.Direction.FORWARD, // motorFL
-				DcMotorSimple.Direction.FORWARD  // motorBL
+				DcMotorSimple.Direction.FORWARD, // motorBL
+				DcMotorSimple.Direction.REVERSE, // motorFR
+				DcMotorSimple.Direction.REVERSE  // motorBR
 		});
 		// expansion hub
 		// Assuming you want to reverse the servo direction

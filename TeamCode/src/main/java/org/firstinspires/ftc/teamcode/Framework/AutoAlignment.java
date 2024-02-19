@@ -65,13 +65,4 @@ public class AutoAlignment
 		}
 		return angle;
 	}
-	public void setPGain(double p)
-	{
-		this.kP = p;
-	}
-
-	public void setDGain(double d)
-	{
-		this.kD = d;
-	}
 }
