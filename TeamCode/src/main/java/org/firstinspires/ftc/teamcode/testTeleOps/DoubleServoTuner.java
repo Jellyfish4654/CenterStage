@@ -38,8 +38,8 @@ public class DoubleServoTuner extends LinearOpMode
 
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
-		double position = 0.1145;
-		double position1 = 0.5307;
+		double position = 0.1166;
+		double position1 = 0.4566;
 		double mult = 1;
 		waitForStart();
 		runtime.reset();
@@ -65,11 +65,11 @@ public class DoubleServoTuner extends LinearOpMode
 
 			if (gamepad1.a)
 			{
-				position = 0.1145;
+				position = 0.1166;
 			}
 			else if (gamepad1.b)
 			{
-				position = 0.765;
+				position = 0.7591;
 			}
 			if (gamepad1.left_bumper)
 			{
@@ -90,11 +90,11 @@ public class DoubleServoTuner extends LinearOpMode
 
 			if (gamepad1.x)
 			{
-				position1 = 0.5307;
+				position1 = 0.4566;
 			}
 			else if (gamepad1.y)
 			{
-				position1 = 0.1811;
+				position1 = 0.8145;
 			}
 			// State Machine b/c CRServo need to change power to turn off
 			switch (currentState)
