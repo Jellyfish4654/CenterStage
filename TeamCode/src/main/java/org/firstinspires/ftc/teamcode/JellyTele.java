@@ -93,9 +93,6 @@ public class JellyTele extends BaseOpMode
 		intakeSystem.servoIntakeDrone();
 		while (opModeIsActive())
 		{
-			for (LynxModule hub : allHubs) {
-				hub.clearBulkCache();
-			}
 			if (timer.milliseconds() % 500 < 100)
 			{
 				displayTelemetry(calculatePrecisionMultiplier());

@@ -24,7 +24,7 @@ public class Slides {
 	private double maxAcceleration = 23886;
 	private double rightPIDOutput;
 	private double leftPIDOutput;
-	private int TargetPosition;
+	private int targetPosition;
 
 	public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
 		this.slideMotorLeft = slideMotorLeft;
@@ -36,17 +36,17 @@ public class Slides {
 		this.timer = new ElapsedTime();
 	}
 
-	public void setTargetPosition(int targetPosition) {
+	public void setTargetPosition(int TargetPosition) {
 		double startVelocity = 0;
 
 		MotionState startStateLeft = new MotionState(slideMotorLeft.getCurrentPosition(), startVelocity);
-		MotionState endStateLeft = new MotionState(targetPosition, 0);
+		MotionState endStateLeft = new MotionState(TargetPosition, 0);
 		this.leftProfile = MotionProfileGenerator.generateSimpleMotionProfile(startStateLeft, endStateLeft, maxVelocity, maxAcceleration);
 
 		MotionState startStateRight = new MotionState(slideMotorRight.getCurrentPosition(), startVelocity);
-		MotionState endStateRight = new MotionState(targetPosition, 0);
+		MotionState endStateRight = new MotionState(TargetPosition, 0);
 		this.rightProfile = MotionProfileGenerator.generateSimpleMotionProfile(startStateRight, endStateRight, maxVelocity, maxAcceleration);
-		TargetPosition=targetPosition;
+		targetPosition=TargetPosition;
 		timer.reset();
 	}
 
@@ -88,7 +88,27 @@ public class Slides {
 	}
 	public int getTargetPosition()
 	{
-		return TargetPosition;
+		return targetPosition;
 	}
+	public class SlidesUp1 implements Action
+	{
+		private boolean initialized = false;
+		@Override
+		public boolean run(@NonNull TelemetryPacket telemetryPacket)
 
+		{
+			if (!initialized) {
+				setTargetPosition(275);
+				initialized = true;
+			}
+			update();
+			int currentPositionLeft = slideMotorLeft.getCurrentPosition();
+			int currentPositionRight = slideMotorRight.getCurrentPosition();
+			int errorMargin = 25;
+
+			boolean leftInPosition = Math.abs(currentPositionLeft - targetPosition) >= errorMargin;
+			boolean rightInPosition = Math.abs(currentPositionRight - targetPosition) >= errorMargin;
+			return leftInPosition && rightInPosition;
+		}
+	}
 }
