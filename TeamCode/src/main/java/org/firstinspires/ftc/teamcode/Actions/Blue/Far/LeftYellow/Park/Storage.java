@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Framework.PoseStorage;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 public class Storage {
-    protected static MecanumDrive drive = PoseStorage.getDrive();
+    protected MecanumDrive drive = PoseStorage.drive;
 
 
     public Action name() {

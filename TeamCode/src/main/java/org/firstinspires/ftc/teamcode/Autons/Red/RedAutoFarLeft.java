@@ -56,8 +56,8 @@ public class RedAutoFarLeft extends BaseOpMode {
             distance = distanceLeft.getDistance(DistanceUnit.INCH);
 //			distance = filter.estimate(distance);
         }
-        drive.pose = new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90));
-        PoseStorage.initialize(drive);
+        PoseStorage.drive=drive;
+        PoseStorage.currentPose=drive.pose;
         // After starting, stop the camera stream
         webcam.stopStreaming();
         ActionStorage actionStorage = new ActionStorage(drive);
