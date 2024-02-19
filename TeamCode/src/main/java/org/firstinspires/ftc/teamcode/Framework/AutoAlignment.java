@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.JellyTele;
 
@@ -13,9 +14,9 @@ public class AutoAlignment
 	private final IMU imuSensor;
 	private final PIDController pidController;
 	private double targetAngle = 0;
-	public static double kP = 0.017;
+	public static double kP = 0.03;
 	public static double kI = 0.0;
-	public static double kD = 0.00017;
+	public static double kD = 0;
 
 	// Constructor
 	public AutoAlignment(DcMotor[] motors, IMU imuSensor)
@@ -33,8 +34,7 @@ public class AutoAlignment
 	public void update()
 	{
 		YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
-//        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
-		double currentYaw = -Math.toDegrees(PoseStorage.currentPose.heading.toDouble());
+        double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
 		currentYaw = normalizeAngle(currentYaw);
 		double angleDifference = normalizeAngle(targetAngle - currentYaw);
 		double correction = pidController.calculate(0, angleDifference);
