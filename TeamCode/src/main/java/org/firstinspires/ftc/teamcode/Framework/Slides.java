@@ -34,6 +34,7 @@ public class Slides {
 		this.rightController = new PIDFController(kPRight, kIRight, kDRight, kFRight);
 
 		this.timer = new ElapsedTime();
+		setTargetPosition(0);
 	}
 
 	public void setTargetPosition(int TargetPosition) {

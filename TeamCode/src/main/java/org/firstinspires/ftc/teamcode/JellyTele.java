@@ -35,7 +35,7 @@ public class JellyTele extends BaseOpMode
 	public static double ld = 0.00002;
 	public static double rp = 0.0015;
 	public static double rd = 0.00002;
-	MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+//	MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 	private double resetHeading = 0;
 	private GamepadEx gamepadEx1;
 	private GamepadEx gamepadEx2;
@@ -89,7 +89,7 @@ public class JellyTele extends BaseOpMode
 
 		waitForStart();
 		ElapsedTime timer = new ElapsedTime();
-		PoseStorage.currentPose = drive.pose;
+//		PoseStorage.currentPose = drive.pose;
 		intakeSystem.servoIntakeDrone();
 		while (opModeIsActive())
 		{
@@ -101,7 +101,7 @@ public class JellyTele extends BaseOpMode
 			{
 				alertEndGame(timer);
 			}
-			PoseStorage.currentPose = drive.pose;
+//			PoseStorage.currentPose = drive.pose;
 			readGamepadInputs();
 			antiTipping.update();
 			controlDroneAndOutake();
@@ -254,12 +254,12 @@ public class JellyTele extends BaseOpMode
 		telemetry.addData("intakeCurrentPosition", intakeMotor.getCurrentPosition());
 		telemetry.addData("intakeTargetPosition", intakeSystem.getTargetPosition());
 		telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-		telemetry.addData("dwyaw", drive.pose.heading.toDouble());
+//		telemetry.addData("dwyaw", drive.pose.heading.toDouble());
 		telemetry.addData("imupitch", imuSensor.getRobotYawPitchRollAngles().getPitch(AngleUnit.DEGREES));
 		telemetry.addData("imuroll", imuSensor.getRobotYawPitchRollAngles().getRoll(AngleUnit.DEGREES));
 		telemetry.addData("intakeOutput", intakeSystem.getPIDOutput());
 		telemetry.update();
-		drive.updatePoseEstimate();
+//		drive.updatePoseEstimate();
 	}
 
 	private void readGamepadInputs()
@@ -286,9 +286,9 @@ public class JellyTele extends BaseOpMode
 			case FIELDCENTRIC:
 				motorSpeeds = FieldCentricDrive();
 				break;
-			case DWFIELDCENTRIC:
-				motorSpeeds = DWFieldCentricDrive();
-				break;
+//			case DWFIELDCENTRIC:
+//				motorSpeeds = DWFieldCentricDrive();
+//				break;
 			default:
 				motorSpeeds = FieldCentricDrive();
 		}
@@ -324,22 +324,22 @@ public class JellyTele extends BaseOpMode
 				rotY - rotX + rotation
 		};
 	}
-	private double[] DWFieldCentricDrive()
-	{
-		double forward = -applyDeadband(gamepad1.left_stick_y);
-		double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
-		double rotation = applyDeadband(gamepad1.right_stick_x);
-		double botHeading = drive.pose.heading.toDouble();
-
-		double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
-		double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
-		return new double[]{
-				rotY - rotX - rotation,
-				rotY + rotX - rotation,
-				rotY + rotX + rotation,
-				rotY - rotX + rotation
-		};
-	}
+//	private double[] DWFieldCentricDrive()
+//	{
+//		double forward = -applyDeadband(gamepad1.left_stick_y);
+//		double strafe = applyDeadband(gamepad1.left_stick_x) * STRAFE_ADJUSTMENT_FACTOR;
+//		double rotation = applyDeadband(gamepad1.right_stick_x);
+//		double botHeading = drive.pose.heading.toDouble();
+//
+//		double rotX = strafe * Math.cos(-botHeading) - forward * Math.sin(-botHeading);
+//		double rotY = strafe * Math.sin(-botHeading) + forward * Math.cos(-botHeading);
+//		return new double[]{
+//				rotY - rotX - rotation,
+//				rotY + rotX - rotation,
+//				rotY + rotX + rotation,
+//				rotY - rotX + rotation
+//		};
+//	}
 	protected void setMotorSpeeds(double multiplier, double[] powers)
 	{
 		applyPrecisionAndScale(multiplier, powers);
@@ -461,14 +461,14 @@ public class JellyTele extends BaseOpMode
 		{
 			imuSensor.resetYaw();
 			resetHeading = 0;
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
+//			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
 		{
 			imuSensor.resetYaw();
 			resetHeading = Math.toRadians(-90);
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
+//			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
@@ -476,7 +476,7 @@ public class JellyTele extends BaseOpMode
 			imuSensor.resetYaw();
 			resetHeading = Math.toRadians(90);
 
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
+//			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
@@ -484,7 +484,7 @@ public class JellyTele extends BaseOpMode
 			imuSensor.resetYaw();
 			resetHeading = Math.toRadians(180);
 
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
+//			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 	}
