@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Framework;
 
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -10,8 +9,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import java.util.List;
 
 public abstract class BaseOpMode extends LinearOpMode
 {
@@ -32,8 +29,6 @@ public abstract class BaseOpMode extends LinearOpMode
 	protected DistanceSensor distanceLeft;
 
 	protected DistanceSensor distanceRight;
-	protected List<LynxModule> allHubs;
-
 
 	protected void initHardware()
 	{
@@ -90,11 +85,6 @@ public abstract class BaseOpMode extends LinearOpMode
 		autoAlignment = new AutoAlignment(driveMotors, imuSensor);
 		distanceLeft = hardwareMap.get(DistanceSensor.class, "distanceLeft");
 		distanceRight = hardwareMap.get(DistanceSensor.class, "distanceRight");
-
-		allHubs = hardwareMap.getAll(LynxModule.class);
-		for (LynxModule hub : allHubs) {
-			hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
-		}
 	}
 
 	private IMU initializeIMUSensor()
@@ -116,5 +106,4 @@ public abstract class BaseOpMode extends LinearOpMode
 			driveMotors[i].setDirection(directions[i]);
 		}
 	}
-
 }
