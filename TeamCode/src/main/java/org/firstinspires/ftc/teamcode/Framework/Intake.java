@@ -16,9 +16,9 @@ public class Intake
 
 	private int targetPosition;
 
-	public static double P = 0.0015;
+	public static double P = 0.015;
 	public static double I = 0;
-	public static double D = 0.00002;
+	public static double D = 0.0002;
 	private double PIDOutput;
 
 
