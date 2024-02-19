@@ -114,17 +114,17 @@ public class JellyTele extends BaseOpMode
 			alignmentControl();
 			intakeSystem.setPGain(p);
 			intakeSystem.setDGain(d);
-			slides.setlPGain(lp);
-			slides.setlDGain(ld);
-			slides.setrPGain(rp);
-			slides.setrDGain(rd);
+//			slides.setlPGain(lp);
+//			slides.setlDGain(ld);
+//			slides.setrPGain(rp);
+//			slides.setrDGain(rd);
 		}
 	}
 
 	private void OutakeControl()
 	{
 		outakeServos.setOutput();
-		if (!outtakeArm && (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2 < 175) {
+		if (!outtakeArm && ((slideMotorLeft.getCurrentPosition() + slideMotorRight.getCurrentPosition() / 2) < 175)) {
 			// Do nothing
 		} else {
 			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
@@ -253,8 +253,7 @@ public class JellyTele extends BaseOpMode
 		telemetry.addData("RightSlide", slideMotorRight.getCurrentPosition());
 		telemetry.addData("LeftSlideOutput", slides.getLeftPIDOutput());
 		telemetry.addData("RightSlideOutput", slides.getRightPIDOutput());
-		telemetry.addData("LeftSlideTarget", slides.getTargetPositionLeft());
-		telemetry.addData("RightSlideTarget", slides.getTargetPositionRight());
+		telemetry.addData("LeftSlideTarget", slides.getTargetPosition());
 		telemetry.addData("intakeCurrentPosition", intakeMotor.getCurrentPosition());
 		telemetry.addData("intakeTargetPosition", intakeSystem.getTargetPosition());
 		telemetry.addData("imuyaw", imuSensor.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
@@ -347,11 +346,11 @@ public class JellyTele extends BaseOpMode
 	protected void setMotorSpeeds(double multiplier, double[] powers)
 	{
 		applyPrecisionAndScale(multiplier, powers);
-		int averageTargetPosition = (slides.getTargetPositionLeft() + slides.getTargetPositionRight()) / 2;
+		int averagePosition = (slideMotorLeft.getCurrentPosition() + slideMotorRight.getCurrentPosition() / 2);
 		double rate = 1.0;
-		if (averageTargetPosition >= 2000)
+		if (averagePosition >= 2000)
 		{
-			rate = 0.99 - ((double) (averageTargetPosition - 2000) / 10) * 0.0005;
+			rate = 0.99 - ((double) (averagePosition - 2000) / 10) * 0.0005;
 			rate = Math.max(rate, 0);
 			applySlewRateLimit(powers, rate);
 		}
