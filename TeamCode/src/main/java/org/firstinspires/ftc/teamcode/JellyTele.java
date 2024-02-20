@@ -232,12 +232,12 @@ public class JellyTele extends BaseOpMode
 	private void alignmentControl(){
 		if (gamepad1.left_trigger > 0.5)
 		{
-			autoAlignment.setTargetAngle(-90);
+			autoAlignment.setTargetAngle(-Math.toRadians(90));
 			autoAlignment.update();
 		}
 		else if (gamepad1.right_trigger > 0.5)
 		{
-			autoAlignment.setTargetAngle(90);
+			autoAlignment.setTargetAngle(Math.toRadians(90));
 			autoAlignment.update();
 		}
 	}
