@@ -46,10 +46,10 @@ public class AutoAlignment
 		double rightPower = correction;
 		double leftPower = -correction;
 
-		motors[0].setPower(rightPower);
-		motors[1].setPower(rightPower);
-		motors[2].setPower(leftPower);
-		motors[3].setPower(leftPower);
+		motors[0].setPower(leftPower);
+		motors[1].setPower(leftPower);
+		motors[2].setPower(rightPower);
+		motors[3].setPower(rightPower);
 	}
 
 	private double normalizeAngle(double angle)
