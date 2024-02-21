@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 
-@TeleOp(name = "LinearTeleop", group = "OpMode")
+@TeleOp(name = "AbigailTeleOp", group = "OpMode")
 
     public class AbigailTeleOp extends LinearOpMode {
         DcMotor frontLeftMotor;

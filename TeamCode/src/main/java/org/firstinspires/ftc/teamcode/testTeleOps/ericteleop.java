@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name = "ericteleop", group = "OpMode")
 public class ericteleop extends LinearOpMode {
-    GamepadEx thegamepad = new Gamepad(gamepad1);
+    GamepadEx thegamepad;
     DcMotor frontLeftMotor;
     DcMotor backLeftMotor;
     DcMotor frontRightMotor;
@@ -34,6 +34,7 @@ public class ericteleop extends LinearOpMode {
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu.initialize(parameters);
+        thegamepad=new GamepadEx(gamepad1);
         waitForStart();
         while (opModeIsActive()) {
             double Yaw = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);

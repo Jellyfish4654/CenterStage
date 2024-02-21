@@ -6,15 +6,15 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Actions.RedFarLeftStorage;
 import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
-import org.firstinspires.ftc.teamcode.Framework.PoseStorage;
+import org.firstinspires.ftc.teamcode.Framework.DriveStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.LeftRedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
@@ -35,8 +35,7 @@ public class RedAutoFarLeft extends BaseOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15, -60, Math.toRadians(90)));
-
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-70.5 + (5.5+24), -70.5+10.375, Math.toRadians(90)));
         Sides.setColor(Sides.Color.RED);
         // Initialize hardware and pipeline
         initHardware(hardwareMap);
@@ -53,18 +52,15 @@ public class RedAutoFarLeft extends BaseOpMode {
 
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
-            distance = distanceLeft.getDistance(DistanceUnit.INCH);
-//			distance = filter.estimate(distance);
         }
-        PoseStorage.drive=drive;
-        PoseStorage.currentPose=drive.pose;
+        RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
         // After starting, stop the camera stream
         webcam.stopStreaming();
         ActionStorage actionStorage = new ActionStorage(drive);
         // Run the autonomous path based on the detected position
         Action leftPurple = actionStorage.getRedFarRight_LeftPurpleAction();
         Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
-        Action rightPurple = actionStorage.getRedFarRight_RightPurpleAction();
+        Action rightPurple = storage.RightPurpleAction();
         Action traj1 = actionStorage.getRedTraj();
         Action leftYellow = actionStorage.getRedFarYellowLeft();
         Action centerYellow = actionStorage.getRedFarYellowCenter();
@@ -78,11 +74,10 @@ public class RedAutoFarLeft extends BaseOpMode {
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
                                 intakeSystem.new IntakeServoRelease(),
-                                leftPurple,
-                                intakeSystem.new IntakeServoDrone()
+                                leftPurple
                         ),
                         (telemetryPacket) -> {
-                            PoseStorage.drive.updatePoseEstimate();
+                            DriveStorage.drive.updatePoseEstimate();
                             slides.update();
                             return true;
                         }
@@ -112,25 +107,17 @@ public class RedAutoFarLeft extends BaseOpMode {
                 break;
             case RIGHT:
             case UNKNOWN:
-                Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        rightPurple,
-                        intakeSystem.new IntakeServoDrone()
-//                                traj1,
-//                                rightYellow,
-//                                slides.new SlidesUp1(),
-//                                outakeServos.new armOuttakeDeposit(),
-//                                new SleepAction(0.75),
-//                                outakeServos.new boxOuttakeDeposit(),
-//                                new SleepAction(0.75),
-//                                wheelServo.new CRMoveForward(),
-//                                outakeServos.new boxOuttakeIntake(),
-//                                new SleepAction(0.75),
-//                                outakeServos.new armOuttakeIntake(),
-//                                new SleepAction(0.75),
-//                        rightPark
-                        )
-                );
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                intakeSystem.new IntakeServoRelease(),
+                                rightPurple
+                        ),
+                        (telemetryPacket) -> {
+                            DriveStorage.drive.updatePoseEstimate();
+                            slides.update();
+                            return true;
+                        }
+                ));
                 break;
         }
     }
