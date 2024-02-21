@@ -43,8 +43,8 @@ public class AutoAlignment
 
 	private void MotorPowers(double correction)
 	{
-		double rightPower = correction;
-		double leftPower = -correction;
+		double rightPower = -correction;
+		double leftPower = correction;
 
 		motors[0].setPower(leftPower);
 		motors[1].setPower(leftPower);

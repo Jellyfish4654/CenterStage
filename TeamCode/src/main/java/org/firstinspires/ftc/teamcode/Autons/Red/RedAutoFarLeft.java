@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.Framework.BaseOpMode;
 import org.firstinspires.ftc.teamcode.Framework.DriveStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.ActionStorage;
 import org.firstinspires.ftc.teamcode.Framework.misc.LeftRedPipeline;
+import org.firstinspires.ftc.teamcode.Framework.misc.RedPipeline;
 import org.firstinspires.ftc.teamcode.Framework.misc.Sides;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -53,6 +54,7 @@ public class RedAutoFarLeft extends BaseOpMode {
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
         }
+        DriveStorage.drive=drive;
         RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
         // After starting, stop the camera stream
         webcam.stopStreaming();

@@ -38,7 +38,7 @@ public class RedFarLeftStorage {
         return drive.actionBuilder(startPose)
                 .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
                 .splineTo(new Vector2d(-30, -36), Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(225))), -36 + (2 * Math.sin(Math.toRadians(225)))),Math.toRadians(120))
+                .splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(225))), -36 + (4 * Math.sin(Math.toRadians(225)))),Math.toRadians(120))
                 .splineToConstantHeading(new Vector2d(-41, -17.5), Math.toRadians(120))
                 .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
                 .build();

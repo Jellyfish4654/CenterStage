@@ -115,10 +115,10 @@ public class MeepMeepTesting {
 
         RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-70.5 + (5.5+24), -70.5+10.375, Math.toRadians(90)))
                 .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
-                .splineTo(new Vector2d(-30, -36), Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(225))), -36 + (2 * Math.sin(Math.toRadians(225)))),Math.toRadians(120))
-                .splineToConstantHeading(new Vector2d(-41, -17.5), Math.toRadians(120))
-                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
+                .splineTo(new Vector2d(-32, -38), Math.toRadians(45))
+//                .splineToConstantHeading(new Vector2d(-30 + (2 * Math.cos(Math.toRadians(225))), -36 + (2 * Math.sin(Math.toRadians(225)))),Math.toRadians(120))
+//                .splineToConstantHeading(new Vector2d(-41, -17.5), Math.toRadians(120))
+//                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
                 .build());
 
 //        BLUE_LEFT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(-39, 60, Math.toRadians(90)))
