@@ -24,7 +24,7 @@ public class JellyTele extends BaseOpMode
 	private final double PRECISION_MULTIPLIER_LOW = 0.35;
 	private final double PRECISION_MULTIPLIER_HIGH = 0.7;
 	private final double DEADBAND_VALUE = 0.02;
-	private final double STRAFE_ADJUSTMENT_FACTOR = 1.1;
+	private final double STRAFE_ADJUSTMENT_FACTOR = (14.0/13.0);
 	private final double MAX_SCALE = 1.0;
 	private final double ENDGAME_ALERT_TIME = 110.0;
 	private final int SLIDES_HANGING_HEIGHT = 2000;
