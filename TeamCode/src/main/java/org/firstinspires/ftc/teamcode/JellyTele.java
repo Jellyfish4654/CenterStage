@@ -215,6 +215,7 @@ public class JellyTele extends BaseOpMode
 			{
 				slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 				slideMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+				slides.setTargetPosition(0);
 			}
 			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.DPAD_UP))
 			{

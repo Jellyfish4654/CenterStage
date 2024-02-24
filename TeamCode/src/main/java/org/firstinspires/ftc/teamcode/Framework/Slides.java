@@ -4,21 +4,21 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Framework.Profiles.MotionProfile;
 import org.firstinspires.ftc.teamcode.Framework.Profiles.MotionProfileGenerator;
 import org.firstinspires.ftc.teamcode.Framework.Profiles.MotionState;
-import com.arcrobotics.ftclib.controller.PIDFController;
 
 public class Slides {
 	private DcMotorEx slideMotorLeft, slideMotorRight;
-	private PIDFController leftController, rightController;
+	private PIDController leftController, rightController;
 	private MotionProfile leftProfile, rightProfile;
 	private ElapsedTime timer;
-	private double kPLeft = 0.011, kILeft = 0, kDLeft = 0.0005, kFLeft = 0;
-	private double kPRight = 0.011, kIRight = 0, kDRight = 0.0005, kFRight = 0;
+	private double kPLeft = 0.0125, kILeft = 0, kDLeft = 0.00038;
+	private double kPRight = 0.0125, kIRight = 0, kDRight = 0.00038;
 
 	private double maxVelocity = 2000; // True max is ~2200
 	private double maxAcceleration = 29000; // True max is ~ 30000
@@ -30,8 +30,8 @@ public class Slides {
 		this.slideMotorLeft = slideMotorLeft;
 		this.slideMotorRight = slideMotorRight;
 
-		this.leftController = new PIDFController(kPLeft, kILeft, kDLeft, kFLeft);
-		this.rightController = new PIDFController(kPRight, kIRight, kDRight, kFRight);
+		this.leftController = new PIDController(kPLeft, kILeft, kDLeft);
+		this.rightController = new PIDController(kPRight, kIRight, kDRight);
 
 		this.timer = new ElapsedTime();
 		setTargetPosition(0);
@@ -72,7 +72,7 @@ public class Slides {
 		slideMotorRight.setPower(rightPower);
 	}
 
-	private double calculateMotorPower(DcMotorEx motor, MotionState targetState, PIDFController controller) {
+	private double calculateMotorPower(DcMotorEx motor, MotionState targetState, PIDController controller) {
 		int currentPosition = motor.getCurrentPosition();
 		double power = controller.calculate(currentPosition, targetState.getX());
 

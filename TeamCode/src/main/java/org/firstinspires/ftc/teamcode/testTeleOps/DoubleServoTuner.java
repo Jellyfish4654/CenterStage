@@ -39,7 +39,7 @@ public class DoubleServoTuner extends LinearOpMode
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
 		double position = 0.1166;
-		double position1 = 0.4566;
+		double position1 = 0.4021;
 		double mult = 1;
 		waitForStart();
 		runtime.reset();
@@ -90,7 +90,7 @@ public class DoubleServoTuner extends LinearOpMode
 
 			if (gamepad1.x)
 			{
-				position1 = 0.4566;
+				position1 = 0.4021;
 			}
 			else if (gamepad1.y)
 			{
