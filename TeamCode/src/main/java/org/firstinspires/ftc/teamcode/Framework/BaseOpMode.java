@@ -15,6 +15,7 @@ public abstract class BaseOpMode extends LinearOpMode
 {
 	protected DcMotor[] driveMotors;
 	protected DroneLauncher droneServo;
+	protected intakeDistance intakeDistanceSensor;
 	protected Intake intakeSystem;
 	protected outtakeServo outakeServos;
 	protected DcMotorEx slideMotorLeft;
@@ -87,6 +88,7 @@ public abstract class BaseOpMode extends LinearOpMode
 		autoAlignment = new AutoAlignment(driveMotors, imuSensor);
 		distanceLeft = hardwareMap.get(DistanceSensor.class, "distanceLeft");
 		distanceRight = hardwareMap.get(DistanceSensor.class, "distanceRight");
+		intakeDistanceSensor = new intakeDistance(distanceRight);
 	}
 
 	private IMU initializeIMUSensor()
@@ -94,7 +96,7 @@ public abstract class BaseOpMode extends LinearOpMode
 		IMU imu = hardwareMap.get(IMU.class, "imu");
 
 		IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-				RevHubOrientationOnRobot.LogoFacingDirection.BACKWARD,
+				RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
 				RevHubOrientationOnRobot.UsbFacingDirection.UP
 		));
 		imu.initialize(parameters);

@@ -122,7 +122,7 @@ public class JellyTele extends BaseOpMode
 		switch (armState) {
 				case ARM_RETRACTED:
 					if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER) &&
-							((slideMotorLeft.getCurrentPosition() + slideMotorRight.getCurrentPosition() / 2) > 175)) {
+							((slideMotorLeft.getCurrentPosition() + slideMotorRight.getCurrentPosition() / 2) > 300)) {
 						armState = outtakeArmState.ARM_DEPLOYED_BOX_RETRACTED;
 						outakeServos.armOuttakeDeposit();
 					}
@@ -130,16 +130,16 @@ public class JellyTele extends BaseOpMode
 				case ARM_DEPLOYED_BOX_RETRACTED:
 					if (gamepadEx2.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
 						armState = outtakeArmState.ARM_RETRACTED;
-						outakeServos.armOuttakeIntake(); // Retract arm
+						outakeServos.armOuttakeIntake();
 					} else if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
 						armState = outtakeArmState.ARM_DEPLOYED_BOX_DEPLOYED;
-						outakeServos.boxOuttakeDeposit(); // Deploy box
+						outakeServos.boxOuttakeDeposit();
 					}
 					break;
 				case ARM_DEPLOYED_BOX_DEPLOYED:
 					if (gamepadEx2.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
 						armState = outtakeArmState.ARM_DEPLOYED_BOX_RETRACTED;
-						outakeServos.boxOuttakeIntake(); // Retract box
+						outakeServos.boxOuttakeIntake();
 					}
 					break;
 			}
@@ -401,7 +401,7 @@ public class JellyTele extends BaseOpMode
 
 	private void updateDriveModeFromGamepad()
 	{
-		if (gamepadEx1.wasJustPressed(GamepadKeys.Button.B))
+		if (gamepadEx1.wasJustPressed(GamepadKeys.Button.X))
 		{
 			driveMode = DriveMode.FIELDCENTRIC;
 		}
@@ -459,22 +459,22 @@ public class JellyTele extends BaseOpMode
 		{
 			imuSensor.resetYaw();
 			resetHeading = 0;
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, -resetHeading));
+			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_LEFT))
 		{
 			imuSensor.resetYaw();
-			resetHeading = Math.toRadians(-90);
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, -resetHeading));
+			resetHeading = Math.toRadians(90);
+			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
 		{
 			imuSensor.resetYaw();
-			resetHeading = Math.toRadians(90);
+			resetHeading = Math.toRadians(-90);
 
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, -resetHeading));
+			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_DOWN))
@@ -482,7 +482,7 @@ public class JellyTele extends BaseOpMode
 			imuSensor.resetYaw();
 			resetHeading = Math.toRadians(180);
 
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, -resetHeading));
+			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 	}
