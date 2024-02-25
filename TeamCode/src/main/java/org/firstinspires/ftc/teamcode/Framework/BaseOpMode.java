@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 public abstract class BaseOpMode extends LinearOpMode
 {
@@ -47,8 +48,8 @@ public abstract class BaseOpMode extends LinearOpMode
 				DcMotorSimple.Direction.REVERSE  // motorBR
 		});
 		// expansion hub
-		// Assuming you want to reverse the servo direction
-		droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"), Servo.Direction.REVERSE);
+		VoltageSensor voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
+		droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"), Servo.Direction.REVERSE, voltageSensor);
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
 		wheelServo = new outtakeCRServo(outtakeCRServo);
@@ -74,13 +75,13 @@ public abstract class BaseOpMode extends LinearOpMode
 		slideMotorLeft = hardwareMap.get(DcMotorEx.class, "slideMotorLeft");
 		slideMotorRight = hardwareMap.get(DcMotorEx.class, "slideMotorRight");
 		slideMotorRight.setDirection(DcMotorSimple.Direction.REVERSE);
-		slideMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+//		slideMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 		slideMotorRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 		slideMotorRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-		slideMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+//		slideMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 		slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 		slideMotorLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-		slides = new Slides(slideMotorLeft, slideMotorRight);
+		slides = new Slides(slideMotorLeft, slideMotorRight, voltageSensor);
 		imuSensor = initializeIMUSensor();
 		antiTipping = new AntiTipping(driveMotors, imuSensor);
 		autoAlignment = new AutoAlignment(driveMotors, imuSensor);

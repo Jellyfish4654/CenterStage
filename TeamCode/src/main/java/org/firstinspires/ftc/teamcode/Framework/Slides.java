@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Framework.Profiles.MotionProfile;
@@ -14,25 +15,29 @@ import org.firstinspires.ftc.teamcode.Framework.Profiles.MotionState;
 
 public class Slides {
 	private DcMotorEx slideMotorLeft, slideMotorRight;
+	private VoltageSensor voltageSensor;
 	private PIDController leftController, rightController;
 	private MotionProfile leftProfile, rightProfile;
 	private ElapsedTime timer;
 	private double kPLeft = 0.0125, kILeft = 0, kDLeft = 0.00038;
 	private double kPRight = 0.0125, kIRight = 0, kDRight = 0.00038;
-
+	private double kF = 0;
+	private final double ticks_in_degrees = 537.7 / 360.0;
 	private double maxVelocity = 2000; // True max is ~2200
 	private double maxAcceleration = 29000; // True max is ~ 30000
 	private double rightPIDOutput;
 	private double leftPIDOutput;
 	private int targetPosition;
+	private double voltageCompensation;
 
-	public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight) {
+	public Slides(DcMotorEx slideMotorLeft, DcMotorEx slideMotorRight, VoltageSensor sensor) {
 		this.slideMotorLeft = slideMotorLeft;
 		this.slideMotorRight = slideMotorRight;
 
 		this.leftController = new PIDController(kPLeft, kILeft, kDLeft);
 		this.rightController = new PIDController(kPRight, kIRight, kDRight);
 
+		this.voltageSensor = sensor;
 		this.timer = new ElapsedTime();
 		setTargetPosition(0);
 	}
@@ -75,7 +80,10 @@ public class Slides {
 	private double calculateMotorPower(DcMotorEx motor, MotionState targetState, PIDController controller) {
 		int currentPosition = motor.getCurrentPosition();
 		double power = controller.calculate(currentPosition, targetState.getX());
-
+		double angle = (targetPosition - currentPosition) / ticks_in_degrees;
+		double ff = Math.cos(Math.toRadians(angle)) * kF;
+		voltageCompensation = 13.2 / voltageSensor.getVoltage();
+		power = (power + ff) * voltageCompensation;
 		return power;
 	}
 	public double getLeftPIDOutput()

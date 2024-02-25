@@ -38,11 +38,9 @@ public class RedAutoFarLeft extends BaseOpMode {
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-70.5 + (5.5+24), -70.5+10.375, Math.toRadians(90)));
         Sides.setColor(Sides.Color.RED);
-        // Initialize hardware and pipeline
         initHardware(hardwareMap);
         initHardware();
         initCamera();
-        // Wait for the start button to be pressed, updating telemetry
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.addData("Left Pixels", LeftRedPipeline.getLeft());
