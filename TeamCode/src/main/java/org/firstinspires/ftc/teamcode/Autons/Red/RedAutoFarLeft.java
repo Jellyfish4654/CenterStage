@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autons.Red;
 
 
+import static org.firstinspires.ftc.teamcode.Framework.misc.Vision.getAprilTagPoses;
+import static org.firstinspires.ftc.teamcode.Framework.misc.Vision.processTagPoses;
+
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
@@ -23,6 +26,8 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import java.util.ArrayList;
 
 @Autonomous(name = "RedAutoFarLeft", group = "Auto")
 public class RedAutoFarLeft extends BaseOpMode {
@@ -74,7 +79,14 @@ public class RedAutoFarLeft extends BaseOpMode {
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
                                 intakeSystem.new IntakeServoRelease(),
-                                leftPurple
+                                leftPurple,
+                                (telemetryPacket) -> {
+                                    ArrayList<Pose2d> tagPoses = getAprilTagPoses();
+                                    DriveStorage.drive.pose = processTagPoses(tagPoses);
+                                    DriveStorage.drive.updatePoseEstimate();
+                                    return false;
+                                }
+
                         ),
                         (telemetryPacket) -> {
                             DriveStorage.drive.updatePoseEstimate();

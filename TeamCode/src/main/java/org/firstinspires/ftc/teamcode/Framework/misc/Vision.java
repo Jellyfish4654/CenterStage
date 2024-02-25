@@ -7,18 +7,19 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
-
+import org.firstinspires.ftc.teamcode.Framework.DriveStorage;
 public class Vision
 {
 
 	private VisionPortal visionPortal;
-	private AprilTagProcessor tagProcessor;
+	private static AprilTagProcessor tagProcessor;
 	private static final String cameraname = "Webcam 1";
 
 	public Vision(HardwareMap hardwareMap)
@@ -46,7 +47,7 @@ public class Vision
 		visionPortal.stopStreaming();
 	}
 
-	public ArrayList<Pose2d> getAprilTagPoses()
+	public static ArrayList<Pose2d> getAprilTagPoses()
 	{
 		ArrayList<AprilTagDetection> tags = tagProcessor.getDetections();
 		ArrayList<Pose2d> poses = new ArrayList<>();
@@ -71,15 +72,33 @@ public class Vision
 
 				Transform3d tagToCameraTransform = cameraToTagTransform.unaryMinusInverse();
 				Transform3d cameraPose = tagPose.plus(tagToCameraTransform);
-				poses.add(cameraPose.toPose2d());
+
+				Transform3d robotToCameraTransform = new Transform3d(
+						new VectorF(
+								-1f,
+								7.5f,
+								4.11024f
+						),
+						new Quaternion(0,0,1f,0, System.nanoTime())
+				);
+
+				Transform3d cameraToRobotTransform = robotToCameraTransform.unaryMinusInverse();
+				Transform3d robotPose = cameraPose.plus(cameraToRobotTransform);
+				poses.add(robotPose.toPose2d());
 			}
 		}
 
 		return poses;
 	}
 
-	public void closeAll()
-	{
+	public static Pose2d processTagPoses(ArrayList<Pose2d> tagPoses) {
+		if (!tagPoses.isEmpty()) {
+			DriveStorage.drive.pose = tagPoses.get(0);
+		}
+		return DriveStorage.drive.pose;
+	}
+
+	public void closeAll() {
 		visionPortal.close();
 		stopAprilTagDetection();
 	}
