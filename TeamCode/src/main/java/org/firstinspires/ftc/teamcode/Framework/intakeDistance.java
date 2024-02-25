@@ -9,7 +9,7 @@ public class intakeDistance {
 	private double previousDistance;
 	private int elementsCount = 0;
 	private boolean elementDetected = false;
-	private int lastReportedCount = -1;
+	private int lastReportedCount;
 	private final double THRESHOLD = 5.0;
 
 	public intakeDistance(DistanceSensor distanceSensor) {

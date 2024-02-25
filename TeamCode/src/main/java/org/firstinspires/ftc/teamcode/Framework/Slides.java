@@ -80,10 +80,15 @@ public class Slides {
 	private double calculateMotorPower(DcMotorEx motor, MotionState targetState, PIDController controller) {
 		int currentPosition = motor.getCurrentPosition();
 		double power = controller.calculate(currentPosition, targetState.getX());
-		double angle = (targetPosition - currentPosition) / ticks_in_degrees;
-		double ff = Math.cos(Math.toRadians(angle)) * kF;
+
+		if (currentPosition > 1000) {
+			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
+			double ff = Math.cos(Math.toRadians(angle)) * kF;
+			power += ff;
+		}
 		voltageCompensation = 13.2 / voltageSensor.getVoltage();
-		power = (power + ff) * voltageCompensation;
+		power *= voltageCompensation;
+
 		return power;
 	}
 	public double getLeftPIDOutput()
