@@ -19,9 +19,8 @@ public class Slides {
 	private PIDController leftController, rightController;
 	private MotionProfile leftProfile, rightProfile;
 	private ElapsedTime timer;
-	private double kPLeft = 0.0125, kILeft = 0, kDLeft = 0.00038;
-	private double kPRight = 0.0125, kIRight = 0, kDRight = 0.00038;
-	private double kF = 0;
+	private double kPLeft = 0.009, kILeft = 0, kDLeft = 0, kFLeft = 0.045;
+	private double kPRight = 0.009, kIRight = 0, kDRight = 0, kFRight = 0.045;
 	private final double ticks_in_degrees = 537.7 / 360.0;
 	private double maxVelocity = 2000; // True max is ~2200
 	private double maxAcceleration = 29000; // True max is ~ 30000
@@ -66,24 +65,38 @@ public class Slides {
 	}
 
 	private void leftControl(MotionState targetState) {
-		double leftPower = calculateMotorPower(slideMotorLeft, targetState, leftController);
+		double leftPower = calculateMotorPowerLeft(slideMotorLeft, targetState, leftController);
 		leftPIDOutput=leftPower;
 		slideMotorLeft.setPower(leftPower);
 	}
 
 	private void rightControl(MotionState targetState) {
-		double rightPower = calculateMotorPower(slideMotorRight, targetState, rightController);
+		double rightPower = calculateMotorPowerRight(slideMotorRight, targetState, rightController);
 		rightPIDOutput=rightPower;
 		slideMotorRight.setPower(rightPower);
 	}
 
-	private double calculateMotorPower(DcMotorEx motor, MotionState targetState, PIDController controller) {
+	private double calculateMotorPowerLeft(DcMotorEx motor, MotionState targetState, PIDController controller) {
 		int currentPosition = motor.getCurrentPosition();
 		double power = controller.calculate(currentPosition, targetState.getX());
 
-		if (currentPosition > 1000) {
+		if (currentPosition > 310) {
 			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
-			double ff = Math.cos(Math.toRadians(angle)) * kF;
+			double ff = Math.cos(Math.toRadians(angle)) * kFLeft;
+			power += ff;
+		}
+		voltageCompensation = 13.2 / voltageSensor.getVoltage();
+		power *= voltageCompensation;
+
+		return power;
+	}
+	private double calculateMotorPowerRight(DcMotorEx motor, MotionState targetState, PIDController controller) {
+		int currentPosition = motor.getCurrentPosition();
+		double power = controller.calculate(currentPosition, targetState.getX());
+
+		if (currentPosition > 300) {
+			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
+			double ff = Math.cos(Math.toRadians(angle)) * kFRight;
 			power += ff;
 		}
 		voltageCompensation = 13.2 / voltageSensor.getVoltage();
@@ -112,7 +125,7 @@ public class Slides {
 
 		{
 			if (!initialized) {
-				setTargetPosition(275);
+				setTargetPosition(630);
 				initialized = true;
 			}
 			update();

@@ -91,7 +91,7 @@ public class JellyTele extends BaseOpMode
 		}
 		waitForStart();
 		ElapsedTime timer = new ElapsedTime();
-		intakeSystem.servoIntakeDrone();
+		intakeSystem.servoIntakeRelease();
 		while (opModeIsActive())
 		{
 			for (LynxModule module : allHubs) {
