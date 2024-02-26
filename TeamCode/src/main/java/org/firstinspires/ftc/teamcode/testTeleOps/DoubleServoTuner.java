@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.testTeleOps;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.JellyTele;
 
 @TeleOp(name = "Double Servo Test", group = "Test")
 public class DoubleServoTuner extends LinearOpMode
@@ -28,6 +31,7 @@ public class DoubleServoTuner extends LinearOpMode
 		final Servo outtakeLeftServo;
 		final Servo outtakeRightServo;
 		final CRServo outtakeCRServo;
+		DcMotorEx intakeMotor;
 
 		armLeftServo = hardwareMap.get(Servo.class, "armLeftServo");
 		armRightServo = hardwareMap.get(Servo.class, "armRightServo");
@@ -35,11 +39,11 @@ public class DoubleServoTuner extends LinearOpMode
 		outtakeRightServo = hardwareMap.get(Servo.class, "outtakeRightServo");
 		outtakeLeftServo.setDirection(Servo.Direction.REVERSE);
 		armLeftServo.setDirection(Servo.Direction.REVERSE);
-
+		intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
 		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
 		double position = 0.1179;
-		double position1 = 0.4021;
+		double position1 = 0.371;
 		double mult = 1;
 		waitForStart();
 		runtime.reset();
@@ -90,43 +94,44 @@ public class DoubleServoTuner extends LinearOpMode
 
 			if (gamepad1.x)
 			{
-				position1 = 0.4021;
+				position1 = 0.371;
 			}
 			else if (gamepad1.y)
 			{
 				position1 = 0.8145;
 			}
 			// State Machine b/c CRServo need to change power to turn off
+			intakeMotor.setPower(-gamepad1.left_stick_y);
 			switch (currentState)
 			{
 				case IDLE:
-					if (gamepad2.left_stick_y < 0)
+					if (gamepad1.left_stick_y < 0)
 					{
 						currentState = State.INTAKE;
 					}
-					else if (gamepad2.x)
+					else if (gamepad1.x)
 					{
 						currentState = State.DEPOSIT;
 					}
 					outtakeCRServo.setPower(0);
 					break;
 				case INTAKE:
-					if (gamepad2.x)
+					if (gamepad1.x)
 					{
 						currentState = State.DEPOSIT;
 					}
-					else if (!(gamepad2.left_stick_y < 0))
+					else if (!(gamepad1.left_stick_y < 0))
 					{
 						currentState = State.IDLE;
 					}
-					outtakeCRServo.setPower(gamepad2.left_stick_y);
+					outtakeCRServo.setPower(gamepad1.left_stick_y);
 					break;
 				case DEPOSIT:
-					if (gamepad2.left_stick_y < 0)
+					if (gamepad1.left_stick_y < 0)
 					{
 						currentState = State.INTAKE;
 					}
-					else if (!gamepad2.x)
+					else if (!gamepad1.x)
 					{
 						currentState = State.IDLE;
 					}
