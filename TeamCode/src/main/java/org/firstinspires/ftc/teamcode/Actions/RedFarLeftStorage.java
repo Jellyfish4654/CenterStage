@@ -43,4 +43,42 @@ public class RedFarLeftStorage {
                 .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
                 .build();
     }
+
+    public Action Traj1() {
+        Pose2d startPose = DriveStorage.drive.pose;
+        return drive.actionBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(-12, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(15, -10), Math.toRadians(0))
+                .build();
+    }
+
+    public Action YellowLeft() {
+        Pose2d startPose = DriveStorage.drive.pose;
+        return drive.actionBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(36, -38), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40.75, -43), Math.toRadians(0))
+                .build();
+    }
+
+    public Action YellowCenter() {
+        Pose2d startPose = DriveStorage.drive.pose;
+        return drive.actionBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(36, -38), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40.75, -49), Math.toRadians(0))
+                .build();
+    }
+
+    public Action YellowRight() {
+        Pose2d startPose = DriveStorage.drive.pose;
+        return drive.actionBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(32, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(36, -36), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40.75, -55), Math.toRadians(0))
+                .build();
+    }
 }

@@ -19,8 +19,10 @@ public class Slides {
 	private PIDController leftController, rightController;
 	private MotionProfile leftProfile, rightProfile;
 	private ElapsedTime timer;
-	private double kPLeft = 0.009, kILeft = 0, kDLeft = 0, kFLeft = 0.045;
-	private double kPRight = 0.009, kIRight = 0, kDRight = 0, kFRight = 0.045;
+	private double kPLeft = 0.01, kILeft = 0, kDLeft = 0.0002, kFLeft = 0.008, kFLeft1 = 0.015, kFLeft2 = 0.04;
+	private double kPRight = 0.01, kIRight = 0, kDRight = 0.0002, kFRight = 0.008, kFRight1 = 0.015, kFRight2 = 0.04;
+	//	private double kPLeft = 0.01, kILeft = 0, kDLeft = 0.0002, kFLeft = 0.01;
+//	private double kPRight = 0.01, kIRight = 0, kDRight = 0.0002, kFRight = 0.01;
 	private final double ticks_in_degrees = 537.7 / 360.0;
 	private double maxVelocity = 2000; // True max is ~2200
 	private double maxAcceleration = 29000; // True max is ~ 30000
@@ -80,7 +82,15 @@ public class Slides {
 		int currentPosition = motor.getCurrentPosition();
 		double power = controller.calculate(currentPosition, targetState.getX());
 
-		if (currentPosition > 310) {
+		if (currentPosition > 900) {
+			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
+			double ff = Math.cos(Math.toRadians(angle)) * kFLeft2;
+			power += ff;
+		} else if (currentPosition > 300) {
+			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
+			double ff = Math.cos(Math.toRadians(angle)) * kFLeft1;
+			power += ff;
+		} else {
 			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
 			double ff = Math.cos(Math.toRadians(angle)) * kFLeft;
 			power += ff;
@@ -94,7 +104,15 @@ public class Slides {
 		int currentPosition = motor.getCurrentPosition();
 		double power = controller.calculate(currentPosition, targetState.getX());
 
-		if (currentPosition > 300) {
+		if (currentPosition > 900) {
+			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
+			double ff = Math.cos(Math.toRadians(angle)) * kFRight2;
+			power += ff;
+		} else if (currentPosition > 300) {
+			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
+			double ff = Math.cos(Math.toRadians(angle)) * kFRight1;
+			power += ff;
+		} else {
 			double angle = (targetState.getX() - currentPosition) / ticks_in_degrees;
 			double ff = Math.cos(Math.toRadians(angle)) * kFRight;
 			power += ff;
