@@ -16,9 +16,9 @@ public class Intake
 
 	private int targetPosition;
 
-	public static double P = 0.015;
+	public static double P = 0.2;
 	public static double I = 0;
-	public static double D = 0.0002;
+	public static double D = 0.002;
 	private double PIDOutput;
 
 
@@ -54,12 +54,12 @@ public class Intake
 
 	public void moveForward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() + 5000);
+		setTargetPosition(intakeMotor.getCurrentPosition() + 500);
 	}
 
 	public void moveBackward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() - 5000);
+		setTargetPosition(intakeMotor.getCurrentPosition() - 500);
 	}
 
 	public void eject()
@@ -74,12 +74,12 @@ public class Intake
 
 	public void servoIntakeInit()
 	{
-		intakeServo.setPosition(0.75);
+		intakeServo.setPosition(0.255);
 	}
 
 	public void servoIntakeRelease()
 	{
-		intakeServo.setPosition(0.255);
+		intakeServo.setPosition(0.75);
 	}
 
 	public void servoIntakeDrone()
@@ -94,7 +94,7 @@ public class Intake
 
 	public boolean checkIntake()
 	{
-		return PIDOutput > 0;
+		return Math.abs(targetPosition-intakeMotor.getCurrentPosition())>50;
 	}
 
 	public class IntakeServoRelease implements Action
@@ -117,12 +117,21 @@ public class Intake
 		}
 	}
 
-	public class IntakeMotor implements Action
+	public class IntakeMotorForward implements Action
 	{
 		@Override
 		public boolean run(@NonNull TelemetryPacket telemetryPacket)
 		{
 			moveForward();
+			return checkIntake();
+		}
+	}
+	public class IntakeMotorBackward implements Action
+	{
+		@Override
+		public boolean run(@NonNull TelemetryPacket telemetryPacket)
+		{
+			moveBackward();
 			return checkIntake();
 		}
 	}

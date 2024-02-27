@@ -41,7 +41,7 @@ public class RedAutoFarLeft extends BaseOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-70.5 + (5.5+24), -70.5+10.375, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90)));
         Sides.setColor(Sides.Color.RED);
         initHardware(hardwareMap);
         initHardware();
@@ -57,7 +57,7 @@ public class RedAutoFarLeft extends BaseOpMode {
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
         }
-        DriveStorage.drive=drive;
+        DriveStorage.drive = drive;
         RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
         // After starting, stop the camera stream
         webcam.stopStreaming();
@@ -97,9 +97,9 @@ public class RedAutoFarLeft extends BaseOpMode {
                 break;
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
-                        intakeSystem.new IntakeServoRelease(),
-                        centerPurple,
-                        intakeSystem.new IntakeServoDrone()
+                                intakeSystem.new IntakeServoRelease(),
+                                centerPurple,
+                                intakeSystem.new IntakeServoDrone()
 //                                traj1,
 //                                centerYellow,
 //                                slides.new SlidesUp1(),
@@ -121,12 +121,23 @@ public class RedAutoFarLeft extends BaseOpMode {
             case UNKNOWN:
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
+
+                                rightPurple,
                                 intakeSystem.new IntakeServoRelease(),
-                                rightPurple
+                                (telemetryPacket) -> {
+                                    intakeSystem.moveForward();
+                                    wheelServo.moveForward();
+                                    return intakeSystem.checkIntake();
+                                },
+                                (telemetryPacket) -> {
+                                    intakeSystem.moveBackward();
+                                    return intakeSystem.checkIntake();
+                                }
                         ),
                         (telemetryPacket) -> {
                             DriveStorage.drive.updatePoseEstimate();
                             slides.update();
+                            intakeSystem.update();
                             return true;
                         }
                 ));

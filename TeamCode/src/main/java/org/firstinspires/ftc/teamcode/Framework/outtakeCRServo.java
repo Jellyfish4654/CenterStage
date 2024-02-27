@@ -27,7 +27,10 @@ public class outtakeCRServo
 		this.timer = new ElapsedTime();
 		this.currentState = ServoState.STOPPED;
 	}
-
+	public void moveForward()
+	{
+		wheelServo.setPower(1);
+	}
 	public void startMovingForward()
 	{
 		timer.reset();
