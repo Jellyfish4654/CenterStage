@@ -51,6 +51,18 @@ public class RedAutoFarLeft extends BaseOpMode {
         initCamera();
         DriveStorage.drive = drive;
         RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
+        ActionStorage actionStorage = new ActionStorage(drive);
+        Action leftPurple = actionStorage.getRedFarRight_LeftPurpleAction();
+        Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
+        Action rightPurple = storage.RightPurpleAction();
+        Action traj1 = actionStorage.getRedTraj();
+        Action leftYellow = actionStorage.getRedFarYellowLeft();
+        Action centerYellow = actionStorage.getRedFarYellowCenter();
+        Action rightYellow = actionStorage.getRedFarYellowRight();
+        Action leftPark = actionStorage.getBlueYellowParkLeft();
+        Action centerPark = actionStorage.getBlueYellowParkCenter();
+        Action rightPark = actionStorage.getBlueYellowParkRight();
+        
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.addData("Left Pixels", LeftRedPipeline.getLeft());
@@ -64,18 +76,6 @@ public class RedAutoFarLeft extends BaseOpMode {
         }
         // After starting, stop the camera stream
         webcam.stopStreaming();
-        ActionStorage actionStorage = new ActionStorage(drive);
-        // Run the autonomous path based on the detected position
-        Action leftPurple = actionStorage.getRedFarRight_LeftPurpleAction();
-        Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
-        Action rightPurple = storage.RightPurpleAction();
-        Action traj1 = actionStorage.getRedTraj();
-        Action leftYellow = actionStorage.getRedFarYellowLeft();
-        Action centerYellow = actionStorage.getRedFarYellowCenter();
-        Action rightYellow = actionStorage.getRedFarYellowRight();
-        Action leftPark = actionStorage.getBlueYellowParkLeft();
-        Action centerPark = actionStorage.getBlueYellowParkCenter();
-        Action rightPark = actionStorage.getBlueYellowParkRight();
 
         switch (detectedPosition) {
             case LEFT:

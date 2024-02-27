@@ -203,7 +203,7 @@ public class JellyTele extends BaseOpMode
 			{
 				slides.setTargetPosition(SLIDES_HANGING_HEIGHT);
 			}
-			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.B))
+			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.X))
 			{
 				slides.setTargetPosition(SLIDES_FIRST_PIXEL_HEIGHT);
 			}
@@ -211,7 +211,7 @@ public class JellyTele extends BaseOpMode
 			{
 				slides.setTargetPosition(RESET_SLIDES_HEIGHT);
 			}
-			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.START))
+			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.B))
 			{
 				slideMotorLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 				slideMotorLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
