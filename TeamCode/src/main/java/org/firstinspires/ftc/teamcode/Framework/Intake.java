@@ -26,7 +26,7 @@ public class Intake
 
 	private void control(int targetPosition) {
 		int position = intakeMotor.getCurrentPosition();
-		final int THRESHOLD = 10;
+		final int THRESHOLD = 30;
 		int positionDifference = position - targetPosition;
 
 		if (Math.abs(positionDifference) > THRESHOLD) {
@@ -48,12 +48,12 @@ public class Intake
 
 	public void moveForward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() + 500);
+		setTargetPosition(intakeMotor.getCurrentPosition() + 1000);
 	}
 
 	public void moveBackward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() - 500);
+		setTargetPosition(intakeMotor.getCurrentPosition() - 1000);
 	}
 	public int getTargetPosition()
 	{

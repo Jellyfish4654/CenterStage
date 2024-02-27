@@ -13,6 +13,7 @@ import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -31,6 +32,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Autonomous(name = "RedAutoFarLeft", group = "Auto")
 public class RedAutoFarLeft extends BaseOpMode {
@@ -49,6 +51,10 @@ public class RedAutoFarLeft extends BaseOpMode {
         initHardware(hardwareMap);
         initHardware();
         initCamera();
+        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule module : allHubs) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
         DriveStorage.drive = drive;
         RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
         ActionStorage actionStorage = new ActionStorage(drive);
@@ -153,6 +159,9 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 }
                         ),
                         (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
                             DriveStorage.drive.updatePoseEstimate();
                             slides.update();
                             intakeSystem.update();
