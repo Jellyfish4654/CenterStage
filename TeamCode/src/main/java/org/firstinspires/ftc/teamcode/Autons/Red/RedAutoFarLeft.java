@@ -4,7 +4,10 @@ package org.firstinspires.ftc.teamcode.Autons.Red;
 import static org.firstinspires.ftc.teamcode.Framework.misc.Vision.getAprilTagPoses;
 import static org.firstinspires.ftc.teamcode.Framework.misc.Vision.processTagPoses;
 
+import androidx.annotation.NonNull;
+
 import com.ThermalEquilibrium.homeostasis.Filters.FilterAlgorithms.LowPassFilter;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -122,16 +125,31 @@ public class RedAutoFarLeft extends BaseOpMode {
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
 
-                                rightPurple,
+//                                rightPurple,
                                 intakeSystem.new IntakeServoRelease(),
-                                (telemetryPacket) -> {
-                                    intakeSystem.moveForward();
-                                    outtakeCRServo.setPower(1);
-                                    return intakeSystem.checkIntake();
+                                new Action() {
+                                    private boolean initialized = false;
+                                    @Override
+                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                                        if (!initialized) {
+                                            intakeSystem.moveForward();
+                                            outtakeCRServo.setPower(1);
+                                            initialized = true;
+                                        }
+                                        return intakeSystem.checkIntake();
+                                    }
                                 },
-                                (telemetryPacket) -> {
-                                    intakeSystem.moveBackward();
-                                    return intakeSystem.checkIntake();
+                                new Action() {
+                                    private boolean initialized = false;
+                                    @Override
+                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                                        if (!initialized) {
+                                            intakeSystem.moveBackward();
+                                            outtakeCRServo.setPower(0);
+                                            initialized = true;
+                                        }
+                                        return intakeSystem.checkIntake();
+                                    }
                                 }
                         ),
                         (telemetryPacket) -> {
