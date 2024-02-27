@@ -46,6 +46,8 @@ public class RedAutoFarLeft extends BaseOpMode {
         initHardware(hardwareMap);
         initHardware();
         initCamera();
+        DriveStorage.drive = drive;
+        RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.addData("Left Pixels", LeftRedPipeline.getLeft());
@@ -57,8 +59,6 @@ public class RedAutoFarLeft extends BaseOpMode {
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
         }
-        DriveStorage.drive = drive;
-        RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
         // After starting, stop the camera stream
         webcam.stopStreaming();
         ActionStorage actionStorage = new ActionStorage(drive);

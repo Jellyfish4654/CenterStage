@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -12,22 +11,12 @@ public class Intake
 {
 	private final DcMotorEx intakeMotor;
 	private final Servo intakeServo;
-	private final PIDController intakeController;
 
 	private int targetPosition;
 
-	public static double P = 0.2;
-	public static double I = 0;
-	public static double D = 0.002;
-	private double PIDOutput;
-
-
-	public Intake(DcMotorEx intakeMotor, Servo intakeServo)
-	{
+	public Intake(DcMotorEx intakeMotor, Servo intakeServo) {
 		this.intakeMotor = intakeMotor;
 		this.intakeServo = intakeServo;
-
-		this.intakeController = new PIDController(P, I, D);
 	}
 
 	public void update()
@@ -35,17 +24,22 @@ public class Intake
 		control(targetPosition);
 	}
 
-	private void control(double targetPosition)
-	{
-		this.intakeController.setPID(P, I, D);
+	private void control(int targetPosition) {
 		int position = intakeMotor.getCurrentPosition();
-		this.PIDOutput = intakeController.calculate(position, targetPosition);
-		double power = this.PIDOutput;
-		if (Math.abs(power) > 0.065)
-		{
-			intakeMotor.setPower(power);
+		final int THRESHOLD = 10;
+		int positionDifference = position - targetPosition;
+
+		if (Math.abs(positionDifference) > THRESHOLD) {
+			if (positionDifference < 0) {
+				intakeMotor.setPower(1);
+			} else {
+				intakeMotor.setPower(-1);
+			}
+		} else {
+			intakeMotor.setPower(0);
 		}
 	}
+
 
 	public void setTargetPosition(int newPosition)
 	{
@@ -61,12 +55,6 @@ public class Intake
 	{
 		setTargetPosition(intakeMotor.getCurrentPosition() - 500);
 	}
-
-	public void eject()
-	{
-		setTargetPosition(intakeMotor.getCurrentPosition() - 70);
-	}
-
 	public int getTargetPosition()
 	{
 		return targetPosition;
@@ -87,14 +75,8 @@ public class Intake
 		intakeServo.setPosition(0.825);
 	}
 
-	public double getPIDOutput()
-	{
-		return PIDOutput;
-	}
-
-	public boolean checkIntake()
-	{
-		return Math.abs(targetPosition-intakeMotor.getCurrentPosition())>50;
+	public boolean checkIntake() {
+		return Math.abs(targetPosition - intakeMotor.getCurrentPosition()) > 50;
 	}
 
 	public class IntakeServoRelease implements Action
