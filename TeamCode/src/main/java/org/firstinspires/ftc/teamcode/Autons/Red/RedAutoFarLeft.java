@@ -126,7 +126,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 intakeSystem.new IntakeServoRelease(),
                                 (telemetryPacket) -> {
                                     intakeSystem.moveForward();
-                                    wheelServo.moveForward();
+                                    outtakeCRServo.setPower(1);
                                     return intakeSystem.checkIntake();
                                 },
                                 (telemetryPacket) -> {
