@@ -13,9 +13,10 @@ public class AutoAlignment
 	private final IMU imuSensor;
 	private final PIDController pidController;
 	private double targetAngle = 0;
-	public static double kP = 0.03;
-	public static double kI = 0.0;
-	public static double kD = 0.0004;
+	public double kP = 0.03;
+	public double kI = 0.0;
+	public double kD = 0.0004;
+	public final double kToleranceDegrees = 2.0;
 
 	// Constructor
 	public AutoAlignment(DcMotor[] motors, IMU imuSensor)
@@ -30,14 +31,17 @@ public class AutoAlignment
 		this.targetAngle = targetAngle;
 	}
 
-	public void update()
-	{
+	public void update() {
 		YawPitchRollAngles orientation = imuSensor.getRobotYawPitchRollAngles();
 		double currentYaw = orientation.getYaw(AngleUnit.DEGREES);
 		currentYaw = normalizeAngle(currentYaw);
 		double angleDifference = normalizeAngle(targetAngle - currentYaw);
 		double correction = pidController.calculate(0, angleDifference);
-		MotorPowers(correction);
+		if (Math.abs(angleDifference) > kToleranceDegrees) {
+			MotorPowers(correction);
+		} else {
+			MotorPowers(0);
+		}
 	}
 
 	private void MotorPowers(double correction)
