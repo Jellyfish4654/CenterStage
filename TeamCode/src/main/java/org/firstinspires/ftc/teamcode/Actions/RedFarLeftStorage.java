@@ -41,11 +41,18 @@ public class RedFarLeftStorage {
                 .splineToConstantHeading(new Vector2d(-31-0.0001, -37-0.0001), Math.toRadians(120))
                 .splineToConstantHeading(new Vector2d(-30 + (4 * Math.cos(Math.toRadians(225))), -37 + (4 * Math.sin(Math.toRadians(225)))),Math.toRadians(120))
                 .splineToConstantHeading(new Vector2d(-41, -17.5), Math.toRadians(120))
-                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-56, -8.5, Math.toRadians(0)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(-7)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-56, -9), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-56+0.001, -9), Math.toRadians(0))
                 .build();
     }
 
+    public Action StackBack() {
+        Pose2d startPose = DriveStorage.drive.pose;
+        return drive.actionBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(-54, -9), Math.toRadians(0))
+                .build();
+    }
     public Action Traj1() {
         Pose2d startPose = DriveStorage.drive.pose;
         return drive.actionBuilder(startPose)

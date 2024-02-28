@@ -42,12 +42,12 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
 
 		this.inPerTick = inPerTick;
 
-		kfPar0Pos = new KalmanFilter(0.002 , 0.02);
-		kfPar1Pos = new KalmanFilter(0.002 , 0.02);
-		kfPerpPos = new KalmanFilter(0.002 , 0.02);
-		kfPar0Vel = new KalmanFilter(0.002 , 0.02);
-		kfPar1Vel = new KalmanFilter(0.002 , 0.02);
-		kfPerpVel = new KalmanFilter(0.002 , 0.02);
+		kfPar0Pos = new KalmanFilter(0.0015 , 0.015);
+		kfPar1Pos = new KalmanFilter(0.0015 , 0.015);
+		kfPerpPos = new KalmanFilter(0.0015 , 0.015);
+		kfPar0Vel = new KalmanFilter(0.0015 , 0.015);
+		kfPar1Vel = new KalmanFilter(0.0015 , 0.015);
+		kfPerpVel = new KalmanFilter(0.0015 , 0.015);
 
 		lastPar0Pos = par0.getPositionAndVelocity().position;
 		lastPar1Pos = par1.getPositionAndVelocity().position;

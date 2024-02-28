@@ -43,6 +43,7 @@ public class RedAutoFarLeft extends BaseOpMode {
     double distanceFilter = 0.9;
     LowPassFilter filter = new LowPassFilter(distanceFilter);
     double distance;
+    public boolean actionRunning = true;
 
     @Override
     public void runOpMode() {
@@ -61,6 +62,7 @@ public class RedAutoFarLeft extends BaseOpMode {
         Action leftPurple = actionStorage.getRedFarRight_LeftPurpleAction();
         Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
         Action rightPurple = storage.RightPurpleAction();
+        Action stackBack = storage.StackBack();
         Action traj1 = actionStorage.getRedTraj();
         Action leftYellow = actionStorage.getRedFarYellowLeft();
         Action centerYellow = actionStorage.getRedFarYellowCenter();
@@ -68,7 +70,7 @@ public class RedAutoFarLeft extends BaseOpMode {
         Action leftPark = actionStorage.getBlueYellowParkLeft();
         Action centerPark = actionStorage.getBlueYellowParkCenter();
         Action rightPark = actionStorage.getBlueYellowParkRight();
-        
+
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
             telemetry.addData("Left Pixels", LeftRedPipeline.getLeft());
@@ -130,42 +132,42 @@ public class RedAutoFarLeft extends BaseOpMode {
             case UNKNOWN:
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
-
-//                                rightPurple,
+                                rightPurple,
                                 intakeSystem.new IntakeServoRelease(),
-                                new Action() {
-                                    private boolean initialized = false;
-                                    @Override
-                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                                        if (!initialized) {
-                                            intakeSystem.moveForward();
-                                            outtakeCRServo.setPower(1);
-                                            initialized = true;
-                                        }
-                                        return intakeSystem.checkIntake();
-                                    }
-                                },
-                                new Action() {
-                                    private boolean initialized = false;
-                                    @Override
-                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                                        if (!initialized) {
-                                            intakeSystem.moveBackward();
-                                            outtakeCRServo.setPower(0);
-                                            initialized = true;
-                                        }
-                                        return intakeSystem.checkIntake();
-                                    }
+                                intakeSystem.new IntakeMotorForward(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
                                 }
                         ),
                         (telemetryPacket) -> {
                             for (LynxModule module : allHubs) {
                                 module.clearBulkCache();
                             }
-                            DriveStorage.drive.updatePoseEstimate();
                             slides.update();
                             intakeSystem.update();
-                            return true;
+                            return actionRunning;
+                        }
+                ));
+                drive.updatePoseEstimate();
+                DriveStorage.drive.pose=drive.pose;
+                actionRunning=true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                stackBack,
+                                intakeSystem.new IntakeMotorBackward(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
                         }
                 ));
                 break;

@@ -62,7 +62,8 @@ public abstract class BaseOpMode extends LinearOpMode
 		intakeServo.setDirection(Servo.Direction.REVERSE);
 		intakeSystem = new Intake(
 				hardwareMap.get(DcMotorEx.class, "Tubing"),
-				intakeServo
+				intakeServo,
+				outtakeCRServo
 		);
 
 		Servo outakeServosLeftServo = hardwareMap.get(Servo.class, "outtakeLeftServo");
