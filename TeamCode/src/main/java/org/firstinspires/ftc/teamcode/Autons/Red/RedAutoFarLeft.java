@@ -12,6 +12,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -56,20 +57,6 @@ public class RedAutoFarLeft extends BaseOpMode {
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
-        DriveStorage.drive = drive;
-        RedFarLeftStorage storage = new RedFarLeftStorage(DriveStorage.drive);
-        ActionStorage actionStorage = new ActionStorage(drive);
-        Action leftPurple = actionStorage.getRedFarRight_LeftPurpleAction();
-        Action centerPurple = actionStorage.getRedFarRight_CenterPurpleAction();
-        Action rightPurple = storage.RightPurpleAction();
-        Action stackBack = storage.StackBack();
-        Action traj1 = actionStorage.getRedTraj();
-        Action leftYellow = actionStorage.getRedFarYellowLeft();
-        Action centerYellow = actionStorage.getRedFarYellowCenter();
-        Action rightYellow = actionStorage.getRedFarYellowRight();
-        Action leftPark = actionStorage.getBlueYellowParkLeft();
-        Action centerPark = actionStorage.getBlueYellowParkCenter();
-        Action rightPark = actionStorage.getBlueYellowParkRight();
 
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
@@ -90,10 +77,9 @@ public class RedAutoFarLeft extends BaseOpMode {
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
                                 intakeSystem.new IntakeServoRelease(),
-                                leftPurple,
+//                                leftPurple,
                                 (telemetryPacket) -> {
-                                    ArrayList<Pose2d> tagPoses = getAprilTagPoses();
-                                    DriveStorage.drive.pose = processTagPoses(tagPoses);
+
                                     DriveStorage.drive.updatePoseEstimate();
                                     return false;
                                 }
@@ -109,7 +95,7 @@ public class RedAutoFarLeft extends BaseOpMode {
             case CENTER:
                 Actions.runBlocking(new SequentialAction(
                                 intakeSystem.new IntakeServoRelease(),
-                                centerPurple,
+//                                centerPurple,
                                 intakeSystem.new IntakeServoDrone()
 //                                traj1,
 //                                centerYellow,
@@ -132,9 +118,39 @@ public class RedAutoFarLeft extends BaseOpMode {
             case UNKNOWN:
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
-                                rightPurple,
+                                drive.actionBuilder(drive.pose)
+                                        .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
+                                        .splineTo(new Vector2d(-31, -37), Math.toRadians(45))
+                                        .splineToConstantHeading(new Vector2d(-31 - 0.0001, -37 - 0.0001), Math.toRadians(225))
+                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225))), -37 + (5 * Math.sin(Math.toRadians(225)))), Math.toRadians(225))
+                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225)))-0.0001, -37 + (5 * Math.sin(Math.toRadians(225)))+0.001), Math.toRadians(120))
+                                        .splineToConstantHeading(new Vector2d(-41, -17.5), Math.toRadians(120))
+                                        .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(-7)), Math.toRadians(0))
+                                        .build(),
                                 intakeSystem.new IntakeServoRelease(),
-                                intakeSystem.new IntakeMotorForward(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose=new Pose2d(-48, -12, Math.toRadians(0));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                drive.actionBuilder(drive.pose)
+                                        .splineToConstantHeading(new Vector2d(-34, -12), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
+                                        .build(),
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -150,12 +166,14 @@ public class RedAutoFarLeft extends BaseOpMode {
                         }
                 ));
                 drive.updatePoseEstimate();
-                DriveStorage.drive.pose=drive.pose;
-                actionRunning=true;
+                actionRunning = true;
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
-                                stackBack,
-                                intakeSystem.new IntakeMotorBackward(),
+                                drive.actionBuilder(drive.pose)
+                                        .splineToConstantHeading(new Vector2d(34, -14), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(34, -14-0.001), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(34, -14), Math.toRadians(270))
+                                        .build(),
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -170,6 +188,30 @@ public class RedAutoFarLeft extends BaseOpMode {
                             return actionRunning;
                         }
                 ));
+
+//                Actions.runBlocking(new ParallelAction(
+//                        new SequentialAction(
+//                                new ParallelAction(
+//                                        drive.actionBuilder(drive.pose)
+//                                                .splineToConstantHeading(new Vector2d(-56, -5.5), Math.toRadians(0))
+//                                                .build(),
+//                                        intakeSystem.new IntakeMotorForward()
+//                                ),
+//                                intakeSystem.new IntakeMotorBackward(),
+//                                (telemetryPacket) -> {
+//                                    actionRunning = false;
+//                                    return false;
+//                                }
+//                        ),
+//                        (telemetryPacket) -> {
+//                            for (LynxModule module : allHubs) {
+//                                module.clearBulkCache();
+//                            }
+//                            slides.update();
+//                            intakeSystem.update();
+//                            return actionRunning;
+//                        }
+//                ));
                 break;
         }
     }

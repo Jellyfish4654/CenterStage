@@ -12,10 +12,10 @@ public class SingleServoTuner extends LinearOpMode
 	public void runOpMode() throws InterruptedException
 	{
 		final Servo outtakeLeftServo;
-		outtakeLeftServo = hardwareMap.get(Servo.class, "intakeServo");
+		outtakeLeftServo = hardwareMap.get(Servo.class, "droneServo");
 
 //        outtakeLeftServo.setDirection(Servo.Direction.REVERSE);
-		double position = 0.5; // Initialize to midpoint
+		double position = 0.85; // Initialize to midpoint
 
 		waitForStart();
 
@@ -41,7 +41,7 @@ public class SingleServoTuner extends LinearOpMode
 			}
 			else if (gamepad1.b)
 			{
-				position = 1;
+				position = 0.85;
 			}
 		}
 	}

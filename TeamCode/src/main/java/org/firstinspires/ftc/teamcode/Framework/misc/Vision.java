@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
+import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -91,11 +92,11 @@ public class Vision
 		return poses;
 	}
 
-	public static Pose2d processTagPoses(ArrayList<Pose2d> tagPoses) {
+	public static Pose2d processTagPoses(ArrayList<Pose2d> tagPoses, MecanumDrive drive) {
 		if (!tagPoses.isEmpty()) {
-			DriveStorage.drive.pose = tagPoses.get(0);
+			drive.pose = tagPoses.get(0);
 		}
-		return DriveStorage.drive.pose;
+		return drive.pose;
 	}
 
 	public void closeAll() {

@@ -26,6 +26,6 @@ public class DroneLauncher
 
 	public void launchDrone()
 	{
-		setCompensatedServoPosition(droneServo, 1);
+		setCompensatedServoPosition(droneServo, 0.85);
 	}
 }
