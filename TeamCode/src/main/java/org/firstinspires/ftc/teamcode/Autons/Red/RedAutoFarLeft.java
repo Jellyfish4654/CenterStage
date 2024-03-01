@@ -12,11 +12,13 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -57,6 +59,7 @@ public class RedAutoFarLeft extends BaseOpMode {
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
+        ElapsedTime timer = new ElapsedTime();
 
         while (!isStarted() && !isStopRequested()) {
             telemetry.addData("Position", Sides.getPosition().toString());
@@ -68,6 +71,9 @@ public class RedAutoFarLeft extends BaseOpMode {
 
             detectedPosition = Sides.getPosition();
             intakeSystem.servoIntakeInit();
+            for (LynxModule module : allHubs) {
+                module.clearBulkCache();
+            }
         }
         // After starting, stop the camera stream
         webcam.stopStreaming();
@@ -76,56 +82,15 @@ public class RedAutoFarLeft extends BaseOpMode {
             case LEFT:
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
-                                intakeSystem.new IntakeServoRelease(),
-//                                leftPurple,
-                                (telemetryPacket) -> {
-
-                                    DriveStorage.drive.updatePoseEstimate();
-                                    return false;
-                                }
-
-                        ),
-                        (telemetryPacket) -> {
-                            DriveStorage.drive.updatePoseEstimate();
-                            slides.update();
-                            return true;
-                        }
-                ));
-                break;
-            case CENTER:
-                Actions.runBlocking(new SequentialAction(
-                                intakeSystem.new IntakeServoRelease(),
-//                                centerPurple,
-                                intakeSystem.new IntakeServoDrone()
-//                                traj1,
-//                                centerYellow,
-//                                slides.new SlidesUp1(),
-//                                outakeServos.new armOuttakeDeposit(),
-//                                new SleepAction(0.75),
-//                                outakeServos.new boxOuttakeDeposit(),
-//                                new SleepAction(0.75),
-//                                wheelServo.new CRMoveForward(),
-//                                outakeServos.new boxOuttakeIntake(),
-//                                new SleepAction(0.75),
-//                                outakeServos.new armOuttakeIntake(),
-//                                new SleepAction(0.75),
-//                        centerPark
-
-                        )
-                );
-                break;
-            case RIGHT:
-            case UNKNOWN:
-                Actions.runBlocking(new ParallelAction(
-                        new SequentialAction(
                                 drive.actionBuilder(drive.pose)
-                                        .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
-                                        .splineTo(new Vector2d(-31, -37), Math.toRadians(45))
-                                        .splineToConstantHeading(new Vector2d(-31 - 0.0001, -37 - 0.0001), Math.toRadians(225))
-                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225))), -37 + (5 * Math.sin(Math.toRadians(225)))), Math.toRadians(225))
-                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225)))-0.0001, -37 + (5 * Math.sin(Math.toRadians(225)))+0.001), Math.toRadians(120))
-                                        .splineToConstantHeading(new Vector2d(-41, -17.5), Math.toRadians(120))
-                                        .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(-7)), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-41, -48), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-49, -40), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-49, -40-0.0001), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-49, -43), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-49+0.0001, -43), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-36, -43), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-36, -43+0.0001), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(0)), Math.toRadians(90))
                                         .build(),
                                 intakeSystem.new IntakeServoRelease(),
                                 (telemetryPacket) -> {
@@ -142,7 +107,69 @@ public class RedAutoFarLeft extends BaseOpMode {
                             return actionRunning;
                         }
                 ));
-                drive.pose=new Pose2d(-48, -12, Math.toRadians(0));
+                break;
+            case CENTER:
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                drive.actionBuilder(drive.pose)
+                                        .splineToConstantHeading(new Vector2d(-41, -37), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-41, -37-0.001), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-41, -39), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-41-0.0001, -39), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-52, -39), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-52, -39+0.001), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-52, -12, Math.toRadians(0)), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-52+0.0001, -12), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-45, -12), Math.toRadians(0))
+                                        .build(),
+                                intakeSystem.new IntakeServoRelease(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                break;
+            case RIGHT:
+            case UNKNOWN:
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                drive.actionBuilder(drive.pose)
+                                        .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
+                                        .splineTo(new Vector2d(-31, -37), Math.toRadians(45))
+                                        .splineToConstantHeading(new Vector2d(-31 - 0.0001, -37 - 0.0001), Math.toRadians(225))
+                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225))), -37 + (5 * Math.sin(Math.toRadians(225)))), Math.toRadians(225))
+                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225))) - 0.0001, -37 + (5 * Math.sin(Math.toRadians(225))) - 0.001), Math.toRadians(120))
+                                        .splineToConstantHeading(new Vector2d(-40, -24), Math.toRadians(120))
+                                        .splineToConstantHeading(new Vector2d(-40, -24+0.001), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-40, -12, Math.toRadians(0)), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-40+0.0001, -12), Math.toRadians(0))
+                                        // -7 head?
+                                        .build(),
+                                intakeSystem.new IntakeServoRelease(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose = new Pose2d(-48, -12, Math.toRadians(0));
                 drive.updatePoseEstimate();
                 actionRunning = true;
                 Actions.runBlocking(new ParallelAction(
@@ -169,11 +196,19 @@ public class RedAutoFarLeft extends BaseOpMode {
                 actionRunning = true;
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
-                                drive.actionBuilder(drive.pose)
-                                        .splineToConstantHeading(new Vector2d(34, -14), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(34, -14-0.001), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(34, -14), Math.toRadians(270))
-                                        .build(),
+                                new ParallelAction(
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(40, -40), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(40 + 0.001, -40), Math.toRadians(0))
+                                                .build(),
+                                        new SequentialAction(
+                                                new SleepAction(1),
+                                                slides.new SlidesUp1()
+                                        )
+                                ),
+
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -188,16 +223,100 @@ public class RedAutoFarLeft extends BaseOpMode {
                             return actionRunning;
                         }
                 ));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(new SequentialAction(
+                                        new SleepAction(0.5),
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(54.3, -40), Math.toRadians(0))
+                                                .build()
+                                ),
+                                        new SequentialAction(
+                                                outakeServos.new armOuttakeDeposit(),
+                                                new SleepAction(0.25),
+                                                outakeServos.new boxOuttakeDeposit(),
+                                                new SleepAction(0.75),
+                                                new Action() {
+                                                    private boolean initialized = false;
 
+                                                    @Override
+                                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+                                                        if (!initialized) {
+                                                            timer.reset();
+                                                            initialized = true;
+                                                        }
+                                                        outtakeCRServo.setPower(1);
+                                                        if (timer.seconds() > 2) {
+                                                            outtakeCRServo.setPower(0);
+                                                            return false;
+                                                        } else {
+                                                            return true;
+                                                        }
+                                                    }
+                                                }
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(
+                                        new SequentialAction(
+                                                drive.actionBuilder(drive.pose)
+                                                        .splineToConstantHeading(new Vector2d(54.3 - 0.0001, -40), Math.toRadians(180))
+                                                        .splineToConstantHeading(new Vector2d(40, -40), Math.toRadians(180))
+                                                        .build()
+                                        ),
+                                        new SequentialAction(
+                                                new SleepAction(0.05),
+                                                outakeServos.new boxOuttakeIntake(),
+                                                new SleepAction(0.05),
+                                                outakeServos.new armOuttakeIntake()
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
 //                Actions.runBlocking(new ParallelAction(
 //                        new SequentialAction(
 //                                new ParallelAction(
 //                                        drive.actionBuilder(drive.pose)
-//                                                .splineToConstantHeading(new Vector2d(-56, -5.5), Math.toRadians(0))
+//                                                .splineToConstantHeading(new Vector2d(-56, -9), Math.toRadians(180))
 //                                                .build(),
 //                                        intakeSystem.new IntakeMotorForward()
 //                                ),
 //                                intakeSystem.new IntakeMotorBackward(),
+//                                new SleepAction(1),
 //                                (telemetryPacket) -> {
 //                                    actionRunning = false;
 //                                    return false;
@@ -212,6 +331,8 @@ public class RedAutoFarLeft extends BaseOpMode {
 //                            return actionRunning;
 //                        }
 //                ));
+//                drive.updatePoseEstimate();
+//                actionRunning = true;
                 break;
         }
     }

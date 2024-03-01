@@ -203,10 +203,6 @@ public class JellyTele extends BaseOpMode
 			{
 				slides.setTargetPosition(SLIDES_HANGING_HEIGHT);
 			}
-			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.X))
-			{
-				slides.setTargetPosition(SLIDES_FIRST_PIXEL_HEIGHT);
-			}
 			if (gamepadEx2.wasJustPressed(GamepadKeys.Button.A))
 			{
 				slides.setTargetPosition(RESET_SLIDES_HEIGHT);

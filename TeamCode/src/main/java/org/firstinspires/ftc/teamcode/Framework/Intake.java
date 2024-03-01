@@ -53,12 +53,12 @@ public class Intake
 
 	public void moveForward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() + 5000);
+		setTargetPosition(intakeMotor.getCurrentPosition() + 3000);
 	}
 
 	public void moveBackward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() - 5000);
+		setTargetPosition(intakeMotor.getCurrentPosition() - 2500);
 	}
 	public int getTargetPosition()
 	{

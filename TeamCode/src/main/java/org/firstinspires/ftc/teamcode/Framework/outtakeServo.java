@@ -12,7 +12,7 @@ public class outtakeServo
 	private static final double OUTTAKE_DEPOSIT = 0.8145 ;
 
 	private static final double ARM_INTAKE_POSITION = 0.1179;
-	private static final double ARM_DEPOSIT_POSITION = 0.7591;
+	private static final double ARM_DEPOSIT_POSITION = 0.7739;
 
 	private final Servo outakeLeftServo;
 	private final Servo outakeRightServo;
