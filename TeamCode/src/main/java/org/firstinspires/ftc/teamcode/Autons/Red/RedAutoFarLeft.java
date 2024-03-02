@@ -11,8 +11,10 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.hardware.lynx.LynxModule;
@@ -84,13 +86,13 @@ public class RedAutoFarLeft extends BaseOpMode {
                         new SequentialAction(
                                 drive.actionBuilder(drive.pose)
                                         .splineToConstantHeading(new Vector2d(-41, -48), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(-49, -40), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(-49, -40-0.0001), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(-49, -43), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(-49+0.0001, -43), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(-36, -43), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(-36, -43+0.0001), Math.toRadians(90))
-                                        .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(0)), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-49.5, -40), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-49.5, -40-0.0001), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-49.5, -43), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-49.5+0.0001, -43), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-33, -43), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-33, -43+0.0001), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-33, -12, Math.toRadians(-1.5)), Math.toRadians(90))
                                         .build(),
                                 intakeSystem.new IntakeServoRelease(),
                                 (telemetryPacket) -> {
@@ -102,110 +104,29 @@ public class RedAutoFarLeft extends BaseOpMode {
                             for (LynxModule module : allHubs) {
                                 module.clearBulkCache();
                             }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
                             slides.update();
                             intakeSystem.update();
                             return actionRunning;
                         }
                 ));
-                break;
-            case CENTER:
-                Actions.runBlocking(new ParallelAction(
-                        new SequentialAction(
-                                drive.actionBuilder(drive.pose)
-                                        .splineToConstantHeading(new Vector2d(-41, -37), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(-41, -37-0.001), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(-41, -39), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(-41-0.0001, -39), Math.toRadians(180))
-                                        .splineToConstantHeading(new Vector2d(-52, -39), Math.toRadians(180))
-                                        .splineToConstantHeading(new Vector2d(-52, -39+0.001), Math.toRadians(90))
-                                        .splineToSplineHeading(new Pose2d(-52, -12, Math.toRadians(0)), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(-52+0.0001, -12), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(-45, -12), Math.toRadians(0))
-                                        .build(),
-                                intakeSystem.new IntakeServoRelease(),
-                                (telemetryPacket) -> {
-                                    actionRunning = false;
-                                    return false;
-                                }
-                        ),
-                        (telemetryPacket) -> {
-                            for (LynxModule module : allHubs) {
-                                module.clearBulkCache();
-                            }
-                            slides.update();
-                            intakeSystem.update();
-                            return actionRunning;
-                        }
-                ));
-                break;
-            case RIGHT:
-            case UNKNOWN:
-                Actions.runBlocking(new ParallelAction(
-                        new SequentialAction(
-                                drive.actionBuilder(drive.pose)
-                                        .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
-                                        .splineTo(new Vector2d(-31, -37), Math.toRadians(45))
-                                        .splineToConstantHeading(new Vector2d(-31 - 0.0001, -37 - 0.0001), Math.toRadians(225))
-                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225))), -37 + (5 * Math.sin(Math.toRadians(225)))), Math.toRadians(225))
-                                        .splineToConstantHeading(new Vector2d(-30 + (5 * Math.cos(Math.toRadians(225))) - 0.0001, -37 + (5 * Math.sin(Math.toRadians(225))) - 0.001), Math.toRadians(120))
-                                        .splineToConstantHeading(new Vector2d(-40, -24), Math.toRadians(120))
-                                        .splineToConstantHeading(new Vector2d(-40, -24+0.001), Math.toRadians(90))
-                                        .splineToSplineHeading(new Pose2d(-40, -12, Math.toRadians(0)), Math.toRadians(90))
-                                        .splineToConstantHeading(new Vector2d(-40+0.0001, -12), Math.toRadians(0))
-                                        // -7 head?
-                                        .build(),
-                                intakeSystem.new IntakeServoRelease(),
-                                (telemetryPacket) -> {
-                                    actionRunning = false;
-                                    return false;
-                                }
-                        ),
-                        (telemetryPacket) -> {
-                            for (LynxModule module : allHubs) {
-                                module.clearBulkCache();
-                            }
-                            slides.update();
-                            intakeSystem.update();
-                            return actionRunning;
-                        }
-                ));
-                drive.pose = new Pose2d(-48, -12, Math.toRadians(0));
-                drive.updatePoseEstimate();
-                actionRunning = true;
-                Actions.runBlocking(new ParallelAction(
-                        new SequentialAction(
-                                drive.actionBuilder(drive.pose)
-                                        .splineToConstantHeading(new Vector2d(-34, -12), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
-                                        .build(),
-                                (telemetryPacket) -> {
-                                    actionRunning = false;
-                                    return false;
-                                }
-                        ),
-                        (telemetryPacket) -> {
-                            for (LynxModule module : allHubs) {
-                                module.clearBulkCache();
-                            }
-                            slides.update();
-                            intakeSystem.update();
-                            return actionRunning;
-                        }
-                ));
+                drive.pose = new Pose2d(-33, -12, Math.toRadians(0));
                 drive.updatePoseEstimate();
                 actionRunning = true;
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
                                 new ParallelAction(
                                         drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
                                                 .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
                                                 .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
-                                                .splineToConstantHeading(new Vector2d(40, -40), Math.toRadians(270))
-                                                .splineToConstantHeading(new Vector2d(40 + 0.001, -40), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -34), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                                                .splineToConstantHeading(new Vector2d(40, -34+0.0001), Math.toRadians(90))
                                                 .build(),
                                         new SequentialAction(
-                                                new SleepAction(1),
+                                                new SleepAction(1.25),
                                                 slides.new SlidesUp1()
+
                                         )
                                 ),
 
@@ -218,26 +139,30 @@ public class RedAutoFarLeft extends BaseOpMode {
                             for (LynxModule module : allHubs) {
                                 module.clearBulkCache();
                             }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
                             slides.update();
                             intakeSystem.update();
                             return actionRunning;
                         }
                 ));
+                drive.pose=processTagPoses(getAprilTagPoses(), drive);
                 drive.updatePoseEstimate();
                 actionRunning = true;
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
                                 new ParallelAction(new SequentialAction(
-                                        new SleepAction(0.5),
+                                        new SleepAction(1),
                                         drive.actionBuilder(drive.pose)
-                                                .splineToConstantHeading(new Vector2d(54.3, -40), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -28.25), Math.toRadians(90))
+                                                .splineToConstantHeading(new Vector2d(40+0.0001, -28.25), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(54.5, -28.25), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .build()
                                 ),
                                         new SequentialAction(
                                                 outakeServos.new armOuttakeDeposit(),
                                                 new SleepAction(0.25),
                                                 outakeServos.new boxOuttakeDeposit(),
-                                                new SleepAction(0.75),
+                                                new SleepAction(1.75),
                                                 new Action() {
                                                     private boolean initialized = false;
 
@@ -248,7 +173,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                                             timer.reset();
                                                             initialized = true;
                                                         }
-                                                        outtakeCRServo.setPower(1);
+                                                        outtakeCRServo.setPower(0.45);
                                                         if (timer.seconds() > 2) {
                                                             outtakeCRServo.setPower(0);
                                                             return false;
@@ -269,6 +194,132 @@ public class RedAutoFarLeft extends BaseOpMode {
                             for (LynxModule module : allHubs) {
                                 module.clearBulkCache();
                             }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose = processTagPoses(getAprilTagPoses(), drive);
+                drive.updatePoseEstimate();
+                actionRunning = true;
+
+                break;
+            case CENTER:
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                drive.actionBuilder(drive.pose)
+                                        .splineToConstantHeading(new Vector2d(-41, -37), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-41, -37-0.001), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-41, -40), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-41-0.0001, -40), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-55, -40), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-55, -40+0.001), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-55, -12, Math.toRadians(-5)), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-55+0.0001, -12), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-45, -12), Math.toRadians(0))
+                                        .build(),
+                                intakeSystem.new IntakeServoRelease(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose = new Pose2d(-45, -12, Math.toRadians(0));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(-40+0.0001, -12), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(-34, -12), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(40, -31-0.0001), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                                                .build(),
+                                        new SequentialAction(
+                                                new SleepAction(3),
+                                                slides.new SlidesUp1()
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(new SequentialAction(
+                                        new SleepAction(0.5),
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(40, -37.75-0.0001), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                                                .splineToConstantHeading(new Vector2d(40+0.0001, -37.75-0.0001), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(54.5, -37.75-0.0001), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                                                .build()
+                                ),
+                                        new SequentialAction(
+                                                outakeServos.new armOuttakeDeposit(),
+                                                new SleepAction(0.25),
+                                                outakeServos.new boxOuttakeDeposit(),
+                                                new SleepAction(1.75),
+                                                new Action() {
+                                                    private boolean initialized = false;
+
+                                                    @Override
+                                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+                                                        if (!initialized) {
+                                                            timer.reset();
+                                                            initialized = true;
+                                                        }
+                                                        outtakeCRServo.setPower(0.8);
+                                                        if (timer.seconds() > 2) {
+                                                            outtakeCRServo.setPower(0);
+                                                            return false;
+                                                        } else {
+                                                            return true;
+                                                        }
+                                                    }
+                                                }
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
                             slides.update();
                             intakeSystem.update();
                             return actionRunning;
@@ -281,8 +332,8 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 new ParallelAction(
                                         new SequentialAction(
                                                 drive.actionBuilder(drive.pose)
-                                                        .splineToConstantHeading(new Vector2d(54.3 - 0.0001, -40), Math.toRadians(180))
-                                                        .splineToConstantHeading(new Vector2d(40, -40), Math.toRadians(180))
+                                                        .splineToConstantHeading(new Vector2d(54.5-0.0001 - 0.0001, -37.75-0.0001), Math.toRadians(180))
+                                                        .splineToConstantHeading(new Vector2d(40, -37.75-0.0001), Math.toRadians(180))
                                                         .build()
                                         ),
                                         new SequentialAction(
@@ -302,16 +353,173 @@ public class RedAutoFarLeft extends BaseOpMode {
                             for (LynxModule module : allHubs) {
                                 module.clearBulkCache();
                             }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
                             slides.update();
                             intakeSystem.update();
                             return actionRunning;
                         }
                 ));
+                break;
+            case RIGHT:
+            case UNKNOWN:
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                drive.actionBuilder(drive.pose)
+                                        .splineTo(new Vector2d(-41, -50), Math.toRadians(90))
+                                        .splineTo(new Vector2d(-31, -40), Math.toRadians(45))
+                                        .splineToConstantHeading(new Vector2d(-31 - 0.0001, -40 - 0.0001), Math.toRadians(225))
+                                        .splineToConstantHeading(new Vector2d(-30 + (6 * Math.cos(Math.toRadians(225))), -40 + (6 * Math.sin(Math.toRadians(225)))), Math.toRadians(225))
+                                        .splineToConstantHeading(new Vector2d(-30 + (6 * Math.cos(Math.toRadians(225))) - 0.0001, -40 + (6 * Math.sin(Math.toRadians(225))) - 0.001), Math.toRadians(120))
+                                        .splineToConstantHeading(new Vector2d(-40, -24), Math.toRadians(120))
+                                        .splineToConstantHeading(new Vector2d(-40, -24+0.001), Math.toRadians(90))
+                                        .splineToSplineHeading(new Pose2d(-40, -12, Math.toRadians(-3.1)), Math.toRadians(90))
+                                        .build(),
+                                intakeSystem.new IntakeServoRelease(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose = new Pose2d(-40, -12, Math.toRadians(0));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(-40+0.0001, -12), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(-34, -12), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(40, -31-0.0001), Math.toRadians(270), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
+                                                .build(),
+                                        new SequentialAction(
+                                                new SleepAction(3),
+                                                slides.new SlidesUp1()
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(new SequentialAction(
+                                        new SleepAction(0.5),
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(40, -43.75-0.0001), Math.toRadians(270), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
+                                                .splineToConstantHeading(new Vector2d(40+0.0001, -43.75-0.0001), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(54.5, -43.75-0.0001), Math.toRadians(0), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
+                                                .build()
+                                ),
+                                        new SequentialAction(
+                                                outakeServos.new armOuttakeDeposit(),
+                                                new SleepAction(0.25),
+                                                outakeServos.new boxOuttakeDeposit(),
+                                                new SleepAction(1.75),
+                                                new Action() {
+                                                    private boolean initialized = false;
+
+                                                    @Override
+                                                    public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+                                                        if (!initialized) {
+                                                            timer.reset();
+                                                            initialized = true;
+                                                        }
+                                                        outtakeCRServo.setPower(0.8);
+                                                        if (timer.seconds() > 2) {
+                                                            outtakeCRServo.setPower(0);
+                                                            return false;
+                                                        } else {
+                                                            return true;
+                                                        }
+                                                    }
+                                                }
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new ParallelAction(
+                                        new SequentialAction(
+                                                drive.actionBuilder(drive.pose)
+                                                        .splineToConstantHeading(new Vector2d(54.5 - 0.0001, -43.75-0.0001), Math.toRadians(180))
+                                                        .splineToConstantHeading(new Vector2d(40, -43.75-0.0001), Math.toRadians(180))
+                                                        .build()
+                                        ),
+                                        new SequentialAction(
+                                                new SleepAction(0.05),
+                                                outakeServos.new boxOuttakeIntake(),
+                                                new SleepAction(0.05),
+                                                outakeServos.new armOuttakeIntake()
+                                        )
+                                ),
+
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose=processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+
 //                Actions.runBlocking(new ParallelAction(
 //                        new SequentialAction(
 //                                new ParallelAction(
 //                                        drive.actionBuilder(drive.pose)
-//                                                .splineToConstantHeading(new Vector2d(-56, -9), Math.toRadians(180))
+//                                                .splineToConstantHeading(new Vector2d(-54, -9), Math.toRadians(180))
 //                                                .build(),
 //                                        intakeSystem.new IntakeMotorForward()
 //                                ),
@@ -333,7 +541,7 @@ public class RedAutoFarLeft extends BaseOpMode {
 //                ));
 //                drive.updatePoseEstimate();
 //                actionRunning = true;
-                break;
+//                break;
         }
     }
 

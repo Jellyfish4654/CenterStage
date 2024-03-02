@@ -143,7 +143,7 @@ public class Slides {
 
 		{
 			if (!initialized) {
-				setTargetPosition(350);
+				setTargetPosition(360);
 				initialized = true;
 			}
 			update();

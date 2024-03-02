@@ -72,7 +72,7 @@ public class Intake
 
 	public void servoIntakeRelease()
 	{
-		intakeServo.setPosition(0.75);
+		intakeServo.setPosition(0.7);
 	}
 
 	public void servoIntakeDrone()

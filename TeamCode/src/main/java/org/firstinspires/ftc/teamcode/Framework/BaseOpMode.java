@@ -52,7 +52,7 @@ public abstract class BaseOpMode extends LinearOpMode
 		VoltageSensor voltageSensor = hardwareMap.get(VoltageSensor.class, "Control Hub");
 		droneServo = new DroneLauncher(hardwareMap.get(Servo.class, "droneServo"), Servo.Direction.REVERSE, voltageSensor);
 		outtakeCRServo = hardwareMap.get(CRServo.class, "wheelServo");
-		outtakeCRServo.setDirection(CRServo.Direction.REVERSE);
+		outtakeCRServo.setDirection(CRServo.Direction.FORWARD);
 		wheelServo = new outtakeCRServo(outtakeCRServo);
 		intakeMotor = hardwareMap.get(DcMotorEx.class, "Tubing");
 		intakeMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
