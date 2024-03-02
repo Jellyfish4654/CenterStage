@@ -21,7 +21,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "RedAutoCloseRight", group = "Auto")
+@Autonomous(name = "RedAutoCloseRight", group = "Deprecated Auto")
 public class RedAutoCloseRight extends BaseOpMode
 {
 	OpenCvCamera webcam;
