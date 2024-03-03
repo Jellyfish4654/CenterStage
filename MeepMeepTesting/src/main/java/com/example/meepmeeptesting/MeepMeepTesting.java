@@ -1,6 +1,8 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.core.colorscheme.scheme.*;
@@ -97,12 +99,14 @@ public class MeepMeepTesting {
 //                .build());
 
 //        RED_FAR1.runAction(RED_FAR1.getDrive().actionBuilder(new Pose2d(-70.5 + (5.5 + 24), 70.5 - 10.375, Math.toRadians(270)))
-//                .splineTo(new Vector2d(-39, 48), Math.toRadians(270))
-//                .splineTo(new Vector2d(-40, 40), Math.toRadians(315))
-//                .splineToConstantHeading(new Vector2d(-40 + (8 * Math.cos(Math.toRadians(135))), 40 + (8 * Math.sin(Math.toRadians(135)))), Math.toRadians(135))
-//                .splineToConstantHeading(new Vector2d(-40 + (8 * Math.cos(Math.toRadians(135))), 30 + (8 * Math.sin(Math.toRadians(135)))), Math.toRadians(244.18)) // Adjusting angle to 244.18 degrees
-//                .splineToConstantHeading(new Vector2d(-32, 24), Math.toRadians(244.18))
-//                .splineToSplineHeading(new Pose2d(-48, 12, Math.toRadians(0)), Math.toRadians(180))
+//                .splineToConstantHeading(new Vector2d(-41, 48), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(-49.5, 40), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(-49.5, 40 + 0.0001), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-49.5, 44), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-49.5 - 0.0001, 44), Math.toRadians(0))
+//                .splineToConstantHeading(new Vector2d(-34.5, 44), Math.toRadians(0))
+//                .splineToConstantHeading(new Vector2d(-34.5, 44 - 0.0001), Math.toRadians(270))
+//                .splineToSplineHeading(new Pose2d(-35.5, 12, Math.toRadians(1.25)), Math.toRadians(270))
 //                .build());
 //        RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-70.5 + (5.5+24), -70.5+10.375, Math.toRadians(90)))
 //                .splineTo(new Vector2d(-39, -48), Math.toRadians(90))
@@ -113,16 +117,16 @@ public class MeepMeepTesting {
 //                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(0)), Math.toRadians(180))
 //                .build());
 
-        RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(-41, -48), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-49, -40), Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(-49, -40-0.0001), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-49, -43), Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(-49+0.0001, -43), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-36, -43), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-36, -43+0.0001), Math.toRadians(90))
-                .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(0)), Math.toRadians(90))
-                .build());
+//        RED_LEFT_PURPLE.runAction(RED_LEFT_PURPLE.getDrive().actionBuilder(new Pose2d(-70.5 + (5.5 + 24), -70.5 + 10.375, Math.toRadians(90)))
+//                .splineToConstantHeading(new Vector2d(-41, -48), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-49.5, -40), Math.toRadians(90))
+//                .splineToConstantHeading(new Vector2d(-49.5, -40 - 0.0001), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(-49.5, -44), Math.toRadians(270))
+//                .splineToConstantHeading(new Vector2d(-49.5 + 0.0001, -44), Math.toRadians(0))
+//                .splineToConstantHeading(new Vector2d(-34.5, -44), Math.toRadians(0))
+//                .splineToConstantHeading(new Vector2d(-34.5, -44 + 0.0001), Math.toRadians(90))
+//                .splineToSplineHeading(new Pose2d(-35.5, -12, Math.toRadians(-1.25)), Math.toRadians(90))
+//                .build());
 
 //        BLUE_LEFT_PURPLE.runAction(BLUE_RIGHT_PURPLE.getDrive().actionBuilder(new Pose2d(-39, 60, Math.toRadians(90)))
 //                .splineTo(new Vector2d(-39, 50), Math.toRadians(270))
@@ -193,21 +197,43 @@ public class MeepMeepTesting {
 //                .splineToConstantHeading(new Vector2d(48, -29), Math.toRadians(0))
 //               .build());
 //
-//        RED_FAR1.runAction(RED_FAR1.getDrive().actionBuilder(new Pose2d(40.75, -58, Math.toRadians(0)))
-//                .splineToConstantHeading(new Vector2d(46, -41), Math.toRadians(180))
-//                .splineToConstantHeading(new Vector2d(46, -10), Math.toRadians(0))
-//                .splineToConstantHeading(new Vector2d(58, -10), Math.toRadians(0))
-//                .build());
+        RED_FAR1.runAction(RED_FAR1.getDrive().actionBuilder(new Pose2d(40, -34, Math.toRadians(0)))
+                .splineToConstantHeading(new Vector2d(40, -27.25 - 0.0001), Math.toRadians(90), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                .splineToConstantHeading(new Vector2d(40 + 0.0001, -27.25), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(54.65, -27.25 - 0.0001), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                        .splineToConstantHeading(new Vector2d(54.65 - 0.0001, -27.25), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(40, -27.25), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(40, -43.75), Math.toRadians(270))
+                        .splineToConstantHeading(new Vector2d(40 + 0.0001, -43.75), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(54.65, -43.75), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                        .splineToConstantHeading(new Vector2d(54.65 - 0.0001, -43.75), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(40, -43.75), Math.toRadians(180))
+
+                .build());
+
+        BLUE_FAR1.runAction(BLUE_FAR1.getDrive().actionBuilder(new Pose2d(40, 34, Math.toRadians(0)))
+                        .splineToConstantHeading(new Vector2d(40, 27.25 - 0.0001), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                        .splineToConstantHeading(new Vector2d(40 + 0.0001, 27.25), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(54.65, 27.25 - 0.0001), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                        .splineToConstantHeading(new Vector2d(54.65 - 0.0001, 27.25), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(40, 27.25), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(40, 43.75), Math.toRadians(90))
+                        .splineToConstantHeading(new Vector2d(40 + 0.0001, 43.75), Math.toRadians(0))
+                        .splineToConstantHeading(new Vector2d(54.65, 43.75), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                        .splineToConstantHeading(new Vector2d(54.65 - 0.0001, 43.75), Math.toRadians(180))
+                        .splineToConstantHeading(new Vector2d(40, 43.75), Math.toRadians(180))
+                        
+                .build());
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
 //                .addEntity(RED_RIGHT_PURPLE)
-                .addEntity(RED_LEFT_PURPLE)
+//                .addEntity(RED_LEFT_PURPLE)
 //                .addEntity(RED_TRAJ)
-//                .addEntity(RED_FAR1)
+                .addEntity(RED_FAR1)
 //                .addEntity(BLUE_LEFT_PURPLE)
 //                .addEntity(BLUE_TRAJ)
-//                .addEntity(BLUE_FAR1)
+                .addEntity(BLUE_FAR1)
 //                .addEntity(BLUE_RIGHT_PURPLE)
 //                .addEntity(BLUE_LEFT_PURPLE)
 //                .addEntity(RED_CLOSE_YELLOW)
