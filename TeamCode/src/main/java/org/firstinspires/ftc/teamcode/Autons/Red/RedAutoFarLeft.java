@@ -83,10 +83,10 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         .splineToConstantHeading(new Vector2d(-41, -48), Math.toRadians(90))
                                         .splineToConstantHeading(new Vector2d(-49.5, -40), Math.toRadians(90))
                                         .splineToConstantHeading(new Vector2d(-49.5, -40 - 0.0001), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(-49.5, -43), Math.toRadians(270))
-                                        .splineToConstantHeading(new Vector2d(-49.5 + 0.0001, -43), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(-33, -43), Math.toRadians(0))
-                                        .splineToConstantHeading(new Vector2d(-33, -43 + 0.0001), Math.toRadians(90))
+                                        .splineToConstantHeading(new Vector2d(-49.5, -44), Math.toRadians(270))
+                                        .splineToConstantHeading(new Vector2d(-49.5 + 0.0001, -44), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-33, -44), Math.toRadians(0))
+                                        .splineToConstantHeading(new Vector2d(-33, -44 + 0.0001), Math.toRadians(90))
                                         .splineToSplineHeading(new Pose2d(-33, -12, Math.toRadians(-1.25)), Math.toRadians(90))
                                         .build(),
                                 intakeSystem.new IntakeServoRelease(),
@@ -112,9 +112,9 @@ public class RedAutoFarLeft extends BaseOpMode {
                         new SequentialAction(
                                 new ParallelAction(
                                         drive.actionBuilder(drive.pose)
-                                                .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(15, -12.5), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -12.5), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -12.5 - 0.001), Math.toRadians(270))
                                                 .splineToConstantHeading(new Vector2d(40, -34), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .splineToConstantHeading(new Vector2d(40, -34 + 0.0001), Math.toRadians(90))
                                                 .build(),
@@ -123,7 +123,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                                 slides.new SlidesUp1()
                                         )
                                 ),
-                                new SleepAction(0.15),
+                                new SleepAction(0.5),
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -147,16 +147,16 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 new ParallelAction(new SequentialAction(
                                         new SleepAction(1),
                                         drive.actionBuilder(drive.pose)
-                                                .splineToConstantHeading(new Vector2d(40, -28.25), Math.toRadians(90))
-                                                .splineToConstantHeading(new Vector2d(40+0.0001, -28.25), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(54.5, -28.25), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                                                .splineToConstantHeading(new Vector2d(40, -27.25), Math.toRadians(90))
+                                                .splineToConstantHeading(new Vector2d(40 + 0.0001, -27.25), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(52.89, -27.25), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .build()
                                 ),
                                         new SequentialAction(
                                                 outakeServos.new armOuttakeDeposit(),
                                                 new SleepAction(0.25),
                                                 outakeServos.new boxOuttakeDeposit(),
-                                                new SleepAction(0.5),
+                                                new SleepAction(1),
                                                 new Action() {
                                                     private boolean initialized = false;
 
@@ -167,8 +167,8 @@ public class RedAutoFarLeft extends BaseOpMode {
                                                             timer.reset();
                                                             initialized = true;
                                                         }
-                                                        outtakeCRServo.setPower(0.45);
-                                                        if (timer.seconds() > 2) {
+                                                        outtakeCRServo.setPower(0.35);
+                                                        if (timer.seconds() > 3) {
                                                             outtakeCRServo.setPower(0);
                                                             return false;
                                                         } else {
@@ -200,9 +200,8 @@ public class RedAutoFarLeft extends BaseOpMode {
                 Actions.runBlocking(new ParallelAction(
                         new SequentialAction(
                                 drive.actionBuilder(drive.pose)
-                                        .splineToConstantHeading(new Vector2d(54.5 - 0.0001, -27), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(52.89 - 0.0001, -27), Math.toRadians(180))
                                         .splineToConstantHeading(new Vector2d(40, -27), Math.toRadians(180))
-                                        .splineToConstantHeading(new Vector2d(40, -27 + 0.001), Math.toRadians(90))
                                         .build(),
                                 new SleepAction(0.15),
                                 (telemetryPacket) -> {
@@ -227,9 +226,8 @@ public class RedAutoFarLeft extends BaseOpMode {
                         new SequentialAction(
                                 new ParallelAction(
                                         drive.actionBuilder(drive.pose)
-                                                .splineToConstantHeading(new Vector2d(40, -11), Math.toRadians(90))
-                                                .splineToConstantHeading(new Vector2d(40 - 0.0001, -11), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-54, -11), Math.toRadians(180))
+                                                .splineToConstantHeading(new Vector2d(40, -27 + 0.001), Math.toRadians(90))
+                                                .splineToSplineHeading(new Pose2d(40, -12.5, Math.toRadians(-0.2)), 180, new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .build(),
                                         new SequentialAction(
                                                 new SleepAction(0.15),
@@ -240,7 +238,6 @@ public class RedAutoFarLeft extends BaseOpMode {
                                                 slides.new SlidesUp0()
                                         )
                                 ),
-
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -256,6 +253,67 @@ public class RedAutoFarLeft extends BaseOpMode {
                             return actionRunning;
                         }
                 ));
+                drive.pose = new Pose2d(40, -12.5, Math.toRadians(-0));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                new SequentialAction(
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(40 - 0.0001, -12.5), Math.toRadians(180))
+                                                .splineToConstantHeading(new Vector2d(-50, -12.5), Math.toRadians(180))
+                                                .build()
+                                ),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose = processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+                drive.updatePoseEstimate();
+                actionRunning = true;
+                Actions.runBlocking(new ParallelAction(
+                        new SequentialAction(
+                                slides.new SlidesUpIntake(),
+                                new ParallelAction(
+                                        drive.actionBuilder(drive.pose)
+                                                .splineToConstantHeading(new Vector2d(-50, -12.5 + 0.0001), Math.toRadians(90))
+                                                .splineToConstantHeading(new Vector2d(-50, -11), Math.toRadians(90))
+                                                .splineToConstantHeading(new Vector2d(-50-0.0001, -11), Math.toRadians(180))
+                                                .splineToConstantHeading(new Vector2d(-56, -10), Math.toRadians(180))
+                                                .build(),
+                                        intakeSystem.new IntakeMotorForward()
+                                ),
+                                new SleepAction(1.5),
+                                intakeSystem.new IntakeMotorForwardMore(),
+                                new SleepAction(0.5),
+                                intakeSystem.new IntakeMotorBackward(),
+                                (telemetryPacket) -> {
+                                    actionRunning = false;
+                                    return false;
+                                }
+                        ),
+                        (telemetryPacket) -> {
+                            for (LynxModule module : allHubs) {
+                                module.clearBulkCache();
+                            }
+                            drive.pose = processTagPoses(getAprilTagPoses(), drive);
+                            slides.update();
+                            intakeSystem.update();
+                            return actionRunning;
+                        }
+                ));
+
+                
                 break;
             case CENTER:
                 Actions.runBlocking(new ParallelAction(
@@ -296,17 +354,18 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         drive.actionBuilder(drive.pose)
                                                 .splineToConstantHeading(new Vector2d(-40 + 0.0001, -12), Math.toRadians(0))
                                                 .splineToConstantHeading(new Vector2d(-34, -12), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(15, -12.5), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -12.5), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -12.5 - 0.001), Math.toRadians(270))
                                                 .splineToConstantHeading(new Vector2d(40, -31 - 0.0001), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .build(),
                                         new SequentialAction(
                                                 new SleepAction(3),
                                                 slides.new SlidesUp1()
+
                                         )
                                 ),
-
+                                new SleepAction(0.5),
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -332,7 +391,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         drive.actionBuilder(drive.pose)
                                                 .splineToConstantHeading(new Vector2d(40, -37.75 - 0.0001), Math.toRadians(270), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .splineToConstantHeading(new Vector2d(40 + 0.0001, -37.75 - 0.0001), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(54.5, -37.75 - 0.0001), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
+                                                .splineToConstantHeading(new Vector2d(52.89, -37.75 - 0.0001), Math.toRadians(0), new TranslationalVelConstraint(25), new ProfileAccelConstraint(-30, 15))
                                                 .build()
                                 ),
                                         new SequentialAction(
@@ -384,7 +443,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 new ParallelAction(
                                         new SequentialAction(
                                                 drive.actionBuilder(drive.pose)
-                                                        .splineToConstantHeading(new Vector2d(54.5 - 0.0001 - 0.0001, -37.75 - 0.0001), Math.toRadians(180))
+                                                        .splineToConstantHeading(new Vector2d(52.89 - 0.0001 - 0.0001, -37.75 - 0.0001), Math.toRadians(180))
                                                         .splineToConstantHeading(new Vector2d(40, -37.75 - 0.0001), Math.toRadians(180))
                                                         .build()
                                         ),
@@ -451,9 +510,9 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         drive.actionBuilder(drive.pose)
                                                 .splineToConstantHeading(new Vector2d(-40 + 0.0001, -12), Math.toRadians(0))
                                                 .splineToConstantHeading(new Vector2d(-34, -12), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(15, -14), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(40, -14), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(40, -14 - 0.001), Math.toRadians(270))
+                                                .splineToConstantHeading(new Vector2d(15, -12.5), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -12.5), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(40, -12.5 - 0.001), Math.toRadians(270))
                                                 .splineToConstantHeading(new Vector2d(40, -31 - 0.0001), Math.toRadians(270), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
                                                 .build(),
                                         new SequentialAction(
@@ -461,7 +520,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                                 slides.new SlidesUp1()
                                         )
                                 ),
-
+                                new SleepAction(0.5),
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
@@ -487,7 +546,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                         drive.actionBuilder(drive.pose)
                                                 .splineToConstantHeading(new Vector2d(40, -43.75 - 0.0001), Math.toRadians(270), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
                                                 .splineToConstantHeading(new Vector2d(40 + 0.0001, -43.75 - 0.0001), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(54.5, -43.75 - 0.0001), Math.toRadians(0), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
+                                                .splineToConstantHeading(new Vector2d(52.89, -43.75 - 0.0001), Math.toRadians(0), new TranslationalVelConstraint(40.0), new ProfileAccelConstraint(-30, 25))
                                                 .build()
                                 ),
                                         new SequentialAction(
@@ -539,7 +598,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 new ParallelAction(
                                         new SequentialAction(
                                                 drive.actionBuilder(drive.pose)
-                                                        .splineToConstantHeading(new Vector2d(54.5 - 0.0001, -43.75 - 0.0001), Math.toRadians(180))
+                                                        .splineToConstantHeading(new Vector2d(52.89 - 0.0001, -43.75 - 0.0001), Math.toRadians(180))
                                                         .splineToConstantHeading(new Vector2d(40, -43.75 - 0.0001), Math.toRadians(180))
                                                         .build()
                                         ),

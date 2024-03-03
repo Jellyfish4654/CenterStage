@@ -110,9 +110,9 @@ public class LeftRedPipeline extends OpenCvPipeline
 
 	private Sides.Position determinePosition(int leftCount, int centerCount, int rightCount)
 	{
-		int leftThreshold = 50000; // Minimum difference to consider a change in position
-		int rightThreshold = 50000;
-		int centerThreshold = 50000;
+		int leftThreshold = 30000; // Minimum difference to consider a change in position
+		int rightThreshold = 30000;
+		int centerThreshold = 30000;
 		boolean leftIsValid = leftCount > leftThreshold;
 		boolean rightIsValid = rightCount > rightThreshold;
 		boolean centerIsValid = centerCount > centerThreshold;

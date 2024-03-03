@@ -53,9 +53,12 @@ public class Intake
 
 	public void moveForward()
 	{
-		setTargetPosition(intakeMotor.getCurrentPosition() + 3000);
+		setTargetPosition(intakeMotor.getCurrentPosition() + 1750);
 	}
-
+	public void moveForwardMore()
+	{
+		setTargetPosition(intakeMotor.getCurrentPosition() + 5750);
+	}
 	public void moveBackward()
 	{
 		setTargetPosition(intakeMotor.getCurrentPosition() - 2500);
@@ -107,6 +110,19 @@ public class Intake
 		public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 			if (!initialized) {
 				moveForward();
+				initialized = true;
+			}
+			update();
+			return getTargetPosition() > intakeMotor.getCurrentPosition();
+		}
+	}
+	public class IntakeMotorForwardMore implements Action
+	{
+		private boolean initialized = false;
+		@Override
+		public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+			if (!initialized) {
+				moveForwardMore();
 				initialized = true;
 			}
 			update();

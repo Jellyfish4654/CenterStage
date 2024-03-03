@@ -178,4 +178,25 @@ public class Slides {
 			return leftInPosition && rightInPosition;
 		}
 	}
+	public class SlidesUpIntake implements Action
+	{
+		private boolean initialized = false;
+		@Override
+		public boolean run(@NonNull TelemetryPacket telemetryPacket)
+
+		{
+			if (!initialized) {
+				setTargetPosition(70);
+				initialized = true;
+			}
+			update();
+			int currentPositionLeft = slideMotorLeft.getCurrentPosition();
+			int currentPositionRight = slideMotorRight.getCurrentPosition();
+			int errorMargin = 25;
+
+			boolean leftInPosition = Math.abs(currentPositionLeft - targetPosition) >= errorMargin;
+			boolean rightInPosition = Math.abs(currentPositionRight - targetPosition) >= errorMargin;
+			return leftInPosition && rightInPosition;
+		}
+	}
 }

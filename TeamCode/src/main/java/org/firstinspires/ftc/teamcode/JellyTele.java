@@ -463,7 +463,7 @@ public class JellyTele extends BaseOpMode
 		{
 			imuSensor.resetYaw();
 			resetHeading = Math.toRadians(90);
-			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, resetHeading));
+			drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, -resetHeading));
 			gamepad1.rumbleBlips(3);
 		}
 		else if (gamepadEx1.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT))
