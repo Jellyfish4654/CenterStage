@@ -131,6 +131,7 @@ public class RedAutoFarLeft extends BaseOpMode {
                                 (telemetryPacket) -> {
                                     actionRunning = false;
                                     return false;
+                                }
                         ),
                         (telemetryPacket) -> {
                             for (LynxModule module : allHubs) {
