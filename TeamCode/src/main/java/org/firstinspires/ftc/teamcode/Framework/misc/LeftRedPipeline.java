@@ -39,9 +39,9 @@ public class LeftRedPipeline extends OpenCvPipeline
 		int rectWidth = CAMERA_WIDTH / 3;
 		int rectHeight = CAMERA_HEIGHT;
 
-		leftRect = new Rect(500, 0, 640, 1080);
-		centerRect = new Rect(1140, 0, 640, 1080);
-		rightRect = new Rect(0, 0, 0, 0);
+		leftRect = new Rect(500, 540, 640, 540);
+		centerRect = new Rect(1140, 540, 640, 540);
+		rightRect = new Rect(0, 540, 0, 540);
 	}
 
 	static int leftCount;
